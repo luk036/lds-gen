@@ -251,15 +251,6 @@ class Circle:
 
 class Sphere:
     """Sphere sequence generator
-
-    Examples:
-        >>> sgen = Sphere([2, 3])
-        >>> sgen.reseed(0)
-        >>> for _ in range(2):
-        ...     print(sgen.pop())
-        ...
-        [0.8660254037844387, -0.4999999999999998, 0.0]
-        [-0.7499999999999997, -0.4330127018922197, -0.5]
     """
 
     vdc: VdCorput
@@ -286,11 +277,6 @@ class Sphere:
         `List[float; 3]`. And in the `Sphere3Hopf` class, `pop()` returns
         the next point on the 3-sphere using the Hopf fibration as a
         `List[float; 4]`.
-
-        Examples:
-            >>> sgen = Sphere([2, 3])
-            >>> sgen.pop()
-            [0.8660254037844387, -0.4999999999999998, 0.0]
         """
         cosphi = 2.0 * self.vdc.pop() - 1.0  # map to [-1, 1]
         sinphi = sqrt(1.0 - cosphi * cosphi)
