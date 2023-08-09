@@ -1,3 +1,7 @@
+"""
+This module contains low-discrepancy sequence generators
+"""
+
 from math import cos, pi, sin, sqrt
 from typing import List, Sequence
 
@@ -251,6 +255,16 @@ class Circle:
 
 class Sphere:
     """Sphere sequence generator
+
+    Examples:
+        >>> sgen = Sphere([2, 3])
+        >>> sgen.reseed(0)
+        >>> res = sgen.pop()
+        >>> res[2]
+        0.0
+        >>> res = sgen.pop()
+        >>> res[2]
+        -0.5
     """
 
     vdc: VdCorput
@@ -338,7 +352,7 @@ class Sphere3Hopf:
             cos_eta * cos(psy),
             cos_eta * sin(psy),
             sin_eta * cos(phi + psy),
-            sin_eta * cos(phi + psy),
+            sin_eta * sin(phi + psy),
         ]
 
     def reseed(self, seed: int) -> None:
