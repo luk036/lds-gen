@@ -66,15 +66,12 @@ class VdCorput:
         return vdc_i(self._count, self._base, self._scale)
 
     def reseed(self, seed: int) -> None:
-        """reseed
-
-        The `reseed(size_t seed)` function is used to reset the state of the
-        sequence generator to a specific seed value. This allows the sequence
-        generator to start generating the sequence from the beginning, or from
-        a specific point in the sequence, depending on the value of the seed.
-
-        Args:
-            seed (int): _description_
+        """
+        The `reseed` function resets the state of a sequence generator to a specific seed value.
+        
+        :param seed: The `seed` parameter is an integer value that is used to reset the state of the
+        sequence generator. It determines the starting point of the sequence generation
+        :type seed: int
 
         Examples:
             >>> vdc = VdCorput(2, 10)
@@ -136,15 +133,12 @@ class Halton:
         return [self._vdc0.pop(), self._vdc1.pop()]
 
     def reseed(self, seed: int) -> None:
-        """reseed
-
-        The `reseed(size_t seed)` function is used to reset the state of the
-        sequence generator to a specific seed value. This allows the sequence
-        generator to start generating the sequence from the beginning, or from
-        a specific point in the sequence, depending on the value of the seed.
-
-        Args:
-            seed (int): _description_
+        """
+        The `reseed` function resets the state of a sequence generator to a specific seed value.
+        
+        :param seed: The `seed` parameter is an integer value that is used to reset the state of the
+        sequence generator. It determines the starting point of the sequence generation
+        :type seed: int
         """
         self._vdc0.reseed(seed)
         self._vdc1.reseed(seed)
