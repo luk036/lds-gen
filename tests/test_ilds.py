@@ -1,4 +1,4 @@
-from lds_gen.ilds import vdc_i, VdCorput, Halton
+from lds_gen.ilds import Halton, VdCorput, vdc_i
 
 
 def test_vdc():

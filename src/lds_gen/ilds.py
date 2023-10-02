@@ -68,7 +68,7 @@ class VdCorput:
     def reseed(self, seed: int) -> None:
         """
         The `reseed` function resets the state of a sequence generator to a specific seed value.
-        
+
         :param seed: The `seed` parameter is an integer value that is used to reset the state of the
         sequence generator. It determines the starting point of the sequence generation
         :type seed: int
@@ -135,7 +135,7 @@ class Halton:
     def reseed(self, seed: int) -> None:
         """
         The `reseed` function resets the state of a sequence generator to a specific seed value.
-        
+
         :param seed: The `seed` parameter is an integer value that is used to reset the state of the
         sequence generator. It determines the starting point of the sequence generation
         :type seed: int

@@ -102,7 +102,7 @@ class VdCorput:
     def reseed(self, seed: int) -> None:
         """
         The `reseed` function resets the state of a sequence generator to a specific seed value.
-        
+
         :param seed: The `seed` parameter is an integer value that is used to reset the state of the
         sequence generator. It determines the starting point of the sequence generation
         :type seed: int
@@ -179,7 +179,7 @@ class Halton:
     def reseed(self, seed: int) -> None:
         """
         The `reseed` function resets the state of a sequence generator to a specific seed value.
-        
+
         :param seed: The `seed` parameter is an integer value that is used to reset the state of the
         sequence generator. It determines the starting point of the sequence generation
         :type seed: int
@@ -206,7 +206,7 @@ class Circle:
     def __init__(self, base: int) -> None:
         """
         The function initializes an instance of the class with a given base.
-        
+
         :param base: The `base` parameter is an integer that represents the base of the Van der Corput
         sequence
         :type base: int
@@ -238,7 +238,7 @@ class Circle:
     def reseed(self, seed: int) -> None:
         """
         The `reseed` function resets the state of a sequence generator to a specific seed value.
-        
+
         :param seed: The `seed` parameter is an integer value that is used to reset the state of the
         sequence generator. It determines the starting point of the sequence generation
         :type seed: int
@@ -267,7 +267,7 @@ class Sphere:
         """
         The function initializes the `vdc` and `cirgen` attributes with the first and second elements of the
         `base` list, respectively.
-        
+
         :param base: The `base` parameter is a sequence of integers. It is expected to have two elements.
         The first element is used to initialize a `VdCorput` object, and the second element is used to
         initialize a `Circle` object
@@ -297,7 +297,7 @@ class Sphere:
     def reseed(self, seed: int) -> None:
         """
         The `reseed` function resets the state of a sequence generator to a specific seed value.
-        
+
         :param seed: The `seed` parameter is an integer value that is used to reset the state of the
         sequence generator. It determines the starting point of the sequence generation
         :type seed: int
@@ -317,7 +317,7 @@ class Sphere3Hopf:
     def __init__(self, base: Sequence[int]) -> None:
         """
         The function initializes three VdCorput objects with the values from the base list.
-        
+
         :param base: The `base` parameter is a list of three integers. It is used to initialize three
         instances of the `VdCorput` class. The first integer in the `base` list is used to initialize
         `self.vdc0`, the second integer is used to initialize `self.vdc1
@@ -355,7 +355,7 @@ class Sphere3Hopf:
     def reseed(self, seed: int) -> None:
         """
         The `reseed` function resets the state of a sequence generator to a specific seed value.
-        
+
         :param seed: The `seed` parameter is an integer value that is used to reset the state of the
         sequence generator. It determines the starting point of the sequence generation
         :type seed: int
@@ -383,7 +383,7 @@ class HaltonN:
     def __init__(self, n: int, base: Sequence[int]) -> None:
         """
         The function initializes a list of VdCorput objects using the given base sequence.
-        
+
         :param n: The parameter `n` is an integer that represents the number of elements in the `base`
         sequence
         :type n: int
@@ -417,7 +417,7 @@ class HaltonN:
     def reseed(self, seed: int) -> None:
         """
         The `reseed` function resets the state of a sequence generator to a specific seed value.
-        
+
         :param seed: The `seed` parameter is an integer value that is used to reset the state of the
         sequence generator. It determines the starting point of the sequence generation
         :type seed: int
