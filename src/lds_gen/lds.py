@@ -15,10 +15,14 @@ def vdc(k: int, base: int = 2) -> float:
 
     :param k: The parameter `k` represents the number for which we want to calculate the van der Corput
     sequence value
+
     :type k: int
+
     :param base: The `base` parameter represents the base of the number system being used. In this case,
     it is set to 2, which means the number system is binary (base 2), defaults to 2
+
     :type base: int (optional)
+
     :return: The function `vdc` returns a floating point value.
 
     Examples:
@@ -73,6 +77,7 @@ class VdCorput:
         :param base: The `base` parameter is an optional integer argument that specifies the base of the
         number system. By default, it is set to 2, which means the number system is binary (base 2).
         However, you can change the value of `base` to any other prime number to use a different, defaults to 2
+
         :type base: int (optional)
         """
         self.count = 0
@@ -105,6 +110,7 @@ class VdCorput:
 
         :param seed: The `seed` parameter is an integer value that is used to reset the state of the
         sequence generator. It determines the starting point of the sequence generation
+
         :type seed: int
         """
         self.count = seed
@@ -151,6 +157,7 @@ class Halton:
         for generating the Halton sequence. The first integer in the list is used as the base for generating
         the first component of the sequence, and the second integer is used as the base for generating the
         second component
+
         :type base: Sequence[int]
         """
         self.vdc0 = VdCorput(base[0])
@@ -182,6 +189,7 @@ class Halton:
 
         :param seed: The `seed` parameter is an integer value that is used to reset the state of the
         sequence generator. It determines the starting point of the sequence generation
+
         :type seed: int
         """
         self.vdc0.reseed(seed)
@@ -207,8 +215,7 @@ class Circle:
         """
         The function initializes an instance of the class with a given base.
 
-        :param base: The `base` parameter is an integer that represents the base of the Van der Corput
-        sequence
+        :param base: The `base` parameter is an integer that represents the base of the Van der Corput sequence
         :type base: int
         """
         self.vdc = VdCorput(base)
@@ -241,6 +248,7 @@ class Circle:
 
         :param seed: The `seed` parameter is an integer value that is used to reset the state of the
         sequence generator. It determines the starting point of the sequence generation
+
         :type seed: int
         """
         self.vdc.reseed(seed)
@@ -271,6 +279,7 @@ class Sphere:
         :param base: The `base` parameter is a sequence of integers. It is expected to have two elements.
         The first element is used to initialize a `VdCorput` object, and the second element is used to
         initialize a `Circle` object
+
         :type base: Sequence[int]
         """
         self.vdc = VdCorput(base[0])
@@ -300,6 +309,7 @@ class Sphere:
 
         :param seed: The `seed` parameter is an integer value that is used to reset the state of the
         sequence generator. It determines the starting point of the sequence generation
+
         :type seed: int
         """
         self.cirgen.reseed(seed)
@@ -321,6 +331,7 @@ class Sphere3Hopf:
         :param base: The `base` parameter is a list of three integers. It is used to initialize three
         instances of the `VdCorput` class. The first integer in the `base` list is used to initialize
         `self.vdc0`, the second integer is used to initialize `self.vdc1
+
         :type base: Sequence[int]
         """
         self.vdc0 = VdCorput(base[0])
@@ -358,6 +369,7 @@ class Sphere3Hopf:
 
         :param seed: The `seed` parameter is an integer value that is used to reset the state of the
         sequence generator. It determines the starting point of the sequence generation
+
         :type seed: int
         """
         self.vdc0.reseed(seed)
@@ -384,12 +396,14 @@ class HaltonN:
         """
         The function initializes a list of VdCorput objects using the given base sequence.
 
-        :param n: The parameter `n` is an integer that represents the number of elements in the `base`
-        sequence
+        :param n: The parameter `n` is an integer that represents the number of elements in the `base` sequence
+
         :type n: int
+
         :param base: The `base` parameter is a list of integers. Each integer represents the base of a Van
         der Corput sequence. The Van der Corput sequence is a low-discrepancy sequence used in numerical
         analysis and Monte Carlo methods. In this code, `base` is used to initialize a list
+
         :type base: Sequence[int]
         """
         self.vdcs = [VdCorput(base[i]) for i in range(n)]
@@ -420,6 +434,7 @@ class HaltonN:
 
         :param seed: The `seed` parameter is an integer value that is used to reset the state of the
         sequence generator. It determines the starting point of the sequence generation
+
         :type seed: int
         """
         for vdc in self.vdcs:
