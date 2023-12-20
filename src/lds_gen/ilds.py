@@ -8,14 +8,20 @@ def vdc_i(k: int, base: int = 2, scale: int = 10) -> int:
 
     :param k: The parameter `k` represents the number for which we want to calculate the van der Corput
     sequence value
+
     :type k: int
+
     :param base: The `base` parameter represents the base of the number system being used. In this case,
     it is set to 2, which means the number system is binary (base 2), defaults to 2
+
     :type base: int (optional)
+
     :param scale: The `scale` parameter determines the precision or number of digits after the decimal
     point in the resulting VDC (Van der Corput) sequence. It specifies the number of times the base is
     raised to calculate the factor, defaults to 10
+
     :type scale: int (optional)
+
     :return: The function `vdc_i` returns an integer value.
 
     Examples:
@@ -41,10 +47,13 @@ class VdCorput:
         :param base: The `base` parameter is an optional integer argument that specifies the base of the
         number system. By default, it is set to 2, which means the number system is binary (base 2).
         However, you can change the value of `base` to any other prime number to use a different, defaults to 2
+
         :type base: int (optional)
+
         :param scale: The `scale` parameter determines the number of digits that can be represented in the
         number system. For example, if `scale` is set to 10, the number system can represent digits from 0
         to 9, defaults to 10
+
         :type scale: int (optional)
         """
         self._base: int = base
@@ -55,6 +64,7 @@ class VdCorput:
         """
         The `pop()` function is a member function of the `VdCorput` class that increments the count and
         calculates the next value in the Van der Corput sequence.
+
         :return: The `pop()` function is returning an `int` value.
 
         Examples:
@@ -71,6 +81,7 @@ class VdCorput:
 
         :param seed: The `seed` parameter is an integer value that is used to reset the state of the
         sequence generator. It determines the starting point of the sequence generation
+
         :type seed: int
 
         Examples:
@@ -120,6 +131,7 @@ class Halton:
         for generating the Halton sequence. The first integer in the list is used as the base for generating
         the first component of the sequence, and the second integer is used as the base for generating the
         second component
+
         :type base: Sequence[int]
         """
         self._vdc0 = VdCorput(base[0], scale[0])
@@ -128,6 +140,7 @@ class Halton:
     def pop(self) -> List[int]:
         """
         The `pop` function returns a list of two integers by popping elements from `vdc0` and `vdc1`.
+
         :return: The `pop` method is returning a list of two integers.
         """
         return [self._vdc0.pop(), self._vdc1.pop()]
@@ -138,6 +151,7 @@ class Halton:
 
         :param seed: The `seed` parameter is an integer value that is used to reset the state of the
         sequence generator. It determines the starting point of the sequence generation
+
         :type seed: int
         """
         self._vdc0.reseed(seed)
