@@ -20,6 +20,16 @@
 
 A longer description of your project goes here...
 
+# Used In
+
+- [sphere-n](https://github.com/luk036/sphere-n)
+- [physdes-py](https://luk036.github.io/physdes-py)
+- [bairstow](https://luk036.github.io/bairstow)
+
+## 👀 See also
+
+- [lds-gen-cpp](https://github.com/luk036/lds-gen-cpp)
+- [lds-rs](https://github.com/luk036/lds-rs)
 
 <!-- pyscaffold-notes -->
 
