@@ -51,7 +51,7 @@ def test_sphere3hopf():
 
 
 def test_halton_n():
-    hgen = HaltonN(3, [2, 3, 5])
+    hgen = HaltonN([2, 3, 5])
     hgen.reseed(0)
     res = hgen.pop()
     assert res[0] == 0.5

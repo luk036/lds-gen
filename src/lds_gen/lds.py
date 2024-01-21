@@ -381,7 +381,7 @@ class HaltonN:
     """HaltonN sequence generator
 
     Examples:
-        >>> hgen = HaltonN(3, [2, 3, 5])
+        >>> hgen = HaltonN([2, 3, 5])
         >>> hgen.reseed(0)
         >>> for _ in range(2):
         ...     print(hgen.pop())
@@ -392,7 +392,7 @@ class HaltonN:
 
     vdcs: List[VdCorput]
 
-    def __init__(self, n: int, base: Sequence[int]) -> None:
+    def __init__(self, base: Sequence[int]) -> None:
         """
         The function initializes a list of VdCorput objects using the given base sequence.
 
@@ -406,7 +406,7 @@ class HaltonN:
 
         :type base: Sequence[int]
         """
-        self.vdcs = [VdCorput(base[i]) for i in range(n)]
+        self.vdcs = [VdCorput(b) for b in base]
 
     def pop(self) -> List[float]:
         """
@@ -422,7 +422,7 @@ class HaltonN:
         `List[float; 4]`.
 
         Examples:
-            >>> hgen = HaltonN(3, [2, 3, 5])
+            >>> hgen = HaltonN([2, 3, 5])
             >>> hgen.pop()
             [0.5, 0.3333333333333333, 0.2]
         """
