@@ -7,18 +7,18 @@ def vdc_i(k: int, base: int = 2, scale: int = 10) -> int:
     specified scale.
 
     :param k: The parameter `k` represents the number for which we want to calculate the van der Corput
-    sequence value
+              sequence value
 
     :type k: int
 
     :param base: The `base` parameter represents the base of the number system being used. In this case,
-    it is set to 2, which means the number system is binary (base 2), defaults to 2
+                 it is set to 2, which means the number system is binary (base 2), defaults to 2
 
     :type base: int (optional)
 
     :param scale: The `scale` parameter determines the precision or number of digits after the decimal
-    point in the resulting VDC (Van der Corput) sequence. It specifies the number of times the base is
-    raised to calculate the factor, defaults to 10
+                  point in the resulting VDC (Van der Corput) sequence. It specifies the number of times the base is
+                  raised to calculate the factor, defaults to 10
 
     :type scale: int (optional)
 
@@ -45,14 +45,14 @@ class VdCorput:
         The function initializes an object with a base and scale value, and sets the count to 0.
 
         :param base: The `base` parameter is an optional integer argument that specifies the base of the
-        number system. By default, it is set to 2, which means the number system is binary (base 2).
-        However, you can change the value of `base` to any other prime number to use a different, defaults to 2
+                     number system. By default, it is set to 2, which means the number system is binary (base 2).
+                     However, you can change the value of `base` to any other prime number to use a different, defaults to 2
 
         :type base: int (optional)
 
         :param scale: The `scale` parameter determines the number of digits that can be represented in the
-        number system. For example, if `scale` is set to 10, the number system can represent digits from 0
-        to 9, defaults to 10
+                      number system. For example, if `scale` is set to 10, the number system can represent digits from 0
+                      to 9, defaults to 10
 
         :type scale: int (optional)
         """
@@ -80,7 +80,7 @@ class VdCorput:
         The `reseed` function resets the state of a sequence generator to a specific seed value.
 
         :param seed: The `seed` parameter is an integer value that is used to reset the state of the
-        sequence generator. It determines the starting point of the sequence generation
+                     sequence generator. It determines the starting point of the sequence generation
 
         :type seed: int
 
@@ -128,9 +128,9 @@ class Halton:
         objects with the given bases.
 
         :param base: The `base` parameter is a list of two integers. These integers are used as the bases
-        for generating the Halton sequence. The first integer in the list is used as the base for generating
-        the first component of the sequence, and the second integer is used as the base for generating the
-        second component
+                     for generating the Halton sequence. The first integer in the list is used as the base for generating
+                     the first component of the sequence, and the second integer is used as the base for generating the
+                     second component
 
         :type base: Sequence[int]
         """
@@ -150,7 +150,7 @@ class Halton:
         The `reseed` function resets the state of a sequence generator to a specific seed value.
 
         :param seed: The `seed` parameter is an integer value that is used to reset the state of the
-        sequence generator. It determines the starting point of the sequence generation
+                     sequence generator. It determines the starting point of the sequence generation
 
         :type seed: int
         """

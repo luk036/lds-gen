@@ -4,16 +4,19 @@ from lds_gen.lds import Circle, Halton, HaltonN, Sphere, Sphere3Hopf, VdCorput, 
 
 
 def test_vdc():
+    """assert that the vdcorput generator produces the correct values""" ""
     assert vdc(11, 2) == 0.8125
 
 
 def test_vdcorput():
+    """assert that the vdcorput generator produces the correct values"""
     vgen = VdCorput(2)
     vgen.reseed(0)
     assert vgen.pop() == 0.5
 
 
 def test_halton():
+    """assert that the halton generator produces the correct values"""
     hgen = Halton([2, 3])
     hgen.reseed(0)
     res = hgen.pop()
@@ -21,6 +24,7 @@ def test_halton():
 
 
 def test_circle():
+    """assert that the circle generator produces the correct values"""
     cgen = Circle(2)
     cgen.reseed(0)
     res = cgen.pop()
@@ -30,6 +34,7 @@ def test_circle():
 
 
 def test_sphere():
+    """assert that the sphere generator produces the correct values"""
     sgen = Sphere([2, 3])
     sgen.reseed(0)
     res = sgen.pop()
@@ -41,6 +46,7 @@ def test_sphere():
 
 
 def test_sphere3hopf():
+    """assert that the sphere3hopf generator produces the correct values"""
     sgen = Sphere3Hopf([2, 3, 5])
     sgen.reseed(0)
     res = sgen.pop()
@@ -51,6 +57,7 @@ def test_sphere3hopf():
 
 
 def test_halton_n():
+    """assert that the halton_n generator produces the correct values"""
     hgen = HaltonN([2, 3, 5])
     hgen.reseed(0)
     res = hgen.pop()
