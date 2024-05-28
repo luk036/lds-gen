@@ -353,9 +353,9 @@ class Sphere3Hopf:
         """
         phi = self.vdc0.pop() * TWO_PI  # map to [0, 2*pi]
         psy = self.vdc1.pop() * TWO_PI  # map to [0, 2*pi]
-        vd = self.vdc2.pop()
-        cos_eta = sqrt(vd)
-        sin_eta = sqrt(1.0 - vd)
+        vdc = self.vdc2.pop()
+        cos_eta = sqrt(vdc)
+        sin_eta = sqrt(1.0 - vdc)
         return [
             cos_eta * cos(psy),
             cos_eta * sin(psy),
