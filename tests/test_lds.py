@@ -28,9 +28,9 @@ def test_circle():
     cgen = Circle(2)
     cgen.reseed(0)
     res = cgen.pop()
-    assert res[1] == -1.0
+    assert res[0] == -1.0
     res = cgen.pop()
-    assert res[0] == 1.0
+    assert res[1] == 1.0
 
 
 def test_sphere():
@@ -38,10 +38,10 @@ def test_sphere():
     sgen = Sphere([2, 3])
     sgen.reseed(0)
     res = sgen.pop()
-    assert res[1] == approx(-0.5)
+    assert res[0] == approx(-0.5)
     assert res[2] == approx(0.0)
     res = sgen.pop()
-    assert res[0] == approx(-0.75)
+    assert res[1] == approx(-0.75)
     assert res[2] == approx(-0.5)
 
 

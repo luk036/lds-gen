@@ -101,7 +101,7 @@ class VdCorput:
             >>> vgen.pop()
             0.5
         """
-        self.count += 1
+        self.count += 1  # ignore 0
         return vdc(self.count, self.base)
 
     def reseed(self, seed: int) -> None:
@@ -205,8 +205,8 @@ class Circle:
         >>> for _ in range(2):
         ...     print(cgen.pop())
         ...
-        [1.2246467991473532e-16, -1.0]
-        [1.0, 6.123233995736766e-17]
+        [-1.0, 1.2246467991473532e-16]
+        [6.123233995736766e-17, 1.0]
     """
 
     vdc: VdCorput
@@ -236,10 +236,10 @@ class Circle:
         Examples:
             >>> cgen = Circle(2)
             >>> cgen.pop()
-            [1.2246467991473532e-16, -1.0]
+            [-1.0, 1.2246467991473532e-16]
         """
         theta = self.vdc.pop() * TWO_PI  # map to [0, 2*pi]
-        return [sin(theta), cos(theta)]
+        return [cos(theta), sin(theta)]
 
     # [allow(dead_code)]
     def reseed(self, seed: int) -> None:
