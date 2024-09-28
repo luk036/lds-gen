@@ -1,3 +1,25 @@
+"""
+ilds.py
+
+This code implements two low-discrepancy sequence generators: the Van der Corput sequence and the Halton sequence. These sequences are used to generate evenly distributed points in a space, which can be useful for various applications like sampling, optimization, or numerical integration.
+
+The code defines three main components: a function called vdc_i, and two classes named VdCorput and Halton.
+
+The vdc_i function is the core of the Van der Corput sequence generation. It takes an integer k, a base (default 2), and a scale (default 10) as inputs. It converts the number k from the given base to a decimal number, using the specified scale for integer output. This function is used to generate individual elements of the Van der Corput sequence.
+
+The VdCorput class is a wrapper around the vdc_i function. It keeps track of the current count and allows you to generate successive elements of the Van der Corput sequence by calling its pop method. You can also reset the sequence to a specific starting point using the reseed method.
+
+The Halton class generates points in a 2-dimensional space using two Van der Corput sequences with different bases. It creates two VdCorput objects internally and uses them to generate pairs of numbers. The pop method of the Halton class returns a list of two integers, representing a point in 2D space.
+
+The main logic flow in this code is the generation of these low-discrepancy sequences. For the Van der Corput sequence, it works by repeatedly dividing the input number by the base and using the remainders to construct the output number. This process creates a sequence of numbers that are well-distributed between 0 and N (when properly scaled).
+
+The Halton sequence extends this idea to multiple dimensions by using different bases for each dimension. In this implementation, it generates 2D points by combining two Van der Corput sequences.
+
+The code doesn't take any direct input from the user. Instead, it provides classes and functions that can be used in other programs to generate these sequences. The output of these generators are individual numbers (for Van der Corput) or pairs of numbers (for Halton) that form the respective sequences.
+
+This code is particularly useful for applications that need well-distributed random-like numbers, but with more uniformity than typical pseudo-random number generators provide. It's a building block that can be used in more complex algorithms and simulations.
+"""
+
 from typing import List, Sequence
 
 
