@@ -220,7 +220,7 @@ class Halton:
 
 
 class Circle:
-    """Circle sequence generator
+    """Unit Circle sequence generator
 
     Examples:
         >>> cgen = Circle(2)
@@ -278,7 +278,7 @@ class Circle:
 
 
 class Sphere:
-    """Sphere sequence generator
+    """Unit Sphere sequence generator
 
     Examples:
         >>> sgen = Sphere([2, 3])
@@ -322,7 +322,7 @@ class Sphere:
         `List[float; 4]`.
         """
         cosphi = 2.0 * self.vdc.pop() - 1.0  # map to [-1, 1]
-        sinphi = sqrt(1.0 - cosphi * cosphi)
+        sinphi = sqrt(1.0 - cosphi * cosphi)  # cylindrical mapping
         [c, s] = self.cirgen.pop()
         return [sinphi * c, sinphi * s, cosphi]
 
@@ -339,9 +339,20 @@ class Sphere:
         self.vdc.reseed(seed)
 
 
-# S(3) sequence generator by Hopf
 class Sphere3Hopf:
-    """Sphere3Hopf sequence generator"""
+    """Sphere-3 sequence generator using Hopf coordinates
+
+        @article{yershova2010generating,
+          title={Generating uniform incremental grids on SO (3) using the Hopf fibration},
+          author={Yershova, Anna and Jain, Swati and LaValle, Steven M and Mitchell, Julie C},
+          journal={The International journal of robotics research},
+          volume={29},
+          number={7},
+          pages={801--812},
+          year={2010},
+          publisher={SAGE Publications}
+        }
+    """
 
     vdc0: VdCorput
     vdc1: VdCorput

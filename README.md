@@ -45,7 +45,7 @@ The purpose of this code is to provide a toolkit for generating well-distributed
 
 - [sphere-n](https://github.com/luk036/sphere-n)
 - [physdes-py](https://luk036.github.io/physdes-py)
-- [bairstow](https://luk036.github.io/bairstow)
+- [ginger](https://luk036.github.io/ginger)
 
 ## 👀 See also
 

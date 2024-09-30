@@ -1,7 +1,7 @@
 """
 ilds.py
 
-This code implements two low-discrepancy sequence generators: the Van der Corput sequence and the Halton sequence. These sequences are used to generate evenly distributed points in a space, which can be useful for various applications like sampling, optimization, or numerical integration.
+This code implements two low-discrepancy sequence generators: the Van der Corput sequence and the Halton sequence (specific for integer output). These sequences are used to generate evenly distributed points in a space, which can be useful for various applications like sampling, optimization, or numerical integration.
 
 The code defines three main components: a function called vdc_i, and two classes named VdCorput and Halton.
 
