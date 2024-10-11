@@ -90,9 +90,6 @@ class VdCorput:
         0.3125
     """
 
-    count: int
-    base: int
-
     def __init__(self, base: int = 2) -> None:
         """
         The function initializes an object with a base and scale value, and sets the count to 0.
@@ -103,8 +100,8 @@ class VdCorput:
 
         :type base: int (optional)
         """
-        self.count = 0
-        self.base = base
+        self.count: int = 0
+        self.base: int = base
 
     def pop(self) -> float:
         """
@@ -168,9 +165,6 @@ class Halton:
         [0.3125, 0.37037037037037035]
     """
 
-    vdc0: VdCorput
-    vdc1: VdCorput
-
     def __init__(self, base: Sequence[int]) -> None:
         """
         The `__init__()` function is a constructor for the `Halton` class that initializes two `VdCorput`
@@ -232,8 +226,6 @@ class Circle:
         [6.123233995736766e-17, 1.0]
     """
 
-    vdc: VdCorput
-
     def __init__(self, base: int) -> None:
         """
         The function initializes an instance of the class with a given base.
@@ -261,7 +253,7 @@ class Circle:
             >>> cgen.pop()
             [-1.0, 1.2246467991473532e-16]
         """
-        theta = self.vdc.pop() * TWO_PI  # map to [0, 2*pi]
+        theta = self.vdc.pop() * TWO_PI  # map to [0, 2π]
         return [cos(theta), sin(theta)]
 
     # [allow(dead_code)]
@@ -290,9 +282,6 @@ class Sphere:
         >>> res[2]
         -0.5
     """
-
-    vdc: VdCorput
-    cirgen: Circle
 
     def __init__(self, base: Sequence[int]) -> None:
         """
@@ -354,10 +343,6 @@ class Sphere3Hopf:
         }
     """
 
-    vdc0: VdCorput
-    vdc1: VdCorput
-    vdc2: VdCorput
-
     def __init__(self, base: Sequence[int]) -> None:
         """
         The function initializes three VdCorput objects with the values from the base list.
@@ -385,8 +370,8 @@ class Sphere3Hopf:
         the next point on the 3-sphere using the Hopf fibration as a
         `List[float; 4]`.
         """
-        phi = self.vdc0.pop() * TWO_PI  # map to [0, 2*pi]
-        psy = self.vdc1.pop() * TWO_PI  # map to [0, 2*pi]
+        phi = self.vdc0.pop() * TWO_PI  # map to [0, 2π]
+        psy = self.vdc1.pop() * TWO_PI  # map to [0, 2π]
         vdc = self.vdc2.pop()
         cos_eta = sqrt(vdc)
         sin_eta = sqrt(1.0 - vdc)
