@@ -56,8 +56,7 @@ def vdc(k: int, base: int = 2) -> float:
     denom = 1.0
     while k != 0:
         denom *= base
-        remainder = k % base
-        k //= base
+        k, remainder = divmod(k, base)
         res += remainder / denom
     return res
 
@@ -89,7 +88,6 @@ class VdCorput:
         0.5625
         0.3125
     """
-
     def __init__(self, base: int = 2) -> None:
         """
         The function initializes an object with a base and scale value, and sets the count to 0.
@@ -102,6 +100,11 @@ class VdCorput:
         """
         self.count: int = 0
         self.base: int = base
+        self.rev_lst: List[float] = []
+        reverse: float = 1.0
+        for i in range(64):
+            reverse /= base
+            self.rev_lst.append(reverse)
 
     def pop(self) -> float:
         """
@@ -122,7 +125,20 @@ class VdCorput:
             0.5
         """
         self.count += 1  # ignore 0
-        return vdc(self.count, self.base)
+        k = self.count
+        res = 0.0
+        i = 0
+        while k != 0:
+            k, remainder = divmod(k, self.base)
+            match remainder:
+                case 0:
+                    pass
+                case 1:
+                    res += self.rev_lst[i]
+                case _:
+                    res += remainder * self.rev_lst[i]
+            i += 1
+        return res
 
     def reseed(self, seed: int) -> None:
         """
