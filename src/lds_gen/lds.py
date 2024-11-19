@@ -292,11 +292,8 @@ class Sphere:
         >>> sgen = Sphere([2, 3])
         >>> sgen.reseed(0)
         >>> res = sgen.pop()
-        >>> res[2]
-        0.0
-        >>> res = sgen.pop()
-        >>> res[2]
-        -0.5
+        >>> res
+        [-0.4999999999999998, 0.8660254037844387, 0.0]
     """
 
     def __init__(self, base: Sequence[int]) -> None:
@@ -357,6 +354,13 @@ class Sphere3Hopf:
       year={2010},
       publisher={SAGE Publications}
     }
+
+    Examples:
+        >>> sp3hgen = Sphere3Hopf([2, 3, 5])
+        >>> sp3hgen.reseed(0)
+        >>> res = sp3hgen.pop()
+        >>> res
+        [-0.22360679774997885, 0.3872983346207417, 0.4472135954999573, -0.7745966692414837]
     """
 
     def __init__(self, base: Sequence[int]) -> None:
