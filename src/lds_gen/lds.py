@@ -88,6 +88,7 @@ class VdCorput:
         0.5625
         0.3125
     """
+
     def __init__(self, base: int = 2) -> None:
         """
         The function initializes an object with a base and scale value, and sets the count to 0.
