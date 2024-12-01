@@ -14,7 +14,7 @@
 [![Documentation Status](https://readthedocs.org/projects/lds-gen/badge/?version=latest)](https://lds-gen.readthedocs.io/en/latest/?badge=latest)
 [![Coveralls](https://img.shields.io/coveralls/github/luk036/lds-gen/main.svg)](https://coveralls.io/r/luk036/lds-gen)
 
-# lds-gen
+# 🤏 lds-gen
 
 > Low Discrepancy Sequence Generation
 
@@ -39,7 +39,7 @@ Furthermore, the library incorporates a set of utility functions and classes tha
 
 Each generator class has methods for producing the next value in the sequence (pop()) and for resetting the sequence to a specific starting point (reseed()). This enables the generators to be employed in a variety of contexts in a flexible manner. The objective of this library is to provide a toolkit for the generation of sequences of numbers that are distributed in a well-balanced manner. These can be used in place of random numbers in many applications to achieve a more uniform coverage of a given space or surface. This can result in more efficient and accurate outcomes in tasks such as sampling, integration, and optimization.
 
-# Used In
+## Used In
 
 - [sphere-n](https://github.com/luk036/sphere-n)
 - [physdes-py](https://luk036.github.io/physdes-py)
