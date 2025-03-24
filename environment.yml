@@ -1,0 +1,8 @@
+name: ellalgo
+channels:
+  - conda-forge
+dependencies:
+  - pytest
+  - pytest-benchmark
+  - pytest-cov
+  - decorator
