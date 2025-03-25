@@ -12,6 +12,7 @@
 
 [![Project generated with PyScaffold](https://img.shields.io/badge/-PyScaffold-005CA0?logo=pyscaffold)](https://pyscaffold.org/)
 [![Documentation Status](https://readthedocs.org/projects/lds-gen/badge/?version=latest)](https://lds-gen.readthedocs.io/en/latest/?badge=latest)
+[![codecov](https://codecov.io/gh/luk036/lds-gen/graph/badge.svg?token=KTy7qZSSs5)](https://codecov.io/gh/luk036/lds-gen)
 [![Coveralls](https://img.shields.io/coveralls/github/luk036/lds-gen/main.svg)](https://coveralls.io/r/luk036/lds-gen)
 
 # 🤏 lds-gen
