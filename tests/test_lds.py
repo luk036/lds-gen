@@ -1,6 +1,6 @@
 from pytest import approx
 
-from lds_gen.lds import Circle, Halton, HaltonN, Sphere, Sphere3Hopf, VdCorput, vdc
+from lds_gen.lds import Circle, Disk, Halton, HaltonN, Sphere, Sphere3Hopf, VdCorput, vdc
 
 
 def test_vdc():
@@ -31,6 +31,15 @@ def test_circle():
     assert res[0] == -1.0
     res = cgen.pop()
     assert res[1] == 1.0
+
+
+def test_disk():
+    """assert that the halton generator produces the correct values"""
+    dgen = Disk([2, 3])
+    dgen.reseed(0)
+    res = dgen.pop()
+    assert res[0] == approx(-0.5773502691896257)
+    assert res[1] == approx(0)
 
 
 def test_sphere():

@@ -286,6 +286,77 @@ class Circle:
         self.vdc.reseed(seed)
 
 
+class Disk:
+    """Unit Disk sequence generator
+
+    Examples:
+        >>> dgen = Disk([2, 3])
+        >>> dgen.reseed(0)
+        >>> for _ in range(10):
+        ...     print(dgen.pop())
+        ...
+        [-0.5773502691896257, 7.070501591499379e-17]
+        [4.9995996217394874e-17, 0.816496580927726]
+        [-6.123233995736765e-17, -0.3333333333333333]
+        [0.4714045207910317, 0.4714045207910317]
+        [-0.6236095644623236, -0.6236095644623234]
+        [-0.3333333333333333, 0.33333333333333337]
+        [0.5270462766947298, -0.52704627669473]
+        [0.871041976584251, 0.36079740009746464]
+        [-0.17780069893139236, -0.07364746089679816]
+        [-0.23289372032206912, 0.5622551781930658]
+    """
+
+    def __init__(self, base: Sequence[int]) -> None:
+        """
+        The `__init__()` function is a constructor for the `Disk` class that initializes two `VdCorput`
+        objects with the given bases.
+
+        :param base: The `base` parameter is a list of two integers. These integers are used as the bases
+                     for generating the Disk sequence. The first integer in the list is used as the base for generating
+                     the first component of the sequence, and the second integer is used as the base for generating the
+                     second component
+
+        :type base: Sequence[int]
+        """
+        self.vdc0 = VdCorput(base[0])
+        self.vdc1 = VdCorput(base[1])
+
+    def pop(self) -> List[float]:
+        """
+        The `pop()` function is used to generate the next value in the sequence.
+        For example, in the `VdCorput` class, `pop()` increments the count and
+        calculates the Van der Corput sequence value for that count and base. In
+        the `Halton` class, `pop()` returns the next point in the Halton sequence
+        as a `List[float; 2]`. Similarly, in the `Circle` class, `pop()`
+        returns the next point on the unit circle as a `List[float; 2]`. In
+        the `Sphere` class, `pop()` returns the next point on the unit sphere as a
+        `List[float; 3]`. And in the `Sphere3Hopf` class, `pop()` returns
+        the next point on the 3-sphere using the Hopf fibration as a
+        `List[float; 4]`.
+
+        Examples:
+            >>> dgen = Disk([2, 3])
+            >>> dgen.pop()
+            [0.5, 0.3333333333333333]
+        """
+        theta = self.vdc0.pop() * TWO_PI  # map to [0, 2π]
+        radius = sqrt(self.vdc1.pop())  # map to [0, 1]
+        return [radius * cos(theta), radius * sin(theta)]
+
+    def reseed(self, seed: int) -> None:
+        """
+        The `reseed` function resets the state of a sequence generator to a specific seed value.
+
+        :param seed: The `seed` parameter is an integer value that is used to reset the state of the
+                     sequence generator. It determines the starting point of the sequence generation
+
+        :type seed: int
+        """
+        self.vdc0.reseed(seed)
+        self.vdc1.reseed(seed)
+
+
 class Sphere:
     """Unit Sphere sequence generator
 
