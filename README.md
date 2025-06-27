@@ -26,9 +26,10 @@ The library defines a number of classes, each of which represents a distinct typ
 1. Van der Corput sequence
 2. Halton sequence
 3. Circle sequence
-4. Sphere sequence
-5. 3-Sphere Hopf sequence
-6. N-dimensional Halton sequence
+4. Disk sequence
+5. Sphere sequence
+6. 3-Sphere Hopf sequence
+7. N-dimensional Halton sequence
 
 Each generator is designed to accept specific inputs, which are typically presented in the form of base numbers or sequences of base numbers. The selection of bases serves to determine the manner in which the sequences are generated. The generators produce outputs in the form of floating-point numbers or lists of floating-point numbers, contingent upon the dimensionality of the sequence.
 

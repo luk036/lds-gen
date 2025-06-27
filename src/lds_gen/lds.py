@@ -8,9 +8,10 @@ The code defines several classes, each representing a different type of low-disc
 1. Van der Corput sequence
 2. Halton sequence
 3. Circle sequence
-4. Sphere sequence
-5. 3-Sphere Hopf sequence
-6. N-dimensional Halton sequence
+4. Disk sequence
+5. Sphere sequence
+6. 3-Sphere Hopf sequence
+7. N-dimensional Halton sequence
 
 Each generator takes specific inputs, usually in the form of base numbers or sequences of base numbers. These bases determine how the sequences are generated. The generators produce outputs in the form of floating-point numbers or lists of floating-point numbers, depending on the dimensionality of the sequence.
 
