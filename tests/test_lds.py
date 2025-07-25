@@ -1,6 +1,15 @@
 from pytest import approx
 
-from lds_gen.lds import Circle, Disk, Halton, HaltonN, Sphere, Sphere3Hopf, VdCorput, vdc
+from lds_gen.lds import (
+    Circle,
+    Disk,
+    Halton,
+    HaltonN,
+    Sphere,
+    Sphere3Hopf,
+    VdCorput,
+    vdc,
+)
 
 
 def test_vdc():
