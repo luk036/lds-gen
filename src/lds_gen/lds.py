@@ -132,13 +132,8 @@ class VdCorput:
         i = 0
         while k != 0:
             k, remainder = divmod(k, self.base)
-            match remainder:
-                case 0:
-                    pass
-                case 1:
-                    res += self.rev_lst[i]
-                case _:
-                    res += remainder * self.rev_lst[i]
+            if remainder != 0:
+                res += remainder * self.rev_lst[i]
             i += 1
         return res
 

@@ -23,41 +23,7 @@ This code is particularly useful for applications that need well-distributed ran
 from typing import List, Sequence
 
 
-def vdc_i(k: int, base: int = 2, scale: int = 10) -> int:
-    """
-    The function `vdc_i` converts a given number `k` from base `base` to a decimal number using a
-    specified scale.
 
-    :param k: The parameter `k` represents the number for which we want to calculate the van der Corput
-              sequence value
-
-    :type k: int
-
-    :param base: The `base` parameter represents the base of the number system being used. In this case,
-                 it is set to 2, which means the number system is binary (base 2), defaults to 2
-
-    :type base: int (optional)
-
-    :param scale: The `scale` parameter determines the precision or number of digits after the decimal
-                  point in the resulting VDC (Van der Corput) sequence. It specifies the number of times the base is
-                  raised to calculate the factor, defaults to 10
-
-    :type scale: int (optional)
-
-    :return: The function `vdc_i` returns an integer value.
-
-    Examples:
-        >>> vdc_i(1, 2, 10)
-        512
-    """
-    vdc: int = 0
-    factor: int = base**scale
-    while k != 0:
-        factor //= base
-        remainder: int = k % base
-        k //= base
-        vdc += remainder * factor
-    return vdc
 
 
 # The `VdCorput` class initializes an object with a base and scale value, and sets the count to 0.
@@ -81,6 +47,7 @@ class VdCorput:
         self._base: int = base
         self._scale: int = scale
         self._count: int = 0
+        self._factor: int = base**scale
 
     def pop(self) -> int:
         """
@@ -95,7 +62,15 @@ class VdCorput:
             512
         """
         self._count += 1
-        return vdc_i(self._count, self._base, self._scale)
+        k = self._count
+        vdc: int = 0
+        factor: int = self._factor
+        while k != 0:
+            factor //= self._base
+            remainder: int = k % self._base
+            k //= self._base
+            vdc += remainder * factor
+        return vdc
 
     def reseed(self, seed: int) -> None:
         """
