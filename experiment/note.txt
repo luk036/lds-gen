@@ -5,4 +5,3 @@ lds-gen\experiment on  main [!] via 🐍 v3.12.4 via V via 🅒 pyflow
 ❯ vvp div_mod_7_testbench
 All tests completed
 .\tests\div_mod_7_tb.v:64: $finish called at 80000 (1ps)
-

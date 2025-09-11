@@ -24,7 +24,7 @@ module cordic_trig(
     reg [8:0] y, y_next;
     reg [7:0] z, z_next;
     reg [3:0] iteration;
-    
+
     // CORDIC scaling factor compensation (K ≈ 0.607)
     parameter SCALE = 8'd78;    // 0.607 * 128
 
@@ -45,13 +45,13 @@ module cordic_trig(
                 y_next = y + (x >>> iteration);
                 z_next = z - atan_table[iteration];
             end
-            
+
             x <= x_next;
             y <= y_next;
             z <= z_next;
             iteration <= iteration + 1;
         end
-        
+
         // Output scaled results
         cosine <= x[8:1];      // Scale down and take upper bits
         sine <= y[8:1];        // Scale down and take upper bits

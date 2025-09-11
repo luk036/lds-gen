@@ -23,9 +23,6 @@ This code is particularly useful for applications that need well-distributed ran
 from typing import List, Sequence
 
 
-
-
-
 # The `VdCorput` class initializes an object with a base and scale value, and sets the count to 0.
 class VdCorput:
     def __init__(self, base: int = 2, scale: int = 10) -> None:
