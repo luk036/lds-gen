@@ -334,7 +334,7 @@ class Disk:
         Examples:
             >>> dgen = Disk([2, 3])
             >>> dgen.pop()
-            [0.5, 0.3333333333333333]
+            [-0.5773502691896257, 7.070501591499379e-17]
         """
         theta = self.vdc0.pop() * TWO_PI  # map to [0, 2π]
         radius = sqrt(self.vdc1.pop())  # map to [0, 1]
