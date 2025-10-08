@@ -44,20 +44,20 @@ from typing import List, Sequence
 class VdCorput:
     def __init__(self, base: int = 2, scale: int = 10) -> None:
         """
-                The function initializes an object with a base and scale value, and sets the count to 0.
+        The function initializes an object with a base and scale value, and sets the count to 0.
 
-                :param base: The `base` parameter is an optional integer argument that specifies the base of the
-                     number system. By default, it is set to 2, which means the number system is binary (base 2).
-                     However, you can change the value of `base` to any other prime number to use a different,
-                     defaults to 2
+        :param base: The `base` parameter is an optional integer argument that specifies the base of the
+             number system. By default, it is set to 2, which means the number system is binary (base 2).
+             However, you can change the value of `base` to any other prime number to use a different,
+             defaults to 2
 
-                :type base: int (optional)
+        :type base: int (optional)
 
-                :param scale: The `scale` parameter determines the number of digits that can be represented in the
-                              number system. For example, if `scale` is set to 10, the number system can represent digits from 0
-                              to 9, defaults to 10
+        :param scale: The `scale` parameter determines the number of digits that can be represented in the
+                      number system. For example, if `scale` is set to 10, the number system can represent digits from 0
+                      to 9, defaults to 10
 
-                :type scale: int (optional)
+        :type scale: int (optional)
         """
         self._base: int = base
         self._scale: int = scale
