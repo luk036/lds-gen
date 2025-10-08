@@ -423,16 +423,18 @@ class Sphere:
 class Sphere3Hopf:
     """Sphere-3 sequence generator using Hopf coordinates
 
-    @article{yershova2010generating,
-      title={Generating uniform incremental grids on SO (3) using the Hopf fibration},
-      author={Yershova, Anna and Jain, Swati and LaValle, Steven M and Mitchell, Julie C},
-      journal={The International journal of robotics research},
-      volume={29},
-      number={7},
-      pages={801--812},
-      year={2010},
-      publisher={SAGE Publications}
-    }
+    .. code-block:: bibtex
+
+        @article{yershova2010generating,
+          title={Generating uniform incremental grids on SO (3) using the Hopf fibration},
+          author={Yershova, Anna and Jain, Swati and LaValle, Steven M and Mitchell, Julie C},
+          journal={The International journal of robotics research},
+          volume={29},
+          number={7},
+          pages={801--812},
+          year={2010},
+          publisher={SAGE Publications}
+        }
 
     Examples:
         >>> sp3hgen = Sphere3Hopf([2, 3, 5])
