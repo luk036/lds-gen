@@ -37,9 +37,9 @@ tasks like sampling, integration, and optimization.
 """
 
 from math import cos, pi, sin, sqrt
-from typing import List, Sequence
+from typing import Final, List, Sequence
 
-TWO_PI = 2.0 * pi
+TWO_PI: Final[float] = 2.0 * pi
 
 
 def vdc(k: int, base: int = 2) -> float:
@@ -563,7 +563,7 @@ class HaltonN:
 
 # First 1000 prime numbers
 # [allow(dead_code)]
-PRIME_TABLE: List[int] = [
+PRIME_TABLE: Final[List[int]] = [
     2,
     3,
     5,
