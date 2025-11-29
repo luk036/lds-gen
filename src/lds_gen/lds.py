@@ -305,11 +305,7 @@ class Circle:
              /  |  \
             /   |   \
        o (-1,0) -+- (1,0) o
-            \   |   /
-             \  |  /
-              \ | /
-               \|/
-                o (0,-1)
+            o (0,-1)
          
          Using low-discrepancy sequence for
          uniform distribution on unit circle
@@ -452,8 +448,8 @@ class Sphere:
                /       |       \
               /        |        \
              o---------+---------o
-            /          |          \
-           /           |           \
+            \\          |          /
+           \\           |           /
           o            o            o
                        |
                        |
