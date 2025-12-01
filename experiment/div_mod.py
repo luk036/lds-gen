@@ -1,4 +1,4 @@
-def div_mod_3(n: int):
+def div_mod_3(n: int) -> tuple[int, int]:
     quotient: int = 0
     remainder: int = n
 
@@ -22,7 +22,7 @@ def div_mod_3(n: int):
     return quotient, remainder
 
 
-def div_mod_7(n: int):
+def div_mod_7(n: int) -> tuple[int, int]:
     quotient: int = 0
     remainder: int = n
 

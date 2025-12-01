@@ -12,12 +12,12 @@ from lds_gen.lds import (
 )
 
 
-def test_vdc():
+def test_vdc() -> None:
     """assert that the vdcorput generator produces the correct values""" ""
     assert vdc(11, 2) == 0.8125
 
 
-def test_vdcorput_pop():
+def test_vdcorput_pop() -> None:
     """Test the pop method of the VdCorput class."""
     vgen = VdCorput(2)
     vgen.reseed(0)
@@ -27,7 +27,7 @@ def test_vdcorput_pop():
     assert vgen.pop() == 0.125
 
 
-def test_vdcorput_reseed():
+def test_vdcorput_reseed() -> None:
     """Test the reseed method of the VdCorput class."""
     vgen = VdCorput(2)
     vgen.reseed(5)
@@ -36,7 +36,7 @@ def test_vdcorput_reseed():
     assert vgen.pop() == 0.5
 
 
-def test_halton_pop():
+def test_halton_pop() -> None:
     """Test the pop method of the Halton class."""
     hgen = Halton([2, 3])
     hgen.reseed(0)
@@ -48,7 +48,7 @@ def test_halton_pop():
     assert res[1] == approx(2 / 3)
 
 
-def test_halton_reseed():
+def test_halton_reseed() -> None:
     """Test the reseed method of the Halton class."""
     hgen = Halton([2, 3])
     hgen.reseed(5)
@@ -61,7 +61,7 @@ def test_halton_reseed():
     assert res[1] == approx(1 / 3)
 
 
-def test_circle_pop():
+def test_circle_pop() -> None:
     """Test the pop method of the Circle class."""
     cgen = Circle(2)
     cgen.reseed(0)
@@ -73,7 +73,7 @@ def test_circle_pop():
     assert res[1] == approx(1.0)
 
 
-def test_circle_reseed():
+def test_circle_reseed() -> None:
     """Test the reseed method of the Circle class."""
     cgen = Circle(2)
     cgen.reseed(2)
@@ -86,7 +86,7 @@ def test_circle_reseed():
     assert res[1] == approx(0.0)
 
 
-def test_disk_pop():
+def test_disk_pop() -> None:
     """Test the pop method of the Disk class."""
     dgen = Disk([2, 3])
     dgen.reseed(0)
@@ -98,7 +98,7 @@ def test_disk_pop():
     assert res[1] == approx(0.816496580927726)
 
 
-def test_disk_reseed():
+def test_disk_reseed() -> None:
     """Test the reseed method of the Disk class."""
     dgen = Disk([2, 3])
     dgen.reseed(2)
@@ -111,7 +111,7 @@ def test_disk_reseed():
     assert res[1] == approx(0.0)
 
 
-def test_sphere_pop():
+def test_sphere_pop() -> None:
     """Test the pop method of the Sphere class."""
     sgen = Sphere([2, 3])
     sgen.reseed(0)
@@ -125,7 +125,7 @@ def test_sphere_pop():
     assert res[2] == approx(-0.5)
 
 
-def test_sphere_reseed():
+def test_sphere_reseed() -> None:
     """Test the reseed method of the Sphere class."""
     sgen = Sphere([2, 3])
     sgen.reseed(1)
@@ -140,7 +140,7 @@ def test_sphere_reseed():
     assert res[2] == approx(0.0)
 
 
-def test_sphere3hopf_pop():
+def test_sphere3hopf_pop() -> None:
     """Test the pop method of the Sphere3Hopf class."""
     sgen = Sphere3Hopf([2, 3, 5])
     sgen.reseed(0)
@@ -151,7 +151,7 @@ def test_sphere3hopf_pop():
     assert res[3] == approx(-0.7745966692414837)
 
 
-def test_sphere3hopf_reseed():
+def test_sphere3hopf_reseed() -> None:
     """Test the reseed method of the Sphere3Hopf class."""
     sgen = Sphere3Hopf([2, 3, 5])
     sgen.reseed(1)
@@ -168,7 +168,7 @@ def test_sphere3hopf_reseed():
     assert res[3] == approx(-0.7745966692414837)
 
 
-def test_halton_n_reseed():
+def test_halton_n_reseed() -> None:
     """Test the reseed method of the HaltonN class."""
     hgen = HaltonN([2, 3, 5])
     hgen.reseed(1)

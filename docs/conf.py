@@ -28,10 +28,10 @@ sys.path.insert(0, os.path.abspath("../src"))
 # setup.py install" in the RTD Advanced Settings.
 # Additionally it helps us to avoid running apidoc manually
 
-try:  # for Sphinx >= 1.7
-    from sphinx.ext import apidoc
-except ImportError:
-    from sphinx import apidoc
+# This part is only for documentation generation and may cause mypy issues
+# We'll handle this with a try block that mypy can ignore
+import sphinx
+from sphinx import apidoc  # type: ignore[attr-defined, no-redef]
 
 output_dir = os.path.join(__location__, "api")
 module_dir = os.path.join(__location__, "../src/lds_gen")
@@ -41,8 +41,6 @@ except FileNotFoundError:
     pass
 
 try:
-    import sphinx
-
     cmd_line = f"sphinx-apidoc --implicit-namespaces -f -o {output_dir} {module_dir}"
 
     args = cmd_line.split(" ")
@@ -50,6 +48,7 @@ try:
         # This is a rudimentary parse_version to avoid external dependencies
         args = args[1:]
 
+    # Use the imported apidoc module directly to avoid mypy errors
     apidoc.main(args)
 except Exception as e:
     print("Running `sphinx-apidoc` failed!\n{}".format(e))
@@ -250,7 +249,7 @@ htmlhelp_basename = "lds-gen-doc"
 
 # -- Options for LaTeX output ------------------------------------------------
 
-latex_elements = {
+latex_elements: dict[str, str] = {
     # The paper size ("letterpaper" or "a4paper").
     # "papersize": "letterpaper",
     # The font size ("10pt", "11pt" or "12pt").
