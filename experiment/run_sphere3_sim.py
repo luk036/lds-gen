@@ -27,7 +27,7 @@ def run_systemverilog_simulation(base, count=10):
     base_str = "_".join(map(str, base))
     
     # Run simulation
-    cmd = f"vvp sphere3_32bit_sim"
+    cmd = "vvp sphere3_32bit_sim"
     result = subprocess.run(cmd, shell=True, capture_output=True, text=True, cwd=".")
     
     if result.returncode != 0:

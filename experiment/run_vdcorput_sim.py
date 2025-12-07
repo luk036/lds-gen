@@ -54,7 +54,7 @@ def generate_reference_values():
     
     # Scale 8 values for multi-base test
     scale_8 = 8
-    print(f"\nScale 8 values (for multi-base test):")
+    print("\nScale 8 values (for multi-base test):")
     for i in range(1, 11):
         val2 = vdc_i(i, 2, scale_8)
         val3 = vdc_i(i, 3, scale_8)

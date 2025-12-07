@@ -25,7 +25,7 @@ def generate_circle_reference():
     """Generate reference values for Circle sequence bases 2, 3, and 7"""
     bases = [2, 3, 7]
     
-    print(f"Circle Sequence Reference Values")
+    print("Circle Sequence Reference Values")
     print("=" * 50)
     
     for base in bases:
@@ -48,7 +48,7 @@ def generate_circle_reference():
         [628646298, 628646298],   # k=5
     ]
     
-    print(f"\nComparing simulation results (base 2):")
+    print("\nComparing simulation results (base 2):")
     for i, sim_raw in enumerate(sim_values_raw):
         k = i + 1
         # Convert from Q32 fixed point
@@ -65,12 +65,12 @@ def generate_circle_reference():
         
         # Check if within reasonable tolerance (coarse approximation)
         if error_x < 0.4 and error_y < 0.4:
-            print(f"  Status: PASS (within tolerance)")
+            print("  Status: PASS (within tolerance)")
         else:
-            print(f"  Status: FAIL (outside tolerance)")
+            print("  Status: FAIL (outside tolerance)")
     
     # Test reseed functionality
-    print(f"\nReseed test (k=6 after reseed to 5):")
+    print("\nReseed test (k=6 after reseed to 5):")
     sim_reseed_raw = [3621193184, 2048909069]
     sim_reseed_float = [sim_reseed_raw[0] / 2147483648.0, sim_reseed_raw[1] / 2147483648.0]
     expected_reseed = circle_sequence(6, 2)
@@ -83,9 +83,9 @@ def generate_circle_reference():
           f"Err=[{error_x:.6f}, {error_y:.6f}]")
     
     if error_x < 0.4 and error_y < 0.4:
-        print(f"  Status: PASS (within tolerance)")
+        print("  Status: PASS (within tolerance)")
     else:
-        print(f"  Status: FAIL (outside tolerance)")
+        print("  Status: FAIL (outside tolerance)")
 
 if __name__ == "__main__":
     generate_circle_reference()

@@ -32,7 +32,7 @@ def generate_sphere_reference():
     """Generate reference values for Sphere sequence bases [2,3], [2,7], [3,7]"""
     base_pairs = [(2, 3), (2, 7), (3, 7)]
     
-    print(f"Sphere Sequence Reference Values")
+    print("Sphere Sequence Reference Values")
     print("=" * 50)
     
     for base_0, base_1 in base_pairs:
@@ -55,7 +55,7 @@ def generate_sphere_reference():
         [1, 1, 4294945792],     # k=5 (z is negative)
     ]
     
-    print(f"\nComparing simulation results (bases [2,3]):")
+    print("\nComparing simulation results (bases [2,3]):")
     for i, sim_raw in enumerate(sim_values_raw):
         k = i + 1
         # Convert from Q32 fixed point (handle signed values)
@@ -79,12 +79,12 @@ def generate_sphere_reference():
         
         # Check if within reasonable tolerance (coarse approximation)
         if error_x < 0.5 and error_y < 0.5 and error_z < 0.5:
-            print(f"  Status: PASS (within tolerance)")
+            print("  Status: PASS (within tolerance)")
         else:
-            print(f"  Status: FAIL (outside tolerance)")
+            print("  Status: FAIL (outside tolerance)")
     
     # Test reseed functionality
-    print(f"\nReseed test (k=6 after reseed to 5):")
+    print("\nReseed test (k=6 after reseed to 5):")
     sim_reseed_raw = [0, 0, 31744]
     sim_reseed_float = []
     for val in sim_reseed_raw:
@@ -104,12 +104,12 @@ def generate_sphere_reference():
           f"Err=[{error_x:.6f}, {error_y:.6f}, {error_z:.6f}]")
     
     if error_x < 0.5 and error_y < 0.5 and error_z < 0.5:
-        print(f"  Status: PASS (within tolerance)")
+        print("  Status: PASS (within tolerance)")
     else:
-        print(f"  Status: FAIL (outside tolerance)")
+        print("  Status: FAIL (outside tolerance)")
     
     # Check if points are on unit sphere
-    print(f"\nUnit sphere validation:")
+    print("\nUnit sphere validation:")
     for i, sim_raw in enumerate(sim_values_raw):
         k = i + 1
         # Convert from Q32 fixed point (handle signed values)

@@ -35,7 +35,7 @@ def generate_sphere3hopf_reference():
     """Generate reference values for Sphere3Hopf sequence bases [2,3,7]"""
     base_triples = [(2, 3, 7), (2, 7, 3), (3, 2, 7)]
     
-    print(f"Sphere3Hopf Sequence Reference Values")
+    print("Sphere3Hopf Sequence Reference Values")
     print("=" * 60)
     
     for base_0, base_1, base_2 in base_triples:
@@ -58,7 +58,7 @@ def generate_sphere3hopf_reference():
         [0, 0, 0, 0],     # k=5
     ]
     
-    print(f"\nComparing simulation results (bases [2,3,7]):")
+    print("\nComparing simulation results (bases [2,3,7]):")
     for i, sim_raw in enumerate(sim_values_raw):
         k = i + 1
         # Convert from Q32 fixed point (handle signed values)
@@ -83,12 +83,12 @@ def generate_sphere3hopf_reference():
         
         # Check if within reasonable tolerance
         if error_x < 0.5 and error_y < 0.5 and error_z < 0.5 and error_w < 0.5:
-            print(f"    Status: PASS (within tolerance)")
+            print("    Status: PASS (within tolerance)")
         else:
-            print(f"    Status: FAIL (outside tolerance)")
+            print("    Status: FAIL (outside tolerance)")
     
     # Test reseed functionality
-    print(f"\nReseed test (k=6 after reseed to 5):")
+    print("\nReseed test (k=6 after reseed to 5):")
     sim_reseed_raw = [0, 0, 0, 0]
     sim_reseed_float = []
     for val in sim_reseed_raw:
@@ -109,12 +109,12 @@ def generate_sphere3hopf_reference():
     print(f"Err=[{error_x:.6f}, {error_y:.6f}, {error_z:.6f}, {error_w:.6f}]")
     
     if error_x < 0.5 and error_y < 0.5 and error_z < 0.5 and error_w < 0.5:
-        print(f"Status: PASS (within tolerance)")
+        print("Status: PASS (within tolerance)")
     else:
-        print(f"Status: FAIL (outside tolerance)")
+        print("Status: FAIL (outside tolerance)")
     
     # Check if points are on unit 3-sphere
-    print(f"\nUnit 3-sphere validation:")
+    print("\nUnit 3-sphere validation:")
     for i, sim_raw in enumerate(sim_values_raw):
         k = i + 1
         # Convert from Q32 fixed point (handle signed values)

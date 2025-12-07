@@ -55,7 +55,7 @@ def generate_halton_reference():
         print(f"k={k}: Sim=[{sim_val[0]:6d}, {sim_val[1]:6d}] Exp=[{expected[0]:6d}, {expected[1]:6d}] {status}")
     
     # Test reseed functionality
-    print(f"\nReseed test (k=6 after reseed to 5):")
+    print("\nReseed test (k=6 after reseed to 5):")
     expected_reseed = halton_sequence(6, bases, scales)
     sim_reseed = [768, 1539]  # From simulation
     match_reseed = (sim_reseed[0] == expected_reseed[0] and sim_reseed[1] == expected_reseed[1])
