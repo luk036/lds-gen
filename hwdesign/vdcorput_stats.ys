@@ -1,0 +1,15 @@
+# Yosys script to get statistics
+
+# Read Verilog files
+read_verilog vdcorput_fsm_32bit_simple.v
+read_verilog div_mod_3.v
+read_verilog div_mod_7.v
+
+# Hierarchy check
+hierarchy -check -top vdcorput_fsm_32bit_simple
+
+# Simple synthesis
+synth
+
+# Statistics
+stat -top vdcorput_fsm_32bit_simple

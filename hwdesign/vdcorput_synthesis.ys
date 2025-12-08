@@ -1,0 +1,37 @@
+# Yosys synthesis script for VdCorput module
+# Generates gate-level netlist from Verilog RTL
+
+# Read Verilog files
+read_verilog vdcorput_fsm_32bit_simple.v
+read_verilog div_mod_3.v
+read_verilog div_mod_7.v
+
+# Hierarchy check
+hierarchy -check -top vdcorput_fsm_32bit_simple
+
+# High-level synthesis
+proc; opt; fsm; opt; memory; opt
+
+# Technology mapping to generic gates
+techmap; opt
+
+# Map to flip-flops (dfflibmap)
+dfflibmap -liberty my_cells.lib
+
+# ABC synthesis for logic optimization
+abc -liberty my_cells.lib
+
+# Clean up
+opt_clean
+
+# Write netlist in Verilog format
+write_verilog -noattr vdcorput_netlist.v
+
+# Write netlist in BLIF format
+write_blif vdcorput_netlist.blif
+
+# Write netlist in JSON format (for visualization)
+write_json vdcorput_netlist.json
+
+# Statistics
+stat
