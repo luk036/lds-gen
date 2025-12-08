@@ -1,0 +1,11 @@
+# Minimal Yosys synthesis script for halton_32bit.sv
+
+# Read the SystemVerilog files
+read_verilog vdcorput_32bit.sv
+read_verilog halton_32bit.sv
+
+# Convert to gate-level netlist
+synth
+
+# Write the gate-level netlist in Verilog format
+write_verilog halton_32bit_netlist.v

@@ -182,7 +182,7 @@ module sphere3_32bit_tb;
             else if (w_oct < 0 && x_oct >= 0 && y_oct >= 0 && z_oct < 0) orth_count[9] = orth_count[9] + 1;      // -++-
             else if (w_oct < 0 && x_oct < 0 && y_oct >= 0 && z_oct < 0) orth_count[10] = orth_count[10] + 1;     // --+-
             else if (w_oct >= 0 && x_oct < 0 && y_oct >= 0 && z_oct < 0) orth_count[11] = orth_count[11] + 1;    // -++-
-            else if (w_oct >= 0 && x_oct >= 0 && y_oct < 0 && z_oct < 0) orth_count[12] = orth_count[12] + 1;    // +--
+            else if (w_oct >= 0 && x_oct >= 0 && y_oct < 0 && z_oct < 0) orth_count[12] = orth_count[12] + 1;    // ++--
             else if (w_oct < 0 && x_oct >= 0 && y_oct < 0 && z_oct < 0) orth_count[13] = orth_count[13] + 1;     // +---
             else if (w_oct < 0 && x_oct < 0 && y_oct < 0 && z_oct < 0) orth_count[14] = orth_count[14] + 1;      // ----
             else orth_count[15] = orth_count[15] + 1;                                                         // other
@@ -221,6 +221,7 @@ module sphere3_32bit_tb;
         // Test 6: Normalization check
         $display("\n--- Test 6: Normalization Check ---");
         real avg_radius, max_radius, min_radius;
+        real w_norm, x_norm, y_norm, z_norm, radius;
         avg_radius = 0.0;
         max_radius = 0.0;
         min_radius = 2.0;
@@ -229,7 +230,6 @@ module sphere3_32bit_tb;
         for (i = 0; i < 10; i = i + 1) begin
             @(posedge valid);
             
-            real w_norm, x_norm, y_norm, z_norm, radius;
             w_norm = $itor($signed(sphere3_w)) / $itor(FIXED_SCALE);
             x_norm = $itor($signed(sphere3_x)) / $itor(FIXED_SCALE);
             y_norm = $itor($signed(sphere3_y)) / $itor(FIXED_SCALE);

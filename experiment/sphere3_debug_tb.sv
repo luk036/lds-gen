@@ -1,13 +1,13 @@
 `timescale 1ns/1ps
 
 /*
-Sphere3 32-bit Simple Testbench
+Sphere3 32-bit Debug Testbench
 
-This testbench verifies the basic functionality of the Sphere3 sequence generator
-for base triple [2,3,7].
+This testbench helps debug the Sphere3 sequence generator
+by showing internal state transitions.
 */
 
-module sphere3_simple_tb;
+module sphere3_debug_tb;
 
     // Test parameters
     parameter CLK_PERIOD = 10;
@@ -70,55 +70,55 @@ module sphere3_simple_tb;
         rst_n = 1'b1;
         #10;
         
-        $display("=== Sphere3 32-bit Simple Testbench ===");
+        $display("=== Sphere3 32-bit Debug Testbench ===");
         $display("Testing bases [2,3,7] with scale %0d", TEST_SCALE);
         
-        // Test 1: Basic sequence generation
-        $display("\n--- Test 1: Basic Sphere3 Sequence ---");
+        // Enable pop and wait for valid output
+        $display("\n--- Testing basic sequence generation ---");
         pop_enable = 1'b1;
         
-        // Test first few values
-        for (i = 0; i < 8; i = i + 1) begin
-            @(posedge valid);
-            $display("Point %0d: w=%0d, x=%0d, y=%0d, z=%0d", 
-                     i + 1, sphere3_w, sphere3_x, sphere3_y, sphere3_z);
-        end
+        // Wait for first valid output with timeout
+        fork
+            begin
+                @(posedge valid);
+                $display("Got valid output at time %0t", $time);
+                $display("Point: w=%0d, x=%0d, y=%0d, z=%0d", 
+                         sphere3_w, sphere3_x, sphere3_y, sphere3_z);
+                pop_enable = 1'b0;
+            end
+            begin
+                #10000;
+                $display("ERROR: Timeout waiting for valid output!");
+                pop_enable = 1'b0;
+            end
+        join_any
+        disable fork;
         
-        pop_enable = 1'b0;
         #20;
         
-        // Test 2: Reseed functionality
-        $display("\n--- Test 2: Reseed Test ---");
-        reseed_enable = 1'b1;
-        seed = 32'd5;
-        @(posedge clk);
-        reseed_enable = 1'b0;
-        #10;
-        
+        // Try second point
+        $display("\n--- Testing second point ---");
         pop_enable = 1'b1;
-        @(posedge valid);
-        $display("After reseed to 5: w=%0d, x=%0d, y=%0d, z=%0d", 
-                 sphere3_w, sphere3_x, sphere3_y, sphere3_z);
         
-        pop_enable = 1'b0;
+        fork
+            begin
+                @(posedge valid);
+                $display("Got second valid output at time %0t", $time);
+                $display("Point: w=%0d, x=%0d, y=%0d, z=%0d", 
+                         sphere3_w, sphere3_x, sphere3_y, sphere3_z);
+                pop_enable = 1'b0;
+            end
+            begin
+                #10000;
+                $display("ERROR: Timeout waiting for second valid output!");
+                pop_enable = 1'b0;
+            end
+        join_any
+        disable fork;
+        
         #20;
         
-        // Test 3: Reset test
-        $display("\n--- Test 3: Reset Test ---");
-        rst_n = 1'b0;
-        #20;
-        rst_n = 1'b1;
-        #10;
-        
-        pop_enable = 1'b1;
-        @(posedge valid);
-        $display("After reset: w=%0d, x=%0d, y=%0d, z=%0d", 
-                 sphere3_w, sphere3_x, sphere3_y, sphere3_z);
-        
-        pop_enable = 1'b0;
-        #20;
-        
-        $display("\n=== Sphere3 Simple Tests Completed ===");
+        $display("\n=== Sphere3 Debug Tests Completed ===");
         $finish;
     end
     

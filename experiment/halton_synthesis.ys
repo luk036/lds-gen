@@ -1,0 +1,32 @@
+# Yosys synthesis script for halton_32bit.sv
+# This script converts the SystemVerilog module to a gate-level netlist
+
+# Read the SystemVerilog files (halton_32bit and its dependency vdcorput_32bit)
+read_verilog vdcorput_32bit.sv
+read_verilog halton_32bit.sv
+
+# Show the design hierarchy
+hierarchy -check
+
+# Perform high-level optimizations
+proc
+opt_clean
+
+# Convert to gate-level netlist
+# Using the default synth command which includes:
+# - RTL synthesis
+# - Technology mapping
+# - Optimization
+synth
+
+# Show statistics about the design
+stat
+
+# Write the gate-level netlist in Verilog format
+write_verilog -noattr halton_32bit_netlist.v
+
+# Also write in BLIF format for compatibility with other tools
+write_blif halton_32bit_netlist.blif
+
+# Write in JSON format for visualization
+write_json halton_32bit_netlist.json

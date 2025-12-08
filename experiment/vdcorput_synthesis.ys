@@ -1,0 +1,34 @@
+# Yosys synthesis script for vdcorput_32bit.sv
+# This script converts the SystemVerilog module to a gate-level netlist
+
+# Read the SystemVerilog file
+read_verilog vdcorput_32bit.sv
+
+# Show the design hierarchy
+hierarchy -check
+
+# Convert SystemVerilog to Verilog (if needed)
+# This ensures compatibility with synthesis tools
+
+# Perform high-level optimizations
+proc
+opt_clean
+
+# Convert to gate-level netlist
+# Using the default synth command which includes:
+# - RTL synthesis
+# - Technology mapping
+# - Optimization
+synth
+
+# Show statistics about the design
+stat
+
+# Write the gate-level netlist in Verilog format
+write_verilog -noattr vdcorput_32bit_netlist.v
+
+# Also write in BLIF format for compatibility with other tools
+write_blif vdcorput_32bit_netlist.blif
+
+# Write in JSON format for visualization
+write_json vdcorput_32bit_netlist.json

@@ -50,6 +50,10 @@ module halton_32bit #(
     localparam POP_1 = 2'b10;
     localparam OUTPUT = 2'b11;
     
+    // Control signals for each VDC generator
+    wire vdc0_pop_enable = pop_enable_reg && (state == POP_0);
+    wire vdc1_pop_enable = pop_enable_reg && (state == POP_1);
+    
     // Instantiate Van der Corput generator for base 2
     vdcorput_32bit #(
         .BASE(2),
@@ -57,7 +61,7 @@ module halton_32bit #(
     ) vdc_gen_0 (
         .clk(clk),
         .rst_n(rst_n),
-        .pop_enable(pop_enable_reg && (state == POP_0)),
+        .pop_enable(vdc0_pop_enable),
         .seed(seed_reg),
         .reseed_enable(reseed_enable_reg),
         .vdc_out(vdc_out_0),
@@ -71,7 +75,7 @@ module halton_32bit #(
     ) vdc_gen_1 (
         .clk(clk),
         .rst_n(rst_n),
-        .pop_enable(pop_enable_reg && (state == POP_1)),
+        .pop_enable(vdc1_pop_enable),
         .seed(seed_reg),
         .reseed_enable(reseed_enable_reg),
         .vdc_out(vdc_out_1),
@@ -116,6 +120,7 @@ module halton_32bit #(
                 end
                 
                 POP_1: begin
+                    // Trigger second VDC generator
                     pop_enable_reg <= 1'b1;
                     if (vdc_valid_1) begin
                         halton_out_1 <= vdc_out_1;
@@ -124,7 +129,6 @@ module halton_32bit #(
                 end
                 
                 OUTPUT: begin
-                    pop_enable_reg <= 1'b0;
                     valid <= 1'b1;
                     state <= IDLE;
                 end
