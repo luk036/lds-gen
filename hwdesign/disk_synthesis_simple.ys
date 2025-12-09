@@ -1,0 +1,29 @@
+# Yosys synthesis script for Disk FSM (Simple version)
+# Minimal synthesis flow for faster execution
+
+# Read all required Verilog files
+read_verilog disk_fsm_32bit_simple_fixed.v
+read_verilog vdcorput_fsm_32bit_simple.v
+read_verilog cordic_trig_16bit_simple_fixed.v
+read_verilog sqrt_approx_16_16.v
+read_verilog div_mod_3.v
+read_verilog div_mod_7.v
+
+# Hierarchy check
+hierarchy -check -top disk_fsm_32bit_simple_fixed
+
+# Basic synthesis
+proc      # Process procedural blocks
+opt       # Optimize
+
+# Simple synthesis without complex optimizations
+synth
+
+# Write netlist in Verilog format
+write_verilog -noattr disk_netlist.v
+
+# Write netlist in BLIF format  
+write_blif disk_netlist.blif
+
+# Statistics
+stat

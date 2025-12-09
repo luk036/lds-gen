@@ -1,0 +1,39 @@
+# Yosys synthesis script for Circle FSM
+# Based on previous VdCorput and Halton synthesis experience
+
+# Read all required Verilog files
+read_verilog circle_fsm_32bit_simple.v
+read_verilog vdcorput_fsm_32bit_simple.v
+read_verilog cordic_trig_16bit_simple.v
+read_verilog div_mod_3.v
+read_verilog div_mod_7.v
+
+# Hierarchy check
+hierarchy -check -top circle_fsm_32bit_simple
+
+# High-level synthesis
+proc      # Process procedural blocks
+opt       # Optimize
+fsm       # Extract and optimize finite state machines
+opt       # Optimize again
+memory    # Process memories
+opt       # Optimize again
+
+# Technology mapping
+techmap   # Technology mapping
+opt       # Optimize
+
+# Simple synthesis (without ABC for Windows compatibility)
+synth
+
+# Clean up
+opt_clean
+
+# Write netlist in Verilog format
+write_verilog -noattr circle_netlist.v
+
+# Write netlist in BLIF format  
+write_blif circle_netlist.blif
+
+# Statistics
+stat
