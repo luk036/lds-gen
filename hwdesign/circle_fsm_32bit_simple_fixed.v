@@ -161,7 +161,7 @@ module circle_fsm_32bit_simple_fixed (
                         // In fixed-point: multiply by FP_TWO_PI
                         // angle_reg = (vdc_result * FP_TWO_PI) >> 16
                         angle_reg <= (vdc_result * FP_TWO_PI) >> 16;
-                        
+
                         // Convert to 16-bit CORDIC angle (0-65535 for 0-2π)
                         // cordic_angle = angle_reg >> 16 (take integer part)
                         cordic_angle <= angle_reg[31:16];

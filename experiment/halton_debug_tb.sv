@@ -10,7 +10,7 @@ module halton_debug_tb;
 
     // Test parameters
     parameter CLK_PERIOD = 10;
-    
+
     // Signals for DUT connections
     reg         clk;
     reg         rst_n;
@@ -20,11 +20,11 @@ module halton_debug_tb;
     wire [31:0] halton_out_0;
     wire [31:0] halton_out_1;
     wire        valid;
-    
+
     // Test counters
     reg [31:0] i;
     reg [31:0] timeout_count;
-    
+
     // Instantiate DUT
     halton_32bit_fixed dut (
         .clk(clk),
@@ -36,13 +36,13 @@ module halton_debug_tb;
         .halton_out_1(halton_out_1),
         .valid(valid)
     );
-    
+
     // Clock generation
     initial begin
         clk = 0;
         forever #(CLK_PERIOD/2) clk = ~clk;
     end
-    
+
     // Test stimulus
     initial begin
         // Initialize signals
@@ -51,20 +51,20 @@ module halton_debug_tb;
         reseed_enable = 1'b0;
         seed = 32'd0;
         timeout_count = 0;
-        
+
         // Apply reset
         #20;
         rst_n = 1'b1;
         #10;
-        
+
         $display("=== Halton 32-bit Debug Testbench ===");
-        
+
         // Test 1: Try single pop
         $display("\n--- Test 1: Single pop ---");
         pop_enable = 1'b1;
         #10;
         pop_enable = 1'b0;
-        
+
         // Wait for valid with timeout
         fork
             begin
@@ -77,15 +77,15 @@ module halton_debug_tb;
             end
         join_any
         disable fork;
-        
+
         #20;
-        
+
         // Test 2: Try second pop
         $display("\n--- Test 2: Second pop ---");
         pop_enable = 1'b1;
         #10;
         pop_enable = 1'b0;
-        
+
         // Wait for valid with timeout
         fork
             begin
@@ -98,13 +98,13 @@ module halton_debug_tb;
             end
         join_any
         disable fork;
-        
+
         #20;
-        
+
         $display("\n=== Debug Tests Completed ===");
         $finish;
     end
-    
+
     // Timeout protection
     initial begin
         #10000;

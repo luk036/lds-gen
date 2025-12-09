@@ -23,7 +23,7 @@ module disk_minimal_test;
     wire [31:0] vdc0_result, vdc1_result;
     wire vdc0_done, vdc1_done;
     wire vdc0_ready, vdc1_ready;
-    
+
     vdcorput_fsm_32bit_simple vdc0 (
         .clk(clk),
         .rst_n(rst_n),
@@ -34,7 +34,7 @@ module disk_minimal_test;
         .done(vdc0_done),
         .ready(vdc0_ready)
     );
-    
+
     vdcorput_fsm_32bit_simple vdc1 (
         .clk(clk),
         .rst_n(rst_n),
@@ -57,25 +57,25 @@ module disk_minimal_test;
         input [31:0] tolerance; // 16.16 fixed-point tolerance
         begin
             k_in = test_k;
-            
+
             wait(vdc0_ready == 1);
             @(posedge clk);
             start = 1;
             @(posedge clk);
             start = 0;
-            
+
             wait(vdc0_done == 1);
             @(posedge clk);
-            
-            if ((vdc0_result >= expected - tolerance) && 
+
+            if ((vdc0_result >= expected - tolerance) &&
                 (vdc0_result <= expected + tolerance)) begin
-                $display("PASS: k=%0d, base=%0d, result=%h, expected=%h", 
+                $display("PASS: k=%0d, base=%0d, result=%h, expected=%h",
                          test_k, test_base+2, vdc0_result, expected);
             end else begin
-                $display("FAIL: k=%0d, base=%0d, result=%h, expected=%h", 
+                $display("FAIL: k=%0d, base=%0d, result=%h, expected=%h",
                          test_k, test_base+2, vdc0_result, expected);
             end
-            
+
             #(CLK_PERIOD * 5);
         end
     endtask
@@ -87,32 +87,32 @@ module disk_minimal_test;
         k_in = 0;
         base_sel0 = 0;
         base_sel1 = 0;
-        
+
         #(CLK_PERIOD * 2);
         rst_n = 1;
         #(CLK_PERIOD * 2);
-        
+
         $display("Testing VdCorput modules (basic functionality)");
         $display("==============================================");
-        
+
         // Test VdCorput with base 2
         base_sel0 = 2'b00;  // Base 2
-        
+
         // k=1: 0.5 in fixed-point = 0.5 * 65536 = 32768
         run_vdc_test(32'd1, 2'b00, 32'h00008000, 32'd100);
-        
+
         // k=2: 0.25 in fixed-point = 0.25 * 65536 = 16384
         run_vdc_test(32'd2, 2'b00, 32'h00004000, 32'd100);
-        
+
         // Test VdCorput with base 3
         base_sel0 = 2'b01;  // Base 3
-        
+
         // k=1: 1/3 ≈ 0.33333 in fixed-point = 0.33333 * 65536 = 21845
         run_vdc_test(32'd1, 2'b01, 32'h00005555, 32'd100);
-        
+
         // k=2: 2/3 ≈ 0.66667 in fixed-point = 0.66667 * 65536 = 43690
         run_vdc_test(32'd2, 2'b01, 32'h0000AAAA, 32'd100);
-        
+
         $display("\nAll basic tests completed");
         $finish;
     end

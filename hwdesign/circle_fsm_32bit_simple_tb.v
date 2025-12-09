@@ -22,15 +22,15 @@ module circle_fsm_32bit_simple_tb;
 
     // Test vectors
     reg [31:0] test_k [0:4];
-    
+
     // Base 2 expected values (16.16 fixed-point, 2's complement)
     reg [31:0] test_expected_x_2 [0:4];
     reg [31:0] test_expected_y_2 [0:4];
-    
+
     // Base 3 expected values
     reg [31:0] test_expected_x_3 [0:4];
     reg [31:0] test_expected_y_3 [0:4];
-    
+
     // Base 7 expected values
     reg [31:0] test_expected_x_7 [0:4];
     reg [31:0] test_expected_y_7 [0:4];
@@ -79,12 +79,12 @@ module circle_fsm_32bit_simple_tb;
         test_k[2] = 32'd3;
         test_k[3] = 32'd4;
         test_k[4] = 32'd5;
-        
+
         // Base 2 expected values (from Python, adjusted for CORDIC gain)
         // CORDIC outputs are already scaled by K ≈ 0.607
         // So we need to compare with scaled expected values
         // For simplicity, we'll use tolerance-based checking
-        
+
         // Base 3 expected values (placeholder - will use tolerance checking)
         // Base 7 expected values (placeholder - will use tolerance checking)
     end
@@ -97,24 +97,24 @@ module circle_fsm_32bit_simple_tb;
             // Wait for module to be ready
             wait(ready == 1'b1);
             @(posedge clk);
-            
+
             // Apply test vector
             k_in = k_val;
             base_sel = base_val;
             start = 1'b1;
-            
+
             @(posedge clk);
             start = 1'b0;
-            
+
             // Wait for computation to complete
             wait(done == 1'b1);
             @(posedge clk);
-            
+
             // For Circle sequence with CORDIC, we do basic sanity checks:
             // 1. Values are within range [-1.2, 1.2] in fixed-point
             // 2. Outputs are not zero (unless at specific angles)
             // 3. Different k values produce different outputs
-            
+
             // Check if values are within reasonable range
             // In 16.16 fixed-point, 1.0 = 0x00010000, -1.0 = 0xFFFF0000
             // Allow some margin: ±1.2 = ±0x00013333
@@ -129,7 +129,7 @@ module circle_fsm_32bit_simple_tb;
                 test_failed = test_failed + 1;
                 error_count = error_count + 1;
             end
-            
+
             total_tests = total_tests + 1;
         end
     endtask
@@ -147,38 +147,38 @@ module circle_fsm_32bit_simple_tb;
         total_tests = 0;
         test_passed = 0;
         test_failed = 0;
-        
+
         // Apply reset
         #(CLK_PERIOD * 2);
         rst_n = 1;
         #(CLK_PERIOD * 2);
-        
+
         $display("==========================================");
         $display("Starting Circle FSM Testbench");
         $display("Testing unit circle property: x² + y² ≈ 1");
         $display("==========================================");
-        
+
         // Test Base 2
         $display("\nTesting Base 2:");
         $display("----------------");
         for (test_index = 0; test_index < 5; test_index = test_index + 1) begin
             run_test(test_k[test_index], 2'b00);
         end
-        
+
         // Test Base 3
         $display("\nTesting Base 3:");
         $display("----------------");
         for (test_index = 0; test_index < 5; test_index = test_index + 1) begin
             run_test(test_k[test_index], 2'b01);
         end
-        
+
         // Test Base 7
         $display("\nTesting Base 7:");
         $display("----------------");
         for (test_index = 0; test_index < 5; test_index = test_index + 1) begin
             run_test(test_k[test_index], 2'b10);
         end
-        
+
         // Summary
         $display("\n==========================================");
         $display("Test Summary:");
@@ -186,15 +186,15 @@ module circle_fsm_32bit_simple_tb;
         $display("  Passed: %0d", test_passed);
         $display("  Failed: %0d", test_failed);
         $display("  Error count: %0d", error_count);
-        
+
         if (error_count == 0) begin
             $display("\nAll tests PASSED! Circle points are on unit circle.");
         end else begin
             $display("\nSome tests FAILED! Check CORDIC implementation.");
         end
-        
+
         $display("==========================================");
-        
+
         // Finish simulation
         #(CLK_PERIOD * 10);
         $finish;

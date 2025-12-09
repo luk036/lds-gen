@@ -13,7 +13,7 @@ The algorithm works by:
 
 This implementation supports:
 - Base 2: Binary Van der Corput sequence
-- Base 3: Ternary Van der Corput sequence  
+- Base 3: Ternary Van der Corput sequence
 - Base 7: Septenary Van der Corput sequence
 - 32-bit integer arithmetic
 - Configurable scale parameter (default 16)
@@ -35,7 +35,7 @@ module vdcorput_32bit #(
     // Internal registers
     reg [31:0] count;
     reg [31:0] factor;
-    
+
     // Pre-computed factor values for common base/scale combinations
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -56,7 +56,7 @@ module vdcorput_32bit #(
             end
         end
     end
-    
+
     // Main sequential logic
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -69,7 +69,7 @@ module vdcorput_32bit #(
                 count <= seed;
                 vdc_out <= 32'd0;
                 valid <= 1'b0;
-            end 
+            end
             // Handle pop operation
             else if (pop_enable) begin
                 count <= count + 1'b1;
@@ -81,7 +81,7 @@ module vdcorput_32bit #(
             end
         end
     end
-    
+
     // Van der Corput calculation (inline for synthesis)
     function [31:0] calculate_vdc_inline;
         input [31:0] k;
@@ -93,7 +93,7 @@ module vdcorput_32bit #(
             k_temp = k;
             vdc_val = 32'd0;
             factor_temp = factor;
-            
+
             // Unroll the while loop for synthesis (limited iterations)
             // This is a simplified version that works for synthesis
             if (k_temp != 0) begin
@@ -102,35 +102,35 @@ module vdcorput_32bit #(
                 k_temp = k_temp / BASE;
                 vdc_val = vdc_val + (remainder * factor_temp);
             end
-            
+
             if (k_temp != 0) begin
                 factor_temp = factor_temp / BASE;
                 remainder = k_temp % BASE;
                 k_temp = k_temp / BASE;
                 vdc_val = vdc_val + (remainder * factor_temp);
             end
-            
+
             if (k_temp != 0) begin
                 factor_temp = factor_temp / BASE;
                 remainder = k_temp % BASE;
                 k_temp = k_temp / BASE;
                 vdc_val = vdc_val + (remainder * factor_temp);
             end
-            
+
             if (k_temp != 0) begin
                 factor_temp = factor_temp / BASE;
                 remainder = k_temp % BASE;
                 k_temp = k_temp / BASE;
                 vdc_val = vdc_val + (remainder * factor_temp);
             end
-            
+
             if (k_temp != 0) begin
                 factor_temp = factor_temp / BASE;
                 remainder = k_temp % BASE;
                 k_temp = k_temp / BASE;
                 vdc_val = vdc_val + (remainder * factor_temp);
             end
-            
+
             calculate_vdc_inline = vdc_val;
         end
     endfunction

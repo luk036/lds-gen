@@ -43,19 +43,19 @@ module circle_32bit #(
     // Internal signals for Van der Corput generator
     wire [31:0] vdc_out;
     wire        vdc_valid;
-    
+
     // Angle calculation
     reg [ANGLE_BITS-1:0] angle_reg;
     reg [31:0] vdc_value_reg;
-    
+
     // Trigonometric calculation signals
     reg [31:0] cos_val, sin_val;
     reg [4:0] cordic_iter;
     reg        trig_calc_active;
-    
+
     // Constants for 2π scaling
     localparam TWO_PI_SCALE = (1 << ANGLE_BITS);
-    
+
     // Instantiate Van der Corput generator
     vdcorput_32bit #(
         .BASE(BASE),
@@ -69,7 +69,7 @@ module circle_32bit #(
         .vdc_out(vdc_out),
         .valid(vdc_valid)
     );
-    
+
     // State machine
     reg [2:0] state;
     localparam IDLE = 3'b000;
@@ -77,7 +77,7 @@ module circle_32bit #(
     localparam TRIG_START = 3'b010;
     localparam TRIG_CALC = 3'b011;
     localparam OUTPUT = 3'b100;
-    
+
     // Main state machine
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -96,20 +96,20 @@ module circle_32bit #(
                 IDLE: begin
                     valid <= 1'b0;
                     trig_calc_active <= 1'b0;
-                    
+
                     if (vdc_valid) begin
                         vdc_value_reg <= vdc_out;
                         state <= ANGLE_CALC;
                     end
                 end
-                
+
                 ANGLE_CALC: begin
                     // Convert VDC value to angle: angle = vdc * 2π
                     // Scale VDC value to angle range [0, 2π)
                     angle_reg <= (vdc_value_reg * TWO_PI_SCALE) >> SCALE;
                     state <= TRIG_START;
                 end
-                
+
                 TRIG_START: begin
                     // Initialize CORDIC calculation
                     cos_val <= 32'd2147483648;  // 1.0 in Q32 fixed point
@@ -118,7 +118,7 @@ module circle_32bit #(
                     trig_calc_active <= 1'b1;
                     state <= TRIG_CALC;
                 end
-                
+
                 TRIG_CALC: begin
                     // Simplified trigonometric calculation using lookup table
                     if (cordic_iter < 16) begin
@@ -129,19 +129,19 @@ module circle_32bit #(
                         state <= OUTPUT;
                     end
                 end
-                
+
                 OUTPUT: begin
                     circle_x <= cos_val;
                     circle_y <= sin_val;
                     valid <= 1'b1;
                     state <= IDLE;
                 end
-                
+
                 default: state <= IDLE;
             endcase
         end
     end
-    
+
     // Simplified trigonometric approximation
     always @(posedge clk) begin
         if (trig_calc_active) begin

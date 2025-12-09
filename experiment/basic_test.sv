@@ -4,12 +4,12 @@ module basic_test;
 
     reg clk;
     reg rst_n;
-    
+
     initial begin
         clk = 0;
         forever #5 clk = ~clk;
     end
-    
+
     initial begin
         $display("Test started");
         rst_n = 0;

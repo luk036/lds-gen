@@ -10,7 +10,7 @@ module sphere_simple_tb;
     parameter CLK_PERIOD = 10;
     parameter TEST_SCALE = 16;
     parameter TEST_ANGLE_BITS = 16;
-    
+
     // Signals for DUT connections
     reg         clk;
     reg         rst_n;
@@ -21,7 +21,7 @@ module sphere_simple_tb;
     wire [31:0] sphere_y;
     wire [31:0] sphere_z;
     wire        valid;
-    
+
     // Instantiate DUT for bases [3,7]
     sphere_32bit #(
         .BASE_0(3),
@@ -39,13 +39,13 @@ module sphere_simple_tb;
         .sphere_z(sphere_z),
         .valid(valid)
     );
-    
+
     // Clock generation
     initial begin
         clk = 0;
         forever #(CLK_PERIOD/2) clk = ~clk;
     end
-    
+
     // Test stimulus
     initial begin
         // Initialize signals
@@ -53,17 +53,17 @@ module sphere_simple_tb;
         pop_enable = 1'b0;
         reseed_enable = 1'b0;
         seed = 32'd0;
-        
+
         // Apply reset
         #20;
         rst_n = 1'b1;
         #10;
-        
+
         $display("=== Sphere Simple Debug Testbench ===");
-        
+
         // Test basic sequence generation
         pop_enable = 1'b1;
-        
+
         // Wait for valid output with timeout
         fork
             begin
@@ -76,10 +76,10 @@ module sphere_simple_tb;
                 $display("Timeout - No valid output received");
             end
         join
-        
+
         pop_enable = 1'b0;
         #20;
-        
+
         $display("\n=== Debug Test Complete ===");
         $finish;
     end

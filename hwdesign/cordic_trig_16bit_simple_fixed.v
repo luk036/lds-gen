@@ -34,29 +34,29 @@ module cordic_trig_16bit_simple_fixed (
     parameter IDLE = 2'b00;
     parameter COMPUTE = 2'b01;
     parameter FINISH = 2'b10;
-    
+
     reg [1:0] state, next_state;
     reg [3:0] iteration;
-    
+
     // Arctan table for 16-bit CORDIC (atan(2^-i) in 16-bit units)
     // Values in 16-bit fixed-point where 65536 = 2π
     // atan(2^-i) * 65536 / (2π)
     reg [15:0] atan_table [0:15];
-    
+
     // CORDIC variables (17-bit with guard bit)
     reg [16:0] x, y;
     reg [15:0] z;
     reg [15:0] angle_reg;  // Store original angle for quadrant correction
-    
+
     // Temporary variables moved outside always block for Yosys compatibility
     reg [15:0] reduced_angle;
     reg [31:0] x_scaled, y_scaled;
     reg [31:0] cos_result, sin_result;
-    
+
     // CORDIC gain K ≈ 0.607253
     // In 17-bit: 0.607253 * 65536 = 39797
     parameter K = 17'd39797;
-    
+
     // Initialize arctan table
     integer i;
     initial begin
@@ -130,12 +130,12 @@ module cordic_trig_16bit_simple_fixed (
                         ready <= 0;
                         // Save original angle for quadrant correction
                         angle_reg <= angle;
-                        
+
                         // Initialize CORDIC with angle reduction
                         // CORDIC converges for angles in [-π/2, π/2]
                         // Our angle is 0-65535 for 0-2π
                         // We need to map to [-π/2, π/2] = [0, 16384] for positive
-                        
+
                         if (angle < 16384) begin
                             // 0-90°: use directly
                             reduced_angle = angle;
@@ -157,7 +157,7 @@ module cordic_trig_16bit_simple_fixed (
                             x <= 0;
                             y <= -K;
                         end
-                        
+
                         z <= reduced_angle;
                         iteration <= 0;
                     end
@@ -183,17 +183,17 @@ module cordic_trig_16bit_simple_fixed (
                     // Scale to ±65536 for ±1.0 in 16.16
                     // Scale factor: 65536/39797 ≈ 1.647
                     // Simple scaling: multiply by 1.647 ≈ 1 + 0.5 + 0.125 + 0.015625
-                    
+
                     x_scaled = {x[15:0], 16'b0} +               // x * 65536
                                ({x[15:0], 16'b0} >> 1) +        // x * 32768
                                ({x[15:0], 16'b0} >> 3) +        // x * 8192
                                ({x[15:0], 16'b0} >> 6);         // x * 1024
-                               
+
                     y_scaled = {y[15:0], 16'b0} +               // y * 65536
                                ({y[15:0], 16'b0} >> 1) +        // y * 32768
                                ({y[15:0], 16'b0} >> 3) +        // y * 8192
                                ({y[15:0], 16'b0} >> 6);         // y * 1024
-                    
+
                     // Quadrant correction based on original angle
                     if (angle_reg < 16384) begin
                         // 0-90°: cos = x, sin = y
@@ -212,7 +212,7 @@ module cordic_trig_16bit_simple_fixed (
                         cos_result = y_scaled;
                         sin_result = -x_scaled;
                     end
-                    
+
                     cosine <= cos_result;
                     sine <= sin_result;
                     done <= 1;

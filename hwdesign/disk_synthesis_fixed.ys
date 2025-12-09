@@ -33,7 +33,7 @@ opt_clean
 # Write netlist in Verilog format
 write_verilog -noattr disk_netlist.v
 
-# Write netlist in BLIF format  
+# Write netlist in BLIF format
 write_blif disk_netlist.blif
 
 # Statistics

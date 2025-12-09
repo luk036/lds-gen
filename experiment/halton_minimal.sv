@@ -19,7 +19,7 @@ module halton_minimal #(
 );
 
     reg [31:0] count;
-    
+
     // Very simple VDC for base 2 (only first few iterations)
     function [31:0] vdc_base2;
         input [31:0] k;
@@ -34,7 +34,7 @@ module halton_minimal #(
             endcase
         end
     endfunction
-    
+
     // Very simple VDC for base 3 (only first few iterations)
     function [31:0] vdc_base3;
         input [31:0] k;
@@ -49,7 +49,7 @@ module halton_minimal #(
             endcase
         end
     endfunction
-    
+
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             count <= 32'd0;

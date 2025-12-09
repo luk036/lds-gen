@@ -106,14 +106,14 @@ function [31:0] calculate_vdc;
         k_temp = k;
         vdc_val = 32'd0;
         factor_temp = factor;
-        
+
         while (k_temp != 0) begin
             factor_temp = factor_temp / BASE;
             remainder = k_temp % BASE;
             k_temp = k_temp / BASE;
             vdc_val = vdc_val + (remainder * factor_temp);
         end
-        
+
         calculate_vdc = vdc_val;
     end
 endfunction

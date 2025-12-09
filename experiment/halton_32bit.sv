@@ -1,7 +1,7 @@
 /*
 Halton Sequence Generator (32-bit)
 
-This SystemVerilog module implements a Halton sequence generator for bases [2, 3] 
+This SystemVerilog module implements a Halton sequence generator for bases [2, 3]
 with scales [11, 7]. The Halton sequence is a 2-dimensional low-discrepancy sequence
 that provides well-distributed points in the unit square [0,1] x [0,1].
 
@@ -42,18 +42,18 @@ module halton_32bit #(
     reg         pop_enable_reg;
     reg  [31:0] seed_reg;
     reg         reseed_enable_reg;
-    
+
     // Control signals
     reg [1:0] state;
     localparam IDLE = 2'b00;
     localparam POP_0 = 2'b01;
     localparam POP_1 = 2'b10;
     localparam OUTPUT = 2'b11;
-    
+
     // Control signals for each VDC generator
     wire vdc0_pop_enable = pop_enable_reg && (state == POP_0);
     wire vdc1_pop_enable = pop_enable_reg && (state == POP_1);
-    
+
     // Instantiate Van der Corput generator for base 2
     vdcorput_32bit #(
         .BASE(2),
@@ -67,7 +67,7 @@ module halton_32bit #(
         .vdc_out(vdc_out_0),
         .valid(vdc_valid_0)
     );
-    
+
     // Instantiate Van der Corput generator for base 3
     vdcorput_32bit #(
         .BASE(3),
@@ -81,7 +81,7 @@ module halton_32bit #(
         .vdc_out(vdc_out_1),
         .valid(vdc_valid_1)
     );
-    
+
     // State machine for coordinating the two VDC generators
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -98,7 +98,7 @@ module halton_32bit #(
                     valid <= 1'b0;
                     pop_enable_reg <= 1'b0;
                     reseed_enable_reg <= 1'b0;
-                    
+
                     if (reseed_enable) begin
                         seed_reg <= seed;
                         reseed_enable_reg <= 1'b1;
@@ -109,7 +109,7 @@ module halton_32bit #(
                         state <= POP_0;
                     end
                 end
-                
+
                 POP_0: begin
                     pop_enable_reg <= 1'b0;
                     reseed_enable_reg <= 1'b0;
@@ -118,7 +118,7 @@ module halton_32bit #(
                         state <= POP_1;
                     end
                 end
-                
+
                 POP_1: begin
                     // Trigger second VDC generator
                     pop_enable_reg <= 1'b1;
@@ -127,12 +127,12 @@ module halton_32bit #(
                         state <= OUTPUT;
                     end
                 end
-                
+
                 OUTPUT: begin
                     valid <= 1'b1;
                     state <= IDLE;
                 end
-                
+
                 default: state <= IDLE;
             endcase
         end

@@ -19,13 +19,13 @@ module trig_lut_16bit (
 
     // Use upper 8 bits of 16-bit angle to index 256-entry LUT
     wire [7:0] angle_index = angle[15:8];
-    
+
     // Pre-computed cosine LUT (256 entries, 16.16 fixed-point)
     reg [31:0] cos_lut [0:255];
-    
+
     // Pre-computed sine LUT (256 entries, 16.16 fixed-point)
     reg [31:0] sin_lut [0:255];
-    
+
     // Initialize LUTs with cosine and sine values
     integer i;
     real angle_rad, cos_val, sin_val;
@@ -33,11 +33,11 @@ module trig_lut_16bit (
         for (i = 0; i < 256; i = i + 1) begin
             // Convert index to angle in radians (0 to 2π)
             angle_rad = 2.0 * 3.141592653589793 * i / 256.0;
-            
+
             // Compute cosine and sine
             cos_val = $cos(angle_rad);
             sin_val = $sin(angle_rad);
-            
+
             // Convert to 16.16 fixed-point
             cos_lut[i] = $rtoi(cos_val * 65536.0);
             sin_lut[i] = $rtoi(sin_val * 65536.0);

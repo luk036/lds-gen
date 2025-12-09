@@ -52,16 +52,16 @@ module sphere_final_test;
             k_in = test_k;
             base_sel0 = test_base0;
             base_sel1 = test_base1;
-            
+
             wait(ready == 1);
             @(posedge clk);
             start = 1;
             @(posedge clk);
             start = 0;
-            
+
             wait(done == 1);
             @(posedge clk);
-            
+
             // Check with tolerance
             if ((result_x >= expected_x - tolerance) && (result_x <= expected_x + tolerance) &&
                 (result_y >= expected_y - tolerance) && (result_y <= expected_y + tolerance) &&
@@ -72,7 +72,7 @@ module sphere_final_test;
                 $display("  got: x=%h, y=%h, z=%h", result_x, result_y, result_z);
                 $display("  exp: x=%h, y=%h, z=%h", expected_x, expected_y, expected_z);
             end
-            
+
             #(CLK_PERIOD * 5);
         end
     endtask
@@ -84,25 +84,25 @@ module sphere_final_test;
         k_in = 0;
         base_sel0 = 0;
         base_sel1 = 0;
-        
+
         #(CLK_PERIOD * 2);
         rst_n = 1;
         #(CLK_PERIOD * 2);
-        
+
         $display("Testing Sphere implementation (final)");
         $display("=====================================");
-        
+
         // Test with simple expectations
         // Since our implementation uses approximations, we use large tolerance
         // Tolerance: 0.25 in fixed-point = 0.25 * 65536 = 16384
-        
+
         $display("\nTesting base combination [2,3]:");
         // k=1: Expected z ≈ 0.0
         run_test(32'd1, 2'b00, 2'b01, 32'h00000000, 32'h00000000, 32'h00000000, 32'd16384);
-        
+
         // k=2: Expected z ≈ -0.5
         run_test(32'd2, 2'b00, 2'b01, 32'h00000000, 32'h00000000, 32'hFFFF8000, 32'd16384);
-        
+
         $display("\nAll tests completed");
         $finish;
     end

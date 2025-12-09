@@ -298,7 +298,7 @@ class Circle:
        :align: center
 
              Circle Sequence Distribution
-         
+
                 o  (0,1)
                /|\
               / | \
@@ -306,7 +306,7 @@ class Circle:
             /   |   \
        o (-1,0) -+- (1,0) o
             o (0,-1)
-         
+
          Using low-discrepancy sequence for
          uniform distribution on unit circle
     """
@@ -440,7 +440,7 @@ class Sphere:
        :align: center
 
               Sphere Sequence Distribution
-         
+
                     (0,0,1)
                        |
                        |
@@ -454,7 +454,7 @@ class Sphere:
                        |
                        |
                     (0,0,-1)
-         
+
          Using low-discrepancy sequence for
          uniform distribution on unit sphere
     """

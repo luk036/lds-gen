@@ -37,7 +37,7 @@ module cordic_trig_16bit_working (
     // Scale by 256 for 16-bit: [16384, 9728, 5120, 2560, 1280, 768, 256, 256]
     // Extended to 16 iterations
     reg [15:0] atan_table [0:15];
-    
+
     // Internal registers (17-bit for 16-bit + guard bit)
     reg [16:0] x, x_next;
     reg [16:0] y, y_next;
@@ -60,7 +60,7 @@ module cordic_trig_16bit_working (
         atan_table[5] = 16'h0300;   // 768   = 3 * 256
         atan_table[6] = 16'h0100;   // 256   = 1 * 256
         atan_table[7] = 16'h0100;   // 256   = 1 * 256
-        
+
         // Additional entries for 16-bit precision
         atan_table[8] = 16'h0080;   // 128
         atan_table[9] = 16'h0040;   // 64
@@ -86,7 +86,7 @@ module cordic_trig_16bit_working (
             y <= 17'd0;
             z <= angle;
             iteration <= 4'd0;
-            
+
             // Initialize outputs
             cosine <= 0;
             sine <= 0;
@@ -108,7 +108,7 @@ module cordic_trig_16bit_working (
                 z <= z_next;
                 iteration <= iteration + 1;
             end
-            
+
             // Output results (scaled from 17-bit to 16.16 fixed-point)
             // x and y are in range ~±39797 (17-bit signed, K ≈ 0.607)
             // We want ±65536 (16.16 for ±1.0)
@@ -116,17 +116,17 @@ module cordic_trig_16bit_working (
             // Multiply by 1.647 ≈ 1 + 0.5 + 0.125 + 0.015625 = 1.640625
             // x_scaled = x + (x >> 1) + (x >> 3) + (x >> 6)
             reg [31:0] x_scaled, y_scaled;
-            
+
             x_scaled = {x[15:0], 16'b0} +               // x * 65536
                        ({x[15:0], 16'b0} >> 1) +        // x * 32768
                        ({x[15:0], 16'b0} >> 3) +        // x * 8192
                        ({x[15:0], 16'b0} >> 6);         // x * 1024
-                       
+
             y_scaled = {y[15:0], 16'b0} +               // y * 65536
                        ({y[15:0], 16'b0} >> 1) +        // y * 32768
                        ({y[15:0], 16'b0} >> 3) +        // y * 8192
                        ({y[15:0], 16'b0} >> 6);         // y * 1024
-            
+
             cosine <= x_scaled;
             sine <= y_scaled;
         end

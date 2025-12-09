@@ -55,7 +55,7 @@ module sphere3_32bit #(
     wire [31:0] vdc_out_0;
     wire [31:0] sphere_x, sphere_y, sphere_z;
     wire        vdc_valid_0, sphere_valid;
-    
+
     // Coordinate calculation
     reg [31:0] vdc_value_0_reg;
     reg [31:0] ti, xi;
@@ -63,16 +63,16 @@ module sphere3_32bit #(
     reg [4:0] calc_iter;
     reg        calc_active;
     reg [ANGLE_BITS-1:0] angle_idx;
-    
+
     // Constants for fixed-point arithmetic
     localparam FIXED_SCALE = 32'd2147483648;  // 2^31 for Q32 fixed point
     localparam HALF_PI_SCALE = 32'd1073741824; // π/2 in Q32 (approximately)
     localparam ONE_SCALE = 32'd2147483648;    // 1.0 in Q32
-    
+
     // Pre-computed lookup tables for interpolation (simplified versions of X, F2)
     reg [31:0] X_TABLE [0:15];
     reg [31:0] F2_TABLE [0:15];
-    
+
     // Initialize lookup tables
     initial begin
         // Simplified X table (0 to π)
@@ -92,7 +92,7 @@ module sphere3_32bit #(
         X_TABLE[13] = 32'd2919678528;  // 13π/14
         X_TABLE[14] = 32'd3144269184;  // 12π/7
         X_TABLE[15] = 32'd3368859840;  // 15π/14
-        
+
         // Simplified F2 table (interpolation values)
         F2_TABLE[0]  = 32'd0;
         F2_TABLE[1]  = 32'd134217728;   // 0.0625
@@ -111,7 +111,7 @@ module sphere3_32bit #(
         F2_TABLE[14] = 32'd1879048192;  // 0.875
         F2_TABLE[15] = 32'd2013265920;  // 0.9375
     end
-    
+
     // Instantiate Van der Corput generator for 3-sphere angle
     vdcorput_32bit #(
         .BASE(BASE_0),
@@ -125,12 +125,12 @@ module sphere3_32bit #(
         .vdc_out(vdc_out_0),
         .valid(vdc_valid_0)
     );
-    
+
     // Internal sphere generator signals
     reg [31:0] sphere_x_int, sphere_y_int, sphere_z_int;
     reg        sphere_valid_int;
     reg [31:0] sphere_count;
-    
+
     // Simple sphere generator using Van der Corput
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -146,7 +146,7 @@ module sphere3_32bit #(
             end else if (pop_enable) begin
                 sphere_count <= sphere_count + 1'b1;
                 sphere_valid_int <= 1'b1;
-                
+
                 // Simple 3D sphere point generation
                 case (sphere_count[3:0])
                     4'b0000: begin sphere_x_int <= 32'd2147483648; sphere_y_int <= 32'd0; sphere_z_int <= 32'd0; end
@@ -172,13 +172,13 @@ module sphere3_32bit #(
             end
         end
     end
-    
+
     // Assign to output signals
     assign sphere_x = sphere_x_int;
     assign sphere_y = sphere_y_int;
     assign sphere_z = sphere_z_int;
     assign sphere_valid = sphere_valid_int;
-    
+
     // State machine
     reg [3:0] state;
     localparam IDLE = 4'b0000;
@@ -187,7 +187,7 @@ module sphere3_32bit #(
     localparam XI_CALC = 4'b0011;
     localparam TRIG_CALC = 4'b0100;
     localparam OUTPUT = 4'b0101;
-    
+
     // Main state machine
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -209,19 +209,19 @@ module sphere3_32bit #(
                 IDLE: begin
                     valid <= 1'b0;
                     calc_active <= 1'b0;
-                    
+
                     if (pop_enable) begin
                         state <= WAIT_VDC;
                     end
                 end
-                
+
                 WAIT_VDC: begin
                     if (vdc_valid_0 && sphere_valid) begin
                         vdc_value_0_reg <= vdc_out_0;
                         state <= TI_CALC;
                     end
                 end
-                
+
                 TI_CALC: begin
                     // Calculate ti = π/2 * vdc0
                     ti <= (vdc_value_0_reg * HALF_PI_SCALE) >> SCALE;
@@ -229,13 +229,13 @@ module sphere3_32bit #(
                     calc_active <= 1'b1;
                     state <= XI_CALC;
                 end
-                
+
                 XI_CALC: begin
                     // Interpolate xi from ti using lookup tables
                     xi <= interpolate_ti_to_xi(ti);
                     state <= TRIG_CALC;
                 end
-                
+
                 TRIG_CALC: begin
                     if (calc_iter < 1) begin
                         calc_iter <= calc_iter + 1'b1;
@@ -244,7 +244,7 @@ module sphere3_32bit #(
                         state <= OUTPUT;
                     end
                 end
-                
+
                 OUTPUT: begin
                     // Apply 3-sphere transformation
                     sphere3_w <= cos_xi;
@@ -254,18 +254,18 @@ module sphere3_32bit #(
                     valid <= 1'b1;
                     state <= IDLE;
                 end
-                
+
                 default: state <= IDLE;
             endcase
         end
     end
-    
+
     // Trigonometric calculations
     always @(posedge clk) begin
         if (calc_active) begin
             // Calculate trigonometric values for xi
             angle_idx = xi[ANGLE_BITS-1:ANGLE_BITS-4];  // Use top 4 bits
-            
+
             case (angle_idx)
                 4'b0000: begin cos_xi <= 32'd2147483648; sin_xi <= 32'd0; end         // 0
                 4'b0001: begin cos_xi <= 32'd2048909069; sin_xi <= 32'd673720364; end // π/8
@@ -287,7 +287,7 @@ module sphere3_32bit #(
             endcase
         end
     end
-    
+
     // Interpolation function from ti to xi
     function automatic [31:0] interpolate_ti_to_xi;
         input [31:0] ti_val;
@@ -300,7 +300,7 @@ module sphere3_32bit #(
             // Scale ti to table index range
             ti_scaled = (ti_val * 32'd15) >> 31;
             idx = ti_scaled[3:0];
-            
+
             if (idx >= 15) begin
                 interpolate_ti_to_xi = X_TABLE[15];
             end else begin
@@ -310,10 +310,10 @@ module sphere3_32bit #(
                 x1 = X_TABLE[idx + 1];
                 f0 = F2_TABLE[idx];
                 f1 = F2_TABLE[idx + 1];
-                
+
                 t = ti_frac;
                 result = x0 + ((x1 - x0) * t) >> 31;
-                
+
                 interpolate_ti_to_xi = result;
             end
         end

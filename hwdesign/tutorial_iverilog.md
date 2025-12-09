@@ -45,7 +45,7 @@ brew install icarus-verilog
 ```
 hwdesign/
 ├── vdcorput_fsm_32bit_simple.v      # VdCorput 主模块
-├── halton_fsm_32bit_simple.v        # Halton 主模块  
+├── halton_fsm_32bit_simple.v        # Halton 主模块
 ├── circle_fsm_32bit_simple.v        # Circle 主模块
 ├── div_mod_3.v                      # 除以3的模块
 ├── div_mod_7.v                      # 除以7的模块
@@ -300,7 +300,7 @@ module test_module;
             if (result == expected) begin
                 $display("PASS: input=%h, result=%h", test_input, result);
             end else begin
-                $display("FAIL: input=%h, result=%h, expected=%h", 
+                $display("FAIL: input=%h, result=%h, expected=%h",
                          test_input, result, expected);
             end
         end
@@ -310,19 +310,19 @@ module test_module;
         // 初始化
         clk = 0;
         rst_n = 0;
-        
+
         // 复位
         #(CLK_PERIOD * 2);
         rst_n = 1;
         #(CLK_PERIOD * 2);
-        
+
         // 运行测试
         $display("Starting tests...");
-        
+
         run_test(32'd1, 32'h00008000);
         run_test(32'd2, 32'h00004000);
         // ... 更多测试
-        
+
         $display("All tests completed");
         $finish;
     end

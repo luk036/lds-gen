@@ -315,7 +315,7 @@ module vdcorput_32bit_tb;
     reg reseed_enable;
     wire [31:0] vdc_out;
     wire valid;
-    
+
     // Instantiate the design under test
     vdcorput_32bit #(
         .BASE(2),
@@ -329,7 +329,7 @@ module vdcorput_32bit_tb;
         .vdc_out(vdc_out),
         .valid(valid)
     );
-    
+
     // Test stimulus generation
     initial begin
         // Initialize signals
@@ -338,12 +338,12 @@ module vdcorput_32bit_tb;
         pop_enable = 0;
         seed = 0;
         reseed_enable = 0;
-        
+
         // Reset sequence
         #10;
         rst_n = 1;
         #10;
-        
+
         // Test cases
         // ... (LLM generated test cases)
     end
@@ -372,22 +372,22 @@ def vdc_i(k: int, base: int, scale: int) -> int:
     """Python implementation of Van der Corput sequence (integer version)"""
     vdc = 0
     factor = base ** scale
-    
+
     while k != 0:
         factor //= base
         remainder = k % base
         k //= base
         vdc += remainder * factor
-    
+
     return vdc
 
 def generate_reference_values():
     """Generate reference values for bases 2, 3, and 7"""
     scale = 10  # Using scale 10 for easy verification
-    
+
     print(f"Van der Corput Reference Values (scale={scale})")
     print("=" * 50)
-    
+
     # Generate reference values for verification
     for base in [2, 3, 7]:
         print(f"\nBase {base}:")
@@ -483,7 +483,7 @@ The algorithm works by:
 
 This implementation supports:
 - Base 2: Binary Van der Corput sequence
-- Base 3: Ternary Van der Corput sequence  
+- Base 3: Ternary Van der Corput sequence
 - Base 7: Septenary Van der Corput sequence
 - 32-bit integer arithmetic
 - Configurable scale parameter (default 16)

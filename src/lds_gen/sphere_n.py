@@ -40,12 +40,14 @@ from lds_gen.lds import Sphere, VdCorput  # low-discrepancy sequence generators
 
 PI: float = math.pi
 
+
 def linspace(start: float, stop: float, num: int) -> List[float]:
     """Simple implementation of numpy.linspace"""
     if num == 1:
         return [start]
     step = (stop - start) / (num - 1)
     return [start + i * step for i in range(num)]
+
 
 X: List[float] = linspace(0.0, PI, 300)
 NEG_COSINE: List[float] = [-math.cos(x) for x in X]
@@ -60,14 +62,15 @@ def simple_interp(x: float, xp: List[float], yp: List[float]) -> float:
         return yp[0]
     if x >= xp[-1]:
         return yp[-1]
-    
+
     for i in range(len(xp) - 1):
         if xp[i] <= x <= xp[i + 1]:
             # Linear interpolation
             t = (x - xp[i]) / (xp[i + 1] - xp[i])
             return yp[i] + t * (yp[i + 1] - yp[i])
-    
+
     return yp[-1]  # fallback
+
 
 @cache
 def get_tp_recursive(n: int) -> List[float]:
@@ -84,8 +87,10 @@ def get_tp_recursive(n: int) -> List[float]:
     if n == 1:
         return NEG_COSINE
     tp_minus2 = get_tp_recursive(n - 2)
-    return [((n - 1) * tp_minus2[i] + NEG_COSINE[i] * (SINE[i] ** (n - 1))) / n 
-            for i in range(len(tp_minus2))]
+    return [
+        ((n - 1) * tp_minus2[i] + NEG_COSINE[i] * (SINE[i] ** (n - 1))) / n
+        for i in range(len(tp_minus2))
+    ]
 
 
 def get_tp(n: int) -> List[float]:

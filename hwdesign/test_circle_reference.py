@@ -6,6 +6,7 @@ to verify hardware implementation results.
 
 import math
 
+
 def vdc(k: int, base: int = 2) -> float:
     """Van der Corput sequence"""
     res = 0.0
@@ -16,59 +17,68 @@ def vdc(k: int, base: int = 2) -> float:
         res += remainder / denom
     return res
 
+
 def float_to_fixed16_16(value: float) -> int:
     """Convert float to 16.16 fixed-point representation"""
     return int(value * (1 << 16))
 
+
 class Circle:
     """Circle sequence generator (Python reference)"""
+
     def __init__(self, base):
         self.vdc = lambda k: vdc(k, base)
-    
+
     def pop(self, k):
         theta = self.vdc(k) * 2 * math.pi
         return [math.cos(theta), math.sin(theta)]
 
+
 def test_circle_values():
     """Test Circle values for different bases"""
-    
+
     print("Python Circle Reference Values (16.16 fixed-point):")
     print("=" * 70)
-    
+
     # Test different bases
     bases = [2, 3, 7]
-    
+
     for base in bases:
         print(f"\nBase {base}:")
         print("-" * 40)
-        
+
         circle = Circle(base)
-        
+
         # Test first 5 values
         for k in range(1, 6):
             x, y = circle.pop(k)
             x_fixed = float_to_fixed16_16(x)
             y_fixed = float_to_fixed16_16(y)
-            
+
             print(f"k={k}: [{x:.10f}, {y:.10f}]")
             print(f"      x=0x{x_fixed:08x}, y=0x{y_fixed:08x}")
-    
+
     # Special test cases from Python examples
     print("\n\nSpecial Test Cases (from Python examples):")
     print("=" * 70)
-    
+
     circle2 = Circle(2)
     print("\nBase 2, k=1 (from example):")
     x, y = circle2.pop(1)
-    print(f"  Expected: [-1.0, 1.2246467991473532e-16]")
+    print("  Expected: [-1.0, 1.2246467991473532e-16]")
     print(f"  Got:      [{x:.10f}, {y:.10f}]")
-    print(f"  Fixed:    x=0x{float_to_fixed16_16(x):08x}, y=0x{float_to_fixed16_16(y):08x}")
-    
+    print(
+        f"  Fixed:    x=0x{float_to_fixed16_16(x):08x}, y=0x{float_to_fixed16_16(y):08x}"
+    )
+
     print("\nBase 2, k=2 (from example):")
     x, y = circle2.pop(2)
-    print(f"  Expected: [6.123233995736766e-17, 1.0]")
+    print("  Expected: [6.123233995736766e-17, 1.0]")
     print(f"  Got:      [{x:.10f}, {y:.10f}]")
-    print(f"  Fixed:    x=0x{float_to_fixed16_16(x):08x}, y=0x{float_to_fixed16_16(y):08x}")
+    print(
+        f"  Fixed:    x=0x{float_to_fixed16_16(x):08x}, y=0x{float_to_fixed16_16(y):08x}"
+    )
+
 
 if __name__ == "__main__":
     test_circle_values()

@@ -76,11 +76,11 @@ module sphere_fsm_32bit_simple (
     wire [31:0] vdc_result;
     wire vdc_done, vdc_ready;
     reg vdc_start;
-    
+
     wire [31:0] circle_result_x, circle_result_y;
     wire circle_done, circle_ready;
     reg circle_start;
-    
+
     // VdCorput instance for cosφ
     vdcorput_fsm_32bit_simple vdc_inst (
         .clk(clk),
@@ -92,7 +92,7 @@ module sphere_fsm_32bit_simple (
         .done(vdc_done),
         .ready(vdc_ready)
     );
-    
+
     // Circle instance for (c, s)
     circle_fsm_32bit_simple circle_inst (
         .clk(clk),
@@ -115,7 +115,7 @@ module sphere_fsm_32bit_simple (
             // Newton-Raphson method for sqrt(x)
             // Initial guess: y0 = x + 0.5
             y0 = x + 32'h00008000;
-            
+
             // First iteration: y1 = 0.5 * (y0 + x/y0)
             if (y0 != 0) begin
                 x_div_y0 = (x << 16) / y0;  // x/y0 in 16.16
@@ -123,7 +123,7 @@ module sphere_fsm_32bit_simple (
             end else begin
                 y1 = 0;
             end
-            
+
             // Second iteration: y2 = 0.5 * (y1 + x/y1)
             if (y1 != 0) begin
                 x_div_y1 = (x << 16) / y1;  // x/y1 in 16.16
@@ -131,7 +131,7 @@ module sphere_fsm_32bit_simple (
             end else begin
                 y2 = 0;
             end
-            
+
             sqrt_approx = y2;
         end
     endfunction
@@ -219,11 +219,11 @@ module sphere_fsm_32bit_simple (
                     // First calculate cosφ²
                     reg [63:0] cosphi_sq;
                     cosphi_sq = cosphi_reg * cosphi_reg;  // 32.32 result
-                    
+
                     // 1 - cosφ² (in 16.16)
                     reg [31:0] one_minus_cosphi_sq;
                     one_minus_cosphi_sq = FP_ONE - (cosphi_sq >> 16);
-                    
+
                     // sqrt(1 - cosφ²)
                     sinphi_reg <= sqrt_approx(one_minus_cosphi_sq);
                 end

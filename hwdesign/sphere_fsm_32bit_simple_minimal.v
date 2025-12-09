@@ -45,11 +45,11 @@ module sphere_fsm_32bit_simple_minimal (
     wire [31:0] vdc_result;
     wire vdc_done, vdc_ready;
     reg vdc_start;
-    
+
     wire [31:0] circle_result_x, circle_result_y;
     wire circle_done, circle_ready;
     reg circle_start;
-    
+
     // VdCorput instance for cosφ
     vdcorput_fsm_32bit_simple vdc_inst (
         .clk(clk),
@@ -61,17 +61,17 @@ module sphere_fsm_32bit_simple_minimal (
         .done(vdc_done),
         .ready(vdc_ready)
     );
-    
+
     // Simple Circle instance (minimal version)
     // We'll create a simple inline implementation instead of using complex CORDIC
     reg [31:0] simple_circle_x, simple_circle_y;
     reg simple_circle_done, simple_circle_ready;
     reg [1:0] circle_state;
-    
+
     parameter CIRCLE_IDLE = 2'b00;
     parameter CIRCLE_CALC = 2'b01;
     parameter CIRCLE_DONE = 2'b10;
-    
+
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             simple_circle_x <= 0;
@@ -103,7 +103,7 @@ module sphere_fsm_32bit_simple_minimal (
             endcase
         end
     end
-    
+
     assign circle_result_x = simple_circle_x;
     assign circle_result_y = simple_circle_y;
     assign circle_done = simple_circle_done;
@@ -113,7 +113,7 @@ module sphere_fsm_32bit_simple_minimal (
     reg [31:0] sqrt_temp;
     reg [63:0] cosphi_sq_temp;
     reg [31:0] one_minus_cosphi_sq_temp;
-    
+
     // Simple sqrt: sqrt(x) ≈ x for x in [0,1] (for testing)
     // In real implementation, use proper sqrt approximation
 

@@ -10,9 +10,9 @@ module halton_poll_test;
     wire [31:0] halton_out_0;
     wire [31:0] halton_out_1;
     wire valid;
-    
+
     reg [31:0] test_count;
-    
+
     halton_minimal dut (
         .clk(clk),
         .rst_n(rst_n),
@@ -23,30 +23,30 @@ module halton_poll_test;
         .halton_out_1(halton_out_1),
         .valid(valid)
     );
-    
+
     initial begin
         clk = 0;
         forever #5 clk = ~clk;
     end
-    
+
     initial begin
         rst_n = 0;
         pop_enable = 0;
         reseed_enable = 0;
         seed = 0;
         test_count = 0;
-        
+
         #10;
         rst_n = 1;
         #10;
-        
+
         $display("=== Halton Poll Test ===");
-        
+
         while (test_count < 5) begin
             pop_enable = 1;
             #10;
             pop_enable = 0;
-            
+
             // Poll for valid
             #20;
             if (valid) begin
@@ -57,10 +57,10 @@ module halton_poll_test;
             end
             #20;
         end
-        
+
         $finish;
     end
-    
+
     initial #1000 $display("Timeout");
 
 endmodule

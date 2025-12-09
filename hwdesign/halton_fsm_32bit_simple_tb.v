@@ -91,7 +91,7 @@ module halton_fsm_32bit_simple_tb;
         test_k[7] = 32'd8;
         test_k[8] = 32'd9;
         test_k[9] = 32'd10;
-        
+
         // Base [2,3] expected values (16.16 fixed-point)
         test_expected_x_23[0] = 32'h00008000;  // 0.5
         test_expected_y_23[0] = 32'h00005555;  // 0.333333
@@ -113,7 +113,7 @@ module halton_fsm_32bit_simple_tb;
         test_expected_y_23[8] = 32'h0000097B;  // 0.037037
         test_expected_x_23[9] = 32'h00005000;  // 0.3125
         test_expected_y_23[9] = 32'h00005ED0;  // 0.370370
-        
+
         // Base [2,7] expected values
         test_expected_x_27[0] = 32'h00008000;  // 0.5
         test_expected_y_27[0] = 32'h00002492;  // 0.142857
@@ -125,7 +125,7 @@ module halton_fsm_32bit_simple_tb;
         test_expected_y_27[3] = 32'h00009249;  // 0.571429
         test_expected_x_27[4] = 32'h0000A000;  // 0.625
         test_expected_y_27[4] = 32'h0000B6DB;  // 0.714286
-        
+
         // Base [3,7] expected values
         test_expected_x_37[0] = 32'h00005555;  // 0.333333
         test_expected_y_37[0] = 32'h00002492;  // 0.142857
@@ -150,24 +150,24 @@ module halton_fsm_32bit_simple_tb;
             // Wait for module to be ready
             wait(ready == 1'b1);
             @(posedge clk);
-            
+
             // Apply test vector
             k_in = k_val;
             base0_sel = base0_val;
             base1_sel = base1_val;
             start = 1'b1;
-            
+
             @(posedge clk);
             start = 1'b0;
-            
+
             // Wait for computation to complete
             wait(done == 1'b1);
             @(posedge clk);
-            
+
             // Check results with tolerance
             if (result_x >= expected_x - 32'h00000100 && result_x <= expected_x + 32'h00000100 &&
                 result_y >= expected_y - 32'h00000100 && result_y <= expected_y + 32'h00000100) begin
-                $display("PASS: k=%0d, bases=[%b,%b], x=0x%08h, y=0x%08h", 
+                $display("PASS: k=%0d, bases=[%b,%b], x=0x%08h, y=0x%08h",
                          k_val, base0_val, base1_val, result_x, result_y);
                 test_passed = test_passed + 1;
             end else begin
@@ -177,7 +177,7 @@ module halton_fsm_32bit_simple_tb;
                 test_failed = test_failed + 1;
                 error_count = error_count + 1;
             end
-            
+
             total_tests = total_tests + 1;
         end
     endtask
@@ -196,40 +196,40 @@ module halton_fsm_32bit_simple_tb;
         total_tests = 0;
         test_passed = 0;
         test_failed = 0;
-        
+
         // Apply reset
         #(CLK_PERIOD * 2);
         rst_n = 1;
         #(CLK_PERIOD * 2);
-        
+
         $display("==========================================");
         $display("Starting Halton FSM Testbench");
         $display("==========================================");
-        
+
         // Test Base [2,3]
         $display("\nTesting Base [2,3]:");
         $display("-------------------");
         for (test_index = 0; test_index < 10; test_index = test_index + 1) begin
-            run_test(test_k[test_index], 2'b00, 2'b01, 
+            run_test(test_k[test_index], 2'b00, 2'b01,
                      test_expected_x_23[test_index], test_expected_y_23[test_index]);
         end
-        
+
         // Test Base [2,7]
         $display("\nTesting Base [2,7]:");
         $display("-------------------");
         for (test_index = 0; test_index < 5; test_index = test_index + 1) begin
-            run_test(test_k[test_index], 2'b00, 2'b10, 
+            run_test(test_k[test_index], 2'b00, 2'b10,
                      test_expected_x_27[test_index], test_expected_y_27[test_index]);
         end
-        
+
         // Test Base [3,7]
         $display("\nTesting Base [3,7]:");
         $display("-------------------");
         for (test_index = 0; test_index < 5; test_index = test_index + 1) begin
-            run_test(test_k[test_index], 2'b01, 2'b10, 
+            run_test(test_k[test_index], 2'b01, 2'b10,
                      test_expected_x_37[test_index], test_expected_y_37[test_index]);
         end
-        
+
         // Summary
         $display("\n==========================================");
         $display("Test Summary:");
@@ -237,15 +237,15 @@ module halton_fsm_32bit_simple_tb;
         $display("  Passed: %0d", test_passed);
         $display("  Failed: %0d", test_failed);
         $display("  Error count: %0d", error_count);
-        
+
         if (error_count == 0) begin
             $display("\nAll tests PASSED!");
         end else begin
             $display("\nSome tests FAILED!");
         end
-        
+
         $display("==========================================");
-        
+
         // Finish simulation
         #(CLK_PERIOD * 10);
         $finish;

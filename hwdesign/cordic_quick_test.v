@@ -37,20 +37,20 @@ module cordic_quick_test;
         rst_n = 0;
         start = 0;
         angle = 0;
-        
+
         #(CLK_PERIOD * 2);
         rst_n = 1;
         #(CLK_PERIOD * 2);
-        
+
         $display("Testing CORDIC ready signal");
         $display("ready = %b", ready);
-        
+
         // Test angle 0
         angle = 0;
         start = 1;
         @(posedge clk);
         start = 0;
-        
+
         // Wait for done with timeout
         fork
             begin
@@ -63,7 +63,7 @@ module cordic_quick_test;
                 $finish;
             end
         join_any
-        
+
         #(CLK_PERIOD * 10);
         $finish;
     end

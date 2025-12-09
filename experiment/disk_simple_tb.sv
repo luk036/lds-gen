@@ -12,7 +12,7 @@ module disk_simple_tb;
     parameter CLK_PERIOD = 10;
     parameter TEST_SCALE = 16;
     parameter TEST_ANGLE_BITS = 16;
-    
+
     // Signals for DUT connections
     reg         clk;
     reg         rst_n;
@@ -22,10 +22,10 @@ module disk_simple_tb;
     wire [31:0] disk_x;
     wire [31:0] disk_y;
     wire        valid;
-    
+
     // Test counters
     reg [31:0] i;
-    
+
     // Instantiate DUT for bases [2,3]
     disk_32bit #(
         .BASE_0(2),
@@ -42,13 +42,13 @@ module disk_simple_tb;
         .disk_y(disk_y),
         .valid(valid)
     );
-    
+
     // Clock generation
     initial begin
         clk = 0;
         forever #(CLK_PERIOD/2) clk = ~clk;
     end
-    
+
     // Test stimulus
     initial begin
         // Initialize signals
@@ -56,28 +56,28 @@ module disk_simple_tb;
         pop_enable = 1'b0;
         reseed_enable = 1'b0;
         seed = 32'd0;
-        
+
         // Apply reset
         #20;
         rst_n = 1'b1;
         #10;
-        
+
         $display("=== Disk 32-bit Simple Testbench ===");
         $display("Testing bases [2,3] with scale %0d", TEST_SCALE);
-        
+
         // Test 1: Basic sequence generation
         $display("\n--- Test 1: Basic Disk Sequence ---");
         pop_enable = 1'b1;
-        
+
         // Test first few values
         for (i = 0; i < 5; i = i + 1) begin
             @(posedge valid);
             $display("Point %0d: [%0d, %0d]", i + 1, disk_x, disk_y);
         end
-        
+
         pop_enable = 1'b0;
         #20;
-        
+
         // Test 2: Reseed functionality
         $display("\n--- Test 2: Reseed Test ---");
         reseed_enable = 1'b1;
@@ -85,32 +85,32 @@ module disk_simple_tb;
         @(posedge clk);
         reseed_enable = 1'b0;
         #10;
-        
+
         pop_enable = 1'b1;
         @(posedge valid);
         $display("After reseed to 5: [%0d, %0d]", disk_x, disk_y);
-        
+
         pop_enable = 1'b0;
         #20;
-        
+
         // Test 3: Reset test
         $display("\n--- Test 3: Reset Test ---");
         rst_n = 1'b0;
         #20;
         rst_n = 1'b1;
         #10;
-        
+
         pop_enable = 1'b1;
         @(posedge valid);
         $display("After reset: [%0d, %0d]", disk_x, disk_y);
-        
+
         pop_enable = 1'b0;
         #20;
-        
+
         $display("\n=== Disk Simple Tests Completed ===");
         $finish;
     end
-    
+
     // Timeout protection
     initial begin
         #50000;

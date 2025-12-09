@@ -1,7 +1,7 @@
 /*
 Sphere3Hopf Sequence Generator (32-bit)
 
-This SystemVerilog module implements a Sphere3Hopf sequence generator for base triples 
+This SystemVerilog module implements a Sphere3Hopf sequence generator for base triples
 [2,3,7], [2,7,3], [3,2,7], [3,7,2], [7,2,3], [7,3,2]. The Sphere3Hopf sequence generates
 uniformly distributed points on the 3-sphere (S³) using Hopf fibration coordinates.
 
@@ -11,7 +11,7 @@ The algorithm works by:
 3. Computing Hopf coordinates: cos(eta) = sqrt(vdc2), sin(eta) = sqrt(1 - vdc2)
 4. Converting to 4D coordinates:
    - x = cos(eta) * cos(psy)
-   - y = cos(eta) * sin(psy)  
+   - y = cos(eta) * sin(psy)
    - z = sin(eta) * cos(phi + psy)
    - w = sin(eta) * sin(phi + psy)
 
@@ -51,7 +51,7 @@ module sphere3hopf_32bit #(
     // Internal signals for Van der Corput generators
     wire [31:0] vdc_out_0, vdc_out_1, vdc_out_2;
     wire        vdc_valid_0, vdc_valid_1, vdc_valid_2;
-    
+
     // Angle and coordinate calculation
     reg [ANGLE_BITS-1:0] phi_reg, psy_reg;
     reg [31:0] vdc_value_0_reg, vdc_value_1_reg, vdc_value_2_reg;
@@ -60,11 +60,11 @@ module sphere3hopf_32bit #(
     reg [31:0] cos_phi_plus_psy, sin_phi_plus_psy;
     reg [4:0] calc_iter;
     reg        calc_active;
-    
+
     // Constants for 2π scaling and fixed-point arithmetic
     localparam TWO_PI_SCALE = (1 << ANGLE_BITS);
     localparam FIXED_SCALE = 32'd2147483648;  // 2^31 for Q32 fixed point
-    
+
     // Instantiate Van der Corput generators
     vdcorput_32bit #(
         .BASE(BASE_0),
@@ -78,7 +78,7 @@ module sphere3hopf_32bit #(
         .vdc_out(vdc_out_0),
         .valid(vdc_valid_0)
     );
-    
+
     vdcorput_32bit #(
         .BASE(BASE_1),
         .SCALE(SCALE)
@@ -91,7 +91,7 @@ module sphere3hopf_32bit #(
         .vdc_out(vdc_out_1),
         .valid(vdc_valid_1)
     );
-    
+
     vdcorput_32bit #(
         .BASE(BASE_2),
         .SCALE(SCALE)
@@ -104,7 +104,7 @@ module sphere3hopf_32bit #(
         .vdc_out(vdc_out_2),
         .valid(vdc_valid_2)
     );
-    
+
     // State machine
     reg [3:0] state;
     localparam IDLE = 4'b0000;
@@ -113,7 +113,7 @@ module sphere3hopf_32bit #(
     localparam ETA_CALC = 4'b0011;
     localparam TRIG_CALC = 4'b0100;
     localparam OUTPUT = 4'b0101;
-    
+
     // Main state machine
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -141,12 +141,12 @@ module sphere3hopf_32bit #(
                 IDLE: begin
                     valid <= 1'b0;
                     calc_active <= 1'b0;
-                    
+
                     if (pop_enable) begin
                         state <= WAIT_VDC;
                     end
                 end
-                
+
                 WAIT_VDC: begin
                     if (vdc_valid_0 && vdc_valid_1 && vdc_valid_2) begin
                         vdc_value_0_reg <= vdc_out_0;
@@ -155,7 +155,7 @@ module sphere3hopf_32bit #(
                         state <= ANGLE_CALC;
                     end
                 end
-                
+
                 ANGLE_CALC: begin
                     // Convert VDC values to angles: angle = vdc * 2π
                     phi_reg <= (vdc_value_0_reg * TWO_PI_SCALE) >> SCALE;
@@ -164,7 +164,7 @@ module sphere3hopf_32bit #(
                     calc_active <= 1'b1;
                     state <= ETA_CALC;
                 end
-                
+
                 ETA_CALC: begin
                     if (calc_iter < 1) begin
                         calc_iter <= calc_iter + 1'b1;
@@ -173,7 +173,7 @@ module sphere3hopf_32bit #(
                         state <= TRIG_CALC;
                     end
                 end
-                
+
                 TRIG_CALC: begin
                     if (calc_iter < 1) begin
                         calc_iter <= calc_iter + 1'b1;
@@ -182,7 +182,7 @@ module sphere3hopf_32bit #(
                         state <= OUTPUT;
                     end
                 end
-                
+
                 OUTPUT: begin
                     // Apply Hopf coordinate transformation
                     hopf_x <= (cos_eta * cos_psy) >> 31;
@@ -192,15 +192,15 @@ module sphere3hopf_32bit #(
                     valid <= 1'b1;
                     state <= IDLE;
                 end
-                
+
                 default: state <= IDLE;
             endcase
         end
     end
-    
+
     // Variables for coordinate calculations
     reg [ANGLE_BITS:0] phi_plus_psi;
-    
+
     // Coordinate calculations
     always @(posedge clk) begin
         if (calc_active) begin
@@ -210,23 +210,23 @@ module sphere3hopf_32bit #(
                     cos_eta <= sqrt_approx(vdc_value_2_reg);
                     sin_eta <= sqrt_approx((32'd1 << SCALE) - vdc_value_2_reg);
                 end
-                
+
                 TRIG_CALC: begin
                     // Calculate trigonometric values
                     cos_psy <= cos_approx(psy_reg);
                     sin_psy <= sin_approx(psy_reg);
-                    
+
                     // Calculate phi + psy (angle addition)
                     phi_plus_psi = phi_reg + psy_reg;
                     cos_phi_plus_psy <= cos_approx(phi_plus_psi[ANGLE_BITS-1:0]);
                     sin_phi_plus_psy <= sin_approx(phi_plus_psi[ANGLE_BITS-1:0]);
                 end
-                
+
                 default: ;
             endcase
         end
     end
-    
+
     // Trigonometric approximation functions
     function automatic [31:0] cos_approx;
         input [ANGLE_BITS-1:0] angle;
@@ -254,7 +254,7 @@ module sphere3hopf_32bit #(
             cos_approx = result;
         end
     endfunction
-    
+
     function automatic [31:0] sin_approx;
         input [ANGLE_BITS-1:0] angle;
         reg [31:0] result;
@@ -281,7 +281,7 @@ module sphere3hopf_32bit #(
             sin_approx = result;
         end
     endfunction
-    
+
     // Square root approximation function
     function automatic [31:0] sqrt_approx;
         input [31:0] x;
@@ -291,19 +291,19 @@ module sphere3hopf_32bit #(
         begin
             result = 32'd0;
             temp = 32'd0;
-            
+
             // Simple Newton-Raphson approximation
             if (x != 0) begin
                 // Initial guess
                 result = (x >> 1) + (1 << (SCALE/2));
-                
+
                 // Few iterations of Newton-Raphson
                 for (i = 0; i < 4; i = i + 1) begin
                     temp = result + (x << SCALE) / result;
                     result = temp >> 1;
                 end
             end
-            
+
             sqrt_approx = result;
         end
     endfunction

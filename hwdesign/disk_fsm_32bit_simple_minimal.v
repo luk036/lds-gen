@@ -49,7 +49,7 @@ module disk_fsm_32bit_simple_minimal (
     wire vdc0_done, vdc1_done;
     wire vdc0_ready, vdc1_ready;
     reg vdc0_start, vdc1_start;
-    
+
     vdcorput_fsm_32bit_simple vdc0_inst (
         .clk(clk),
         .rst_n(rst_n),
@@ -60,7 +60,7 @@ module disk_fsm_32bit_simple_minimal (
         .done(vdc0_done),
         .ready(vdc0_ready)
     );
-    
+
     vdcorput_fsm_32bit_simple vdc1_inst (
         .clk(clk),
         .rst_n(rst_n),
@@ -91,7 +91,7 @@ module disk_fsm_32bit_simple_minimal (
         begin
             // Determine quadrant (0-65535 → 0-3)
             quadrant = angle[15:14];
-            
+
             // Reduce angle to 0-16383 (0-π/2)
             case (quadrant)
                 2'b00: reduced_angle = angle[13:0];           // 0-90°
@@ -99,12 +99,12 @@ module disk_fsm_32bit_simple_minimal (
                 2'b10: reduced_angle = angle[13:0] - 16'h4000; // 180-270°
                 2'b11: reduced_angle = 16'h8000 - angle[13:0]; // 270-360°
             endcase
-            
+
             // Simple linear approximation for cos in [0, π/2]
             // cos(θ) ≈ 1 - 2θ/π for θ in [0, π/2]
             // In fixed-point: result = FP_ONE - (2 * reduced_angle * FP_ONE / 16384)
             result = FP_ONE - ((reduced_angle * 2) >> 14);
-            
+
             // Apply sign based on quadrant
             case (quadrant)
                 2'b00: cos_approx = result;      // +cos
@@ -124,7 +124,7 @@ module disk_fsm_32bit_simple_minimal (
         begin
             // Determine quadrant (0-65535 → 0-3)
             quadrant = angle[15:14];
-            
+
             // Reduce angle to 0-16383 (0-π/2)
             case (quadrant)
                 2'b00: reduced_angle = angle[13:0];           // 0-90°
@@ -132,12 +132,12 @@ module disk_fsm_32bit_simple_minimal (
                 2'b10: reduced_angle = angle[13:0] - 16'h4000; // 180-270°
                 2'b11: reduced_angle = 16'h8000 - angle[13:0]; // 270-360°
             endcase
-            
+
             // Simple linear approximation for sin in [0, π/2]
             // sin(θ) ≈ 2θ/π for θ in [0, π/2]
             // In fixed-point: result = (2 * reduced_angle * FP_ONE / 16384)
             result = (reduced_angle * 2) >> 14;
-            
+
             // Apply sign based on quadrant
             case (quadrant)
                 2'b00: sin_approx = result;      // +sin
@@ -229,7 +229,7 @@ module disk_fsm_32bit_simple_minimal (
                     // angle = vdc0_result * 2π
                     // In fixed-point: multiply by FP_2PI
                     angle_reg <= (vdc0_result_reg * FP_2PI) >> 16;
-                    
+
                     // Also pre-calculate cos and sin
                     cos_reg <= cos_approx(angle_reg[15:0]);
                     sin_reg <= sin_approx(angle_reg[15:0]);

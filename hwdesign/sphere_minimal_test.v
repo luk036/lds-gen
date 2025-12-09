@@ -46,20 +46,20 @@ module sphere_minimal_test;
             k_in = test_k;
             base_sel0 = test_base0;
             base_sel1 = test_base1;
-            
+
             wait(ready == 1);
             @(posedge clk);
             start = 1;
             @(posedge clk);
             start = 0;
-            
+
             wait(done == 1);
             @(posedge clk);
-            
+
             $display("k=%0d, bases=[%0d,%0d]", test_k, test_base0+2, test_base1+2);
-            $display("  result_x=%h, result_y=%h, result_z=%h", 
+            $display("  result_x=%h, result_y=%h, result_z=%h",
                      result_x, result_y, result_z);
-            
+
             #(CLK_PERIOD * 5);
         end
     endtask
@@ -71,18 +71,18 @@ module sphere_minimal_test;
         k_in = 0;
         base_sel0 = 0;
         base_sel1 = 0;
-        
+
         #(CLK_PERIOD * 2);
         rst_n = 1;
         #(CLK_PERIOD * 2);
-        
+
         $display("Testing minimal Sphere module");
         $display("=============================");
-        
+
         // Test a few cases
         run_test(32'd1, 2'b00, 2'b01);  // base=[2,3], k=1
         run_test(32'd2, 2'b00, 2'b01);  // base=[2,3], k=2
-        
+
         $display("\nAll tests completed");
         $finish;
     end

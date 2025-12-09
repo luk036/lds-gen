@@ -46,16 +46,16 @@ module disk_fsm_32bit_simple_fixed_tb;
         k_in = 0;
         base_sel0 = 0;
         base_sel1 = 0;
-        
+
         // Apply reset
         #(CLK_PERIOD * 2);
         rst_n = 1;
         #(CLK_PERIOD * 2);
-        
+
         $display("==========================================");
         $display("Starting Disk FSM Testbench (Fixed)");
         $display("==========================================");
-        
+
         // Test 1: Base [2,3], k=1
         $display("\nTest 1: Base [2,3], k=1");
         wait(ready == 1'b1);
@@ -66,11 +66,11 @@ module disk_fsm_32bit_simple_fixed_tb;
         start = 1'b1;
         @(posedge clk);
         start = 1'b0;
-        
+
         wait(done == 1'b1);
         @(posedge clk);
         $display("Result: x=0x%08h, y=0x%08h", result_x, result_y);
-        
+
         // Test 2: Base [2,3], k=2
         $display("\nTest 2: Base [2,3], k=2");
         wait(ready == 1'b1);
@@ -81,11 +81,11 @@ module disk_fsm_32bit_simple_fixed_tb;
         start = 1'b1;
         @(posedge clk);
         start = 1'b0;
-        
+
         wait(done == 1'b1);
         @(posedge clk);
         $display("Result: x=0x%08h, y=0x%08h", result_x, result_y);
-        
+
         // Test 3: Base [3,7], k=1
         $display("\nTest 3: Base [3,7], k=1");
         wait(ready == 1'b1);
@@ -96,15 +96,15 @@ module disk_fsm_32bit_simple_fixed_tb;
         start = 1'b1;
         @(posedge clk);
         start = 1'b0;
-        
+
         wait(done == 1'b1);
         @(posedge clk);
         $display("Result: x=0x%08h, y=0x%08h", result_x, result_y);
-        
+
         $display("\n==========================================");
         $display("Testbench completed");
         $display("==========================================");
-        
+
         // Finish simulation
         #(CLK_PERIOD * 10);
         $finish;

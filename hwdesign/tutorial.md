@@ -193,7 +193,7 @@ opt_clean
 # 输出 Verilog 格式网表
 write_verilog -noattr vdcorput_netlist.v
 
-# 输出 BLIF 格式网表  
+# 输出 BLIF 格式网表
 write_blif vdcorput_netlist.blif
 
 # 显示统计信息
@@ -387,7 +387,7 @@ gtkwave vdcorput_wave.vcd
 在设计中添加调试信息：
 ```verilog
 `ifdef DEBUG
-    $display("State: %b, k_reg: %h, remainder: %h", 
+    $display("State: %b, k_reg: %h, remainder: %h",
              current_state, k_reg, remainder_reg);
 `endif
 ```
@@ -401,7 +401,7 @@ iverilog -DDEBUG -o debug_test design.v tb.v
 
 使用 SystemVerilog 断言：
 ```verilog
-assert property (@(posedge clk) 
+assert property (@(posedge clk)
     disable iff (!rst_n)
     (current_state == FINISH) |-> (done == 1'b1))
 else $error("FINISH state without done signal");
@@ -444,7 +444,7 @@ vvp coverage_test
    ```tcl
    # 错误写法
    echo "Starting synthesis..."
-   
+
    # 正确写法（移除 echo）
    # Starting synthesis...
    ```
@@ -453,7 +453,7 @@ vvp coverage_test
    ```tcl
    # 错误写法（需要 liberty 文件）
    dfflibmap -liberty lib.lib
-   
+
    # 正确写法（使用简单综合）
    synth
    ```
@@ -462,7 +462,7 @@ vvp coverage_test
    ```tcl
    # 错误写法
    abc -g AND,OR,NOT
-   
+
    # 正确写法
    synth
    ```
@@ -487,7 +487,7 @@ vvp coverage_test
 1. 在测试平台中添加容差检查
    ```verilog
    // 容差 ±256 (0x00000100)
-   if (result >= expected_val - 32'h00000100 && 
+   if (result >= expected_val - 32'h00000100 &&
        result <= expected_val + 32'h00000100) begin
        $display("PASS");
    end
@@ -576,9 +576,9 @@ module sync_2ff (
     input async_in,
     output reg sync_out
 );
-    
+
     reg meta;
-    
+
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             meta <= 1'b0;

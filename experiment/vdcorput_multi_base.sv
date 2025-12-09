@@ -29,10 +29,10 @@ module vdcorput_multi_base #(
 
     // Internal registers
     reg [31:0] count;
-    
+
     // Pre-calculated scale factors for each base
     wire [31:0] factor_2, factor_3, factor_7;
-    
+
     // Calculate scale factors
     function automatic [31:0] calc_pow;
         input [31:0] base_val;
@@ -47,11 +47,11 @@ module vdcorput_multi_base #(
             calc_pow = result;
         end
     endfunction
-    
+
     assign factor_2 = calc_pow(32'd2, SCALE[31:0]);
     assign factor_3 = calc_pow(32'd3, SCALE[31:0]);
     assign factor_7 = calc_pow(32'd7, SCALE[31:0]);
-    
+
     // Main sequential logic
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -68,7 +68,7 @@ module vdcorput_multi_base #(
                 vdc_out_3 <= 32'd0;
                 vdc_out_7 <= 32'd0;
                 valid <= 1'b0;
-            end 
+            end
             // Handle pop operation
             else if (pop_enable) begin
                 count <= count + 1'b1;
@@ -81,7 +81,7 @@ module vdcorput_multi_base #(
             end
         end
     end
-    
+
     // Van der Corput calculation function
     function automatic [31:0] calculate_vdc;
         input [31:0] k;
@@ -95,14 +95,14 @@ module vdcorput_multi_base #(
             k_temp = k;
             vdc_val = 32'd0;
             factor_temp = scale_factor;
-            
+
             while (k_temp != 32'd0) begin
                 factor_temp = factor_temp / base;
                 remainder = k_temp % base;
                 k_temp = k_temp / base;
                 vdc_val = vdc_val + (remainder * factor_temp);
             end
-            
+
             calculate_vdc = vdc_val;
         end
     endfunction

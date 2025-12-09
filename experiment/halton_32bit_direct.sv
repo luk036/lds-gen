@@ -1,7 +1,7 @@
 /*
 Halton Sequence Generator (32-bit) - Direct Implementation
 
-This SystemVerilog module implements a Halton sequence generator for bases [2, 3] 
+This SystemVerilog module implements a Halton sequence generator for bases [2, 3]
 with scales [11, 7]. This is a direct implementation that doesn't rely on separate
 VdCorput modules, ensuring proper synchronization between dimensions.
 */
@@ -23,7 +23,7 @@ module halton_32bit_direct #(
     // Internal registers
     reg [31:0] count;
     reg [31:0] factor_0, factor_1;
-    
+
     // Calculate scale factors
     function automatic [31:0] calc_pow;
         input [31:0] base_val;
@@ -38,7 +38,7 @@ module halton_32bit_direct #(
             calc_pow = result;
         end
     endfunction
-    
+
     // Van der Corput calculation function
     function automatic [31:0] calculate_vdc;
         input [31:0] k;
@@ -52,18 +52,18 @@ module halton_32bit_direct #(
             k_temp = k;
             vdc_val = 32'd0;
             factor_temp = scale_factor;
-            
+
             while (k_temp != 32'd0) begin
                 factor_temp = factor_temp / base;
                 remainder = k_temp % base;
                 k_temp = k_temp / base;
                 vdc_val = vdc_val + (remainder * factor_temp);
             end
-            
+
             calculate_vdc = vdc_val;
         end
     endfunction
-    
+
     // Main sequential logic
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -80,7 +80,7 @@ module halton_32bit_direct #(
                 halton_out_0 <= 32'd0;
                 halton_out_1 <= 32'd0;
                 valid <= 1'b0;
-            end 
+            end
             // Handle pop operation
             else if (pop_enable) begin
                 count <= count + 1'b1;

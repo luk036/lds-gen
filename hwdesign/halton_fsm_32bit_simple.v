@@ -56,7 +56,7 @@ module halton_fsm_32bit_simple (
     wire vdc0_ready, vdc0_done;
     wire vdc1_ready, vdc1_done;
     wire [31:0] vdc0_result, vdc1_result;
-    
+
     reg vdc0_start, vdc1_start;
     reg [31:0] k_reg;
 

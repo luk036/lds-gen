@@ -46,21 +46,21 @@ module disk_32bit #(
     // Internal signals for Van der Corput generators
     wire [31:0] vdc_out_0, vdc_out_1;
     wire        vdc_valid_0, vdc_valid_1;
-    
+
     // Angle and radius calculation
     reg [ANGLE_BITS-1:0] angle_reg;
     reg [31:0] vdc_value_0_reg, vdc_value_1_reg;
     reg [31:0] radius_reg;
-    
+
     // Trigonometric and square root calculation signals
     reg [31:0] cos_val, sin_val;
     reg [4:0] calc_iter;
     reg        calc_active;
-    
+
     // Constants for 2π scaling and fixed-point arithmetic
     localparam TWO_PI_SCALE = (1 << ANGLE_BITS);
     localparam FIXED_SCALE = 32'd2147483648;  // 2^31 for Q32 fixed point
-    
+
     // Instantiate Van der Corput generators
     vdcorput_32bit #(
         .BASE(BASE_0),
@@ -74,7 +74,7 @@ module disk_32bit #(
         .vdc_out(vdc_out_0),
         .valid(vdc_valid_0)
     );
-    
+
     vdcorput_32bit #(
         .BASE(BASE_1),
         .SCALE(SCALE)
@@ -87,7 +87,7 @@ module disk_32bit #(
         .vdc_out(vdc_out_1),
         .valid(vdc_valid_1)
     );
-    
+
     // State machine
     reg [3:0] state;
     localparam IDLE = 4'b0000;
@@ -97,7 +97,7 @@ module disk_32bit #(
     localparam TRIG_START = 4'b0100;
     localparam TRIG_CALC = 4'b0101;
     localparam OUTPUT = 4'b0110;
-    
+
     // Main state machine
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -118,12 +118,12 @@ module disk_32bit #(
                 IDLE: begin
                     valid <= 1'b0;
                     calc_active <= 1'b0;
-                    
+
                     if (pop_enable) begin
                         state <= WAIT_VDC;
                     end
                 end
-                
+
                 WAIT_VDC: begin
                     if (vdc_valid_0 && vdc_valid_1) begin
                         vdc_value_0_reg <= vdc_out_0;
@@ -131,26 +131,26 @@ module disk_32bit #(
                         state <= ANGLE_CALC;
                     end
                 end
-                
+
                 ANGLE_CALC: begin
                     // Convert VDC value to angle: angle = vdc * 2π
                     angle_reg <= (vdc_value_0_reg * TWO_PI_SCALE) >> SCALE;
                     state <= RADIUS_CALC;
                 end
-                
+
                 RADIUS_CALC: begin
                     // Convert VDC value to radius: radius = sqrt(vdc)
                     radius_reg <= sqrt_approx(vdc_value_1_reg);
                     state <= TRIG_START;
                 end
-                
+
                 TRIG_START: begin
                     // Initialize trigonometric calculation
                     calc_iter <= 5'b0;
                     calc_active <= 1'b1;
                     state <= TRIG_CALC;
                 end
-                
+
                 TRIG_CALC: begin
                     // Simplified trigonometric calculation using lookup table
                     if (calc_iter < 1) begin
@@ -160,7 +160,7 @@ module disk_32bit #(
                         state <= OUTPUT;
                     end
                 end
-                
+
                 OUTPUT: begin
                     // Apply radius to trigonometric values
                     disk_x <= (cos_val * radius_reg) >> 31;
@@ -168,12 +168,12 @@ module disk_32bit #(
                     valid <= 1'b1;
                     state <= IDLE;
                 end
-                
+
                 default: state <= IDLE;
             endcase
         end
     end
-    
+
     // Simplified trigonometric approximation
     always @(posedge clk) begin
         if (calc_active) begin
@@ -199,7 +199,7 @@ module disk_32bit #(
             endcase
         end
     end
-    
+
     // Square root approximation function
     function automatic [31:0] sqrt_approx;
         input [31:0] x;
@@ -209,19 +209,19 @@ module disk_32bit #(
         begin
             result = 32'd0;
             temp = 32'd0;
-            
+
             // Simple Newton-Raphson approximation for sqrt(x/scale)
             if (x != 0) begin
                 // Initial guess
                 result = (x >> 1) + (1 << (SCALE/2));
-                
+
                 // Few iterations of Newton-Raphson
                 for (i = 0; i < 4; i = i + 1) begin
                     temp = result + (x << SCALE) / result;
                     result = temp >> 1;
                 end
             end
-            
+
             sqrt_approx = result;
         end
     endfunction

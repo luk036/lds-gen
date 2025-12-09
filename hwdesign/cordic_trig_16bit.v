@@ -42,7 +42,7 @@ module cordic_trig_16bit (
     // CORDIC constants (arctan values in 16-bit fixed-point)
     // atan(2^-i) for i = 0 to 15
     reg [15:0] atan_table [0:15];
-    
+
     // Internal registers
     reg [31:0] x_reg, y_reg;      // 16.16 fixed-point
     reg [15:0] z_reg;             // Angle remainder
@@ -59,28 +59,28 @@ module cordic_trig_16bit (
         // atan(1) = π/4 ≈ 0.785398 rad
         // In 16-bit (0-65535 maps to 0-2π): 0.785398/(2π) * 65536 = 8192
         atan_table[0] = 16'h2000;   // 8192
-        
+
         // atan(1/2) ≈ 0.463648 rad = 0.463648/(2π) * 65536 = 4836
         atan_table[1] = 16'h12E4;   // 4836
-        
+
         // atan(1/4) ≈ 0.244979 rad = 0.244979/(2π) * 65536 = 2554
         atan_table[2] = 16'h09FA;   // 2554
-        
+
         // atan(1/8) ≈ 0.124355 rad = 0.124355/(2π) * 65536 = 1296
         atan_table[3] = 16'h0510;   // 1296
-        
+
         // atan(1/16) ≈ 0.062419 rad = 0.062419/(2π) * 65536 = 650
         atan_table[4] = 16'h028A;   // 650
-        
+
         // atan(1/32) ≈ 0.031240 rad = 0.031240/(2π) * 65536 = 325
         atan_table[5] = 16'h0145;   // 325
-        
+
         // atan(1/64) ≈ 0.015624 rad = 0.015624/(2π) * 65536 = 163
         atan_table[6] = 16'h00A3;   // 163
-        
+
         // atan(1/128) ≈ 0.007812 rad = 0.007812/(2π) * 65536 = 81
         atan_table[7] = 16'h0051;   // 81
-        
+
         // Remaining entries for 16 iterations
         atan_table[8] = 16'h0029;   // 41
         atan_table[9] = 16'h0014;   // 20
@@ -145,7 +145,7 @@ module cordic_trig_16bit (
                 end
                 COMPUTE: begin
                     compute_start <= 0;
-                    
+
                     // CORDIC iteration
                     if (z_reg[15]) begin  // Negative angle (MSB indicates sign)
                         // Rotate clockwise
@@ -158,7 +158,7 @@ module cordic_trig_16bit (
                         y_reg <= y_reg + (x_reg >>> iteration);
                         z_reg <= z_reg - atan_table[iteration];
                     end
-                    
+
                     iteration <= iteration + 1;
                 end
                 FINISH: begin

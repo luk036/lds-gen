@@ -17,7 +17,7 @@ module cordic_trig_16bit_fixed (
     // FSM states
     parameter IDLE = 1'b0;
     parameter COMPUTE = 1'b1;
-    
+
     reg state;
     reg [3:0] iteration;
     reg compute_active;
@@ -25,11 +25,11 @@ module cordic_trig_16bit_fixed (
     // CORDIC constants (arctan values scaled for 16-bit)
     // atan(2^-i) * 65536/(2π) for i = 0 to 15
     reg [15:0] atan_table [0:15];
-    
+
     // Internal registers (17-bit for 16-bit + guard bit)
     reg [16:0] x, y;
     reg [15:0] z;
-    
+
     // CORDIC scaling factor K ≈ 0.607253
     // In 16-bit fixed-point: 0.607253 * 65536 = 39797
     parameter K_SCALE = 17'd39797;
@@ -40,10 +40,10 @@ module cordic_trig_16bit_fixed (
         // Scale factors from 8-bit to 16-bit:
         // 8-bit: 0-255 maps to 0-2π, arctan values are 0-127 scale
         // 16-bit: 0-65535 maps to 0-2π, need to scale by 65536/256 = 256
-        
+
         // Original 8-bit values: [64, 38, 20, 10, 5, 3, 1, 1]
         // Scaled to 16-bit (×256): [16384, 9728, 5120, 2560, 1280, 768, 256, 256]
-        
+
         atan_table[0] = 16'h4000;   // 16384
         atan_table[1] = 16'h2600;   // 9728
         atan_table[2] = 16'h1400;   // 5120
@@ -91,7 +91,7 @@ module cordic_trig_16bit_fixed (
                         compute_active <= 1;
                     end
                 end
-                
+
                 COMPUTE: begin
                     if (iteration < 16) begin
                         // CORDIC iteration
@@ -106,7 +106,7 @@ module cordic_trig_16bit_fixed (
                             y <= y + (x >>> iteration);
                             z <= z - atan_table[iteration];
                         end
-                        
+
                         iteration <= iteration + 1;
                     end else begin
                         // Computation complete
@@ -115,11 +115,11 @@ module cordic_trig_16bit_fixed (
                         // We want range ±65536 (16.16 fixed-point for ±1.0)
                         // So multiply by 65536/39797 ≈ 1.647
                         // For simplicity, we'll just scale and check magnitude
-                        
+
                         // Scale x and y to 16.16 (shift left 16 bits from 17-bit)
                         cosine <= {x[15:0], 16'b0};  // x * 65536
                         sine <= {y[15:0], 16'b0};    // y * 65536
-                        
+
                         done <= 1;
                         state <= IDLE;
                         compute_active <= 0;

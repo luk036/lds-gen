@@ -121,31 +121,31 @@ module vdcorput_fsm_32bit_tb;
             // Wait for module to be ready
             wait(ready == 1'b1);
             @(posedge clk);
-            
+
             // Apply test vector
             k_in = tv.k;
             base_sel = tv.base_sel;
             start = 1'b1;
-            
+
             @(posedge clk);
             start = 1'b0;
-            
+
             // Wait for computation to complete
             wait(done == 1'b1);
             @(posedge clk);
-            
+
             // Check result with tolerance
             if (result >= tv.expected - 32'h00000100 && result <= tv.expected + 32'h00000100) begin
-                $display("PASS: k=%0d, base_sel=%b, expected=0x%08h, got=0x%08h", 
+                $display("PASS: k=%0d, base_sel=%b, expected=0x%08h, got=0x%08h",
                          tv.k, tv.base_sel, tv.expected, result);
                 test_passed = test_passed + 1;
             end else begin
-                $display("FAIL: k=%0d, base_sel=%b, expected=0x%08h, got=0x%08h", 
+                $display("FAIL: k=%0d, base_sel=%b, expected=0x%08h, got=0x%08h",
                          tv.k, tv.base_sel, tv.expected, result);
                 test_failed = test_failed + 1;
                 error_count = error_count + 1;
             end
-            
+
             total_tests = total_tests + 1;
         end
     endtask
@@ -163,37 +163,37 @@ module vdcorput_fsm_32bit_tb;
         total_tests = 0;
         test_passed = 0;
         test_failed = 0;
-        
+
         // Apply reset
         #(CLK_PERIOD * 2);
         rst_n = 1;
         #(CLK_PERIOD * 2);
-        
+
         $display("==========================================");
         $display("Starting VdCorput FSM Testbench");
         $display("==========================================");
-        
+
         // Test Base 2
         $display("\nTesting Base 2:");
         $display("----------------");
         for (test_index = 0; test_index < 6; test_index = test_index + 1) begin
             run_test(TEST_VECTORS_BASE2[test_index]);
         end
-        
+
         // Test Base 3
         $display("\nTesting Base 3:");
         $display("----------------");
         for (test_index = 0; test_index < 6; test_index = test_index + 1) begin
             run_test(TEST_VECTORS_BASE3[test_index]);
         end
-        
+
         // Test Base 7
         $display("\nTesting Base 7:");
         $display("----------------");
         for (test_index = 0; test_index < 6; test_index = test_index + 1) begin
             run_test(TEST_VECTORS_BASE7[test_index]);
         end
-        
+
         // Summary
         $display("\n==========================================");
         $display("Test Summary:");
@@ -201,15 +201,15 @@ module vdcorput_fsm_32bit_tb;
         $display("  Passed: %0d", test_passed);
         $display("  Failed: %0d", test_failed);
         $display("  Error count: %0d", error_count);
-        
+
         if (error_count == 0) begin
             $display("\nAll tests PASSED!");
         end else begin
             $display("\nSome tests FAILED!");
         end
-        
+
         $display("==========================================");
-        
+
         // Finish simulation
         #(CLK_PERIOD * 10);
         $finish;

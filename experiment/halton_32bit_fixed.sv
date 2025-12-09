@@ -1,7 +1,7 @@
 /*
 Halton Sequence Generator (32-bit) - Fixed Version
 
-This SystemVerilog module implements a Halton sequence generator for bases [2, 3] 
+This SystemVerilog module implements a Halton sequence generator for bases [2, 3]
 with scales [11, 7]. The Halton sequence is a 2-dimensional low-discrepancy sequence
 that provides well-distributed points in the unit square [0,1] x [0,1].
 
@@ -38,11 +38,11 @@ module halton_32bit_fixed #(
 
     // Internal counter (shared by both dimensions)
     reg [31:0] count;
-    
+
     // Pre-computed factor values
     localparam FACTOR_0 = 32'd2048;  // 2^11
     localparam FACTOR_1 = 32'd2187;  // 3^7
-    
+
     // Van der Corput calculation for base 2
     function [31:0] calculate_vdc_base2;
         input [31:0] k;
@@ -54,7 +54,7 @@ module halton_32bit_fixed #(
             k_temp = k;
             vdc_val = 32'd0;
             factor_temp = FACTOR_0;
-            
+
             // Unroll for synthesis (limited iterations for scale 11)
             if (k_temp != 0) begin
                 factor_temp = factor_temp / 2;
@@ -122,11 +122,11 @@ module halton_32bit_fixed #(
                 k_temp = k_temp / 2;
                 vdc_val = vdc_val + (remainder * factor_temp);
             end
-            
+
             calculate_vdc_base2 = vdc_val;
         end
     endfunction
-    
+
     // Van der Corput calculation for base 3
     function [31:0] calculate_vdc_base3;
         input [31:0] k;
@@ -138,7 +138,7 @@ module halton_32bit_fixed #(
             k_temp = k;
             vdc_val = 32'd0;
             factor_temp = FACTOR_1;
-            
+
             // Unroll for synthesis (limited iterations for scale 7)
             if (k_temp != 0) begin
                 factor_temp = factor_temp / 3;
@@ -182,11 +182,11 @@ module halton_32bit_fixed #(
                 k_temp = k_temp / 3;
                 vdc_val = vdc_val + (remainder * factor_temp);
             end
-            
+
             calculate_vdc_base3 = vdc_val;
         end
     endfunction
-    
+
     // Main sequential logic
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -201,7 +201,7 @@ module halton_32bit_fixed #(
                 halton_out_0 <= 32'd0;
                 halton_out_1 <= 32'd0;
                 valid <= 1'b0;
-            end 
+            end
             // Handle pop operation
             else if (pop_enable) begin
                 count <= count + 1'b1;
