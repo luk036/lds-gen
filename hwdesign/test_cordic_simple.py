@@ -37,7 +37,7 @@ def cordic_rotation(angle, iterations=16):
     return x, y
 
 
-def test_cordic():
+def test_cordic() -> None:
     print("Testing CORDIC algorithm")
     print("=" * 50)
 

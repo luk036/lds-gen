@@ -20,7 +20,7 @@ def float_to_fixed16_16(value: float) -> int:
     return int(value * (1 << 16))
 
 
-def test_sequential():
+def test_sequential() -> None:
     """Test sequential generation like hardware FSM"""
     print("Sequential VdCorput Generation Test")
     print("=" * 60)

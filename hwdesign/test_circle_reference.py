@@ -34,7 +34,7 @@ class Circle:
         return [math.cos(theta), math.sin(theta)]
 
 
-def test_circle_values():
+def test_circle_values() -> None:
     """Test Circle values for different bases"""
 
     print("Python Circle Reference Values (16.16 fixed-point):")

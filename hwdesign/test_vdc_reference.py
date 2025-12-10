@@ -21,7 +21,7 @@ def float_to_fixed16_16(value: float) -> int:
     return int(value * (1 << 16))
 
 
-def test_vdc_values():
+def test_vdc_values() -> None:
     """Test VdCorput values for bases 2, 3, and 7"""
 
     test_cases = [

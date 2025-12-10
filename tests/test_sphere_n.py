@@ -8,7 +8,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 from lds_gen.sphere_n import Sphere3, SphereN, linspace, simple_interp, get_tp
 
 
-def test_linspace():
+def test_linspace() -> None:
     """Test the linspace function."""
     # Test basic functionality
     result = linspace(0.0, 1.0, 5)
@@ -28,7 +28,7 @@ def test_linspace():
         assert abs(val - expected[i]) < 1e-10
 
 
-def test_simple_interp():
+def test_simple_interp() -> None:
     """Test the simple_interp function."""
     xp = [0.0, 1.0, 2.0, 3.0]
     yp = [0.0, 2.0, 4.0, 6.0]  # Linear function y = 2x
@@ -52,7 +52,7 @@ def test_simple_interp():
     assert result == 4.0
 
 
-def test_get_tp():
+def test_get_tp() -> None:
     """Test the get_tp function."""
     # Test for n=0
     tp0 = get_tp(0)
@@ -71,7 +71,7 @@ def test_get_tp():
     assert len(tp2) == 300
 
 
-def test_sphere3_basic():
+def test_sphere3_basic() -> None:
     """Test basic Sphere3 functionality."""
     sgen = Sphere3([2, 3, 5])
     sgen.reseed(0)
@@ -92,7 +92,7 @@ def test_sphere3_basic():
         assert -1.0 <= coord <= 1.0
 
 
-def test_sphere3_consistency():
+def test_sphere3_consistency() -> None:
     """Test Sphere3 sequence consistency."""
     bases = [[2, 3, 5], [2, 5, 3], [3, 2, 7]]
 
@@ -111,7 +111,7 @@ def test_sphere3_consistency():
             ), f"Base {base}, Point {i}: {point}, r²={radius_sq}"
 
 
-def test_sphere3_reseed():
+def test_sphere3_reseed() -> None:
     """Test Sphere3 reseed functionality."""
     sgen = Sphere3([2, 3, 5])
 
@@ -144,7 +144,7 @@ def test_sphere3_reseed():
     assert different
 
 
-def test_spheren_basic():
+def test_spheren_basic() -> None:
     """Test basic SphereN functionality."""
     # Test 4-sphere (5D)
     sgen = SphereN([2, 3, 5, 7])
@@ -161,7 +161,7 @@ def test_spheren_basic():
     ), f"Point {point} not on unit sphere: r²={radius_sq}"
 
 
-def test_spheren_higher_dimensions():
+def test_spheren_higher_dimensions() -> None:
     """Test SphereN with higher dimensions."""
     # Test 5-sphere (6D)
     sgen = SphereN([2, 3, 5, 7, 11])
@@ -177,7 +177,7 @@ def test_spheren_higher_dimensions():
     ), f"Point {point} not on unit sphere: r²={radius_sq}"
 
 
-def test_spheren_reseed():
+def test_spheren_reseed() -> None:
     """Test SphereN reseed functionality."""
     sgen = SphereN([2, 3, 5, 7])
 
@@ -195,7 +195,7 @@ def test_spheren_reseed():
             assert abs(seq1[i][j] - seq2[i][j]) < 1e-10
 
 
-def test_comparison_with_original():
+def test_comparison_with_original() -> None:
     """Test that results match the original implementation."""
     # Expected values from doctest examples
     expected_sphere3 = [
@@ -229,7 +229,7 @@ def test_comparison_with_original():
         assert abs(resultN[i] - expected_spheren[i]) < 1e-10
 
 
-def test_uniformity():
+def test_uniformity() -> None:
     """Test that points are reasonably uniformly distributed."""
     sgen = Sphere3([2, 3, 7])
     sgen.reseed(0)

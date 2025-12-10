@@ -32,7 +32,7 @@ class Halton:
         return [self.vdc0(k), self.vdc1(k)]
 
 
-def test_halton_values():
+def test_halton_values() -> None:
     """Test Halton values for different base combinations"""
 
     print("Python Halton Reference Values (16.16 fixed-point):")
