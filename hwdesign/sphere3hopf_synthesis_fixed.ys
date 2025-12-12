@@ -1,0 +1,43 @@
+# Yosys synthesis script for Sphere3Hopf FSM (Fixed version)
+# Based on disk_synthesis_fixed.ys pattern
+
+# Read all required Verilog files
+read_verilog sphere3hopf_fsm_32bit_simple.v
+read_verilog vdcorput_fsm_32bit_simple.v
+read_verilog cordic_trig_16bit_simple_fixed.v
+read_verilog sqrt_approx_16_16.v
+read_verilog div_mod_3.v
+read_verilog div_mod_7.v
+
+# Hierarchy check
+hierarchy -check -top sphere3hopf_fsm_32bit_simple
+
+# High-level synthesis
+proc      # Process procedural blocks
+opt       # Optimize
+fsm       # Extract and optimize finite state machines
+opt       # Optimize again
+memory    # Process memories
+opt       # Optimize again
+
+# Technology mapping
+techmap   # Technology mapping
+opt       # Optimize
+
+# Simple synthesis (without ABC for Windows compatibility)
+synth
+
+# Clean up
+opt_clean
+
+# Write netlist in Verilog format
+write_verilog -noattr sphere3hopf_netlist.v
+
+# Write netlist in BLIF format
+write_blif sphere3hopf_netlist.blif
+
+# Write netlist in JSON format
+write_json sphere3hopf_netlist.json
+
+# Statistics
+stat

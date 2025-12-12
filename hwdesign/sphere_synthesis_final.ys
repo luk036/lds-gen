@@ -1,0 +1,34 @@
+# Yosys synthesis script for Sphere FSM (Final version)
+# Exactly matching disk_synthesis_fixed.ys structure
+
+# Read all required Verilog files
+read_verilog sphere_fsm_32bit_simple.v
+read_verilog vdcorput_fsm_32bit_simple.v
+read_verilog circle_fsm_32bit_simple_fixed.v
+read_verilog cordic_trig_16bit_simple_fixed.v
+read_verilog div_mod_3.v
+read_verilog div_mod_7.v
+
+# Hierarchy check
+hierarchy -check -top sphere_fsm_32bit_simple
+
+# High-level synthesis (exactly like disk synthesis)
+proc      # Process procedural blocks
+opt       # Optimize
+fsm       # Extract and optimize finite state machines
+opt       # Optimize again
+
+# Simple synthesis (without ABC for Windows compatibility)
+synth
+
+# Clean up
+opt_clean
+
+# Write netlist in Verilog format
+write_verilog -noattr sphere_netlist_final.v
+
+# Write netlist in BLIF format
+write_blif sphere_netlist_final.blif
+
+# Statistics
+stat

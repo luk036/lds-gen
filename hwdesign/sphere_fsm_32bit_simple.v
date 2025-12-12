@@ -66,6 +66,10 @@ module sphere_fsm_32bit_simple (
     reg [31:0] sinphi_reg;     // sinφ in 16.16 fixed-point
     reg [31:0] circle_x_reg;   // c from Circle
     reg [31:0] circle_y_reg;   // s from Circle
+    
+    // Temporary calculation registers
+    reg [63:0] cosphi_sq;
+    reg [31:0] one_minus_cosphi_sq;
 
     // Fixed-point constants (16.16 format)
     parameter FP_ONE = 32'h00010000;      // 1.0
@@ -94,7 +98,7 @@ module sphere_fsm_32bit_simple (
     );
 
     // Circle instance for (c, s)
-    circle_fsm_32bit_simple circle_inst (
+    circle_fsm_32bit_simple_fixed circle_inst (
         .clk(clk),
         .rst_n(rst_n),
         .start(circle_start),
@@ -217,11 +221,9 @@ module sphere_fsm_32bit_simple (
                 CALC_SINPHI: begin
                     // Calculate sinφ = sqrt(1 - cosφ²)
                     // First calculate cosφ²
-                    reg [63:0] cosphi_sq;
                     cosphi_sq = cosphi_reg * cosphi_reg;  // 32.32 result
 
                     // 1 - cosφ² (in 16.16)
-                    reg [31:0] one_minus_cosphi_sq;
                     one_minus_cosphi_sq = FP_ONE - (cosphi_sq >> 16);
 
                     // sqrt(1 - cosφ²)

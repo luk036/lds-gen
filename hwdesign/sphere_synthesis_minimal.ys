@@ -1,0 +1,17 @@
+# Minimal Yosys synthesis script for Sphere FSM
+# Just read and check hierarchy first
+
+# Read all required Verilog files
+read_verilog sphere_fsm_32bit_simple.v
+read_verilog vdcorput_fsm_32bit_simple.v
+read_verilog circle_fsm_32bit_simple_fixed.v
+read_verilog cordic_trig_16bit_simple_fixed.v
+read_verilog div_mod_3.v
+read_verilog div_mod_7.v
+
+# Hierarchy check
+hierarchy -check -top sphere_fsm_32bit_simple
+
+# Just write the design without full synthesis
+write_verilog -noattr sphere_netlist_minimal.v
+stat
