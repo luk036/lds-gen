@@ -66,7 +66,7 @@ module sphere_fsm_32bit_simple (
     reg [31:0] sinphi_reg;     // sinφ in 16.16 fixed-point
     reg [31:0] circle_x_reg;   // c from Circle
     reg [31:0] circle_y_reg;   // s from Circle
-    
+
     // Temporary calculation registers
     reg [63:0] cosphi_sq;
     reg [31:0] one_minus_cosphi_sq;

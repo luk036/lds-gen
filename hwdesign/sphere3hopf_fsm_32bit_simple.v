@@ -88,7 +88,7 @@ module sphere3hopf_fsm_32bit_simple (
     reg [31:0] sin_psi_reg;  // sin(ψ) in 16.16 fixed-point
     reg [31:0] cos_phi_psi_reg;  // cos(φ+ψ) in 16.16 fixed-point
     reg [31:0] sin_phi_psi_reg;  // sin(φ+ψ) in 16.16 fixed-point
-    
+
     // Temporary calculation registers
     reg [63:0] vdc_sq;
     reg [31:0] one_minus_vdc;
@@ -304,7 +304,7 @@ module sphere3hopf_fsm_32bit_simple (
                     if (trig_done) begin
                         cos_psi_reg <= trig_cos;
                         sin_psi_reg <= trig_sin;
-                        
+
                         // Now calculate cos(φ+ψ) and sin(φ+ψ)
                         trig_angle <= phi_reg + psi_reg;
                         trig_start <= 1;
@@ -315,14 +315,14 @@ module sphere3hopf_fsm_32bit_simple (
                     if (trig_done) begin
                         cos_phi_psi_reg <= trig_cos;
                         sin_phi_psi_reg <= trig_sin;
-                        
+
                         // Calculate cos_η = sqrt(vdc) and sin_η = sqrt(1 - vdc)
                         // First calculate vdc²
                         vdc_sq = vdc_reg * vdc_reg;  // 32.32 result
-                        
+
                         // 1 - vdc (in 16.16)
                         one_minus_vdc = FP_ONE - (vdc_sq >> 16);
-                        
+
                         // sqrt(vdc) and sqrt(1 - vdc)
                         cos_eta_reg <= sqrt_approx(vdc_reg);
                         sin_eta_reg <= sqrt_approx(one_minus_vdc);
