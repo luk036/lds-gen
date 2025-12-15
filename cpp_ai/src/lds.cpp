@@ -47,7 +47,7 @@ void VdCorput::reseed(std::uint64_t seed) {
     count_ = seed;
 }
 
-Halton::Halton(const std::vector<std::uint64_t>& base) 
+Halton::Halton(const std::vector<std::uint64_t>& base)
     : vdc0_(base[0]), vdc1_(base[1]) {}
 
 std::vector<double> Halton::pop() {
@@ -70,7 +70,7 @@ void Circle::reseed(std::uint64_t seed) {
     vdc_.reseed(seed);
 }
 
-Disk::Disk(const std::vector<std::uint64_t>& base) 
+Disk::Disk(const std::vector<std::uint64_t>& base)
     : vdc0_(base[0]), vdc1_(base[1]) {}
 
 std::vector<double> Disk::pop() {
@@ -84,7 +84,7 @@ void Disk::reseed(std::uint64_t seed) {
     vdc1_.reseed(seed);
 }
 
-Sphere::Sphere(const std::vector<std::uint64_t>& base) 
+Sphere::Sphere(const std::vector<std::uint64_t>& base)
     : vdc_(base[0]), cirgen_(base[1]) {}
 
 std::vector<double> Sphere::pop() {
@@ -101,7 +101,7 @@ void Sphere::reseed(std::uint64_t seed) {
     vdc_.reseed(seed);
 }
 
-Sphere3Hopf::Sphere3Hopf(const std::vector<std::uint64_t>& base) 
+Sphere3Hopf::Sphere3Hopf(const std::vector<std::uint64_t>& base)
     : vdc0_(base[0]), vdc1_(base[1]), vdc2_(base[2]) {}
 
 std::vector<double> Sphere3Hopf::pop() {

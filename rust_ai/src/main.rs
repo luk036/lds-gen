@@ -19,50 +19,50 @@ enum Commands {
         /// Base of the sequence (default: 2)
         #[arg(short, long, default_value_t = 2)]
         base: u32,
-        
+
         /// Number of values to generate (default: 10)
         #[arg(short, long, default_value_t = 10)]
         count: usize,
-        
+
         /// Starting seed (default: 0)
         #[arg(short, long, default_value_t = 0)]
         seed: u32,
     },
-    
+
     /// Generate Halton sequence
     Halton {
         /// First base (default: 2)
         #[arg(long, default_value_t = 2)]
         base1: u32,
-        
+
         /// Second base (default: 3)
         #[arg(long, default_value_t = 3)]
         base2: u32,
-        
+
         /// Number of points to generate (default: 10)
         #[arg(short, long, default_value_t = 10)]
         count: usize,
-        
+
         /// Starting seed (default: 0)
         #[arg(short, long, default_value_t = 0)]
         seed: u32,
     },
-    
+
     /// Generate points on unit circle
     Circle {
         /// Base of the sequence (default: 2)
         #[arg(short, long, default_value_t = 2)]
         base: u32,
-        
+
         /// Number of points to generate (default: 10)
         #[arg(short, long, default_value_t = 10)]
         count: usize,
-        
+
         /// Starting seed (default: 0)
         #[arg(short, long, default_value_t = 0)]
         seed: u32,
     },
-    
+
     /// List first N primes from prime table
     Primes {
         /// Number of primes to list (default: 20)
@@ -73,7 +73,7 @@ enum Commands {
 
 fn main() {
     let cli = Cli::parse();
-    
+
     match cli.command {
         Commands::Vdc { base, count, seed } => {
             println!("Van der Corput sequence (base: {}, seed: {}):", base, seed);
@@ -83,7 +83,7 @@ fn main() {
                 println!("  {}: {}", i + 1, vgen.pop());
             }
         }
-        
+
         Commands::Halton { base1, base2, count, seed } => {
             println!("Halton sequence (bases: [{}, {}], seed: {}):", base1, base2, seed);
             let mut hgen = Halton::new([base1, base2]);
@@ -93,7 +93,7 @@ fn main() {
                 println!("  {}: [{:.6}, {:.6}]", i + 1, point[0], point[1]);
             }
         }
-        
+
         Commands::Circle { base, count, seed } => {
             println!("Circle points (base: {}, seed: {}):", base, seed);
             let mut cgen = Circle::new(base);
@@ -103,7 +103,7 @@ fn main() {
                 println!("  {}: [{:.6}, {:.6}]", i + 1, point[0], point[1]);
             }
         }
-        
+
         Commands::Primes { count } => {
             let n = count.min(PRIME_TABLE.len());
             println!("First {} primes:", n);

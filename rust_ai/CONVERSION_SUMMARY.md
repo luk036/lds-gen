@@ -9,7 +9,7 @@ Successfully converted the Python `lds-gen` library to Rust in the `./rust_ai` d
 - **`lds.py`** → `lib.rs` (main library)
   - `vdc()` function → `vdc()` function
   - `VdCorput` class → `VdCorput` struct
-  - `Halton` class → `Halton` struct  
+  - `Halton` class → `Halton` struct
   - `Circle` class → `Circle` struct
   - `Disk` class → `Disk` struct
   - `Sphere` class → `Sphere` struct
@@ -90,10 +90,10 @@ Successfully converted the Python `lds-gen` library to Rust in the `./rust_ai` d
 - Comprehensive `README.md`
 
 ## Build and Test Status
-✅ **Builds successfully**: `cargo build`  
-✅ **Tests pass**: `cargo test` (15 tests)  
-✅ **Examples work**: `cargo run --example basic`  
-✅ **CLI works**: `cargo run -- vdc --count 5`  
+✅ **Builds successfully**: `cargo build`
+✅ **Tests pass**: `cargo test` (15 tests)
+✅ **Examples work**: `cargo run --example basic`
+✅ **CLI works**: `cargo run -- vdc --count 5`
 
 ## Performance Comparison
 While not benchmarked, the Rust implementation provides:

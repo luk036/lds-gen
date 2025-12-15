@@ -65,7 +65,7 @@ impl SphereTables {
             .map(|((&x, &nc), &s)| (x + nc * s) / 2.0)
             .collect();
         let half_pi = PI / 2.0;
-        
+
         Self {
             x,
             neg_cosine,
@@ -74,7 +74,7 @@ impl SphereTables {
             half_pi,
         }
     }
-    
+
     fn get(&self) -> (&[f64], &[f64], &[f64], &[f64], f64) {
         (&self.x, &self.neg_cosine, &self.sine, &self.f2, self.half_pi)
     }
@@ -87,23 +87,23 @@ static SPHERE_TABLES: once_cell::sync::Lazy<SphereTables> = once_cell::sync::Laz
 fn get_tp(n: usize) -> Vec<f64> {
     use std::sync::Mutex;
     use once_cell::sync::Lazy;
-    
+
     static TP_CACHE: Lazy<Mutex<Vec<Vec<f64>>>> = Lazy::new(|| Mutex::new(Vec::new()));
-    
+
     let mut cache = TP_CACHE.lock().unwrap();
-    
+
     // If already computed, return a copy
     if n < cache.len() {
         return cache[n].clone();
     }
-    
+
     // Ensure cache has entries up to n
     while cache.len() <= n {
         let tables = SPHERE_TABLES.get();
         let x = &tables.0;
         let neg_cosine = &tables.1;
         let sine = &tables.2;
-        
+
         let new_n = cache.len();
         let tp = if new_n == 0 {
             x.to_vec()
@@ -114,14 +114,14 @@ fn get_tp(n: usize) -> Vec<f64> {
             x.iter()
                 .enumerate()
                 .map(|(i, _xi)| {
-                    ((new_n - 1) as f64 * tp_minus2[i] + neg_cosine[i] * sine[i].powi((new_n - 1) as i32)) 
+                    ((new_n - 1) as f64 * tp_minus2[i] + neg_cosine[i] * sine[i].powi((new_n - 1) as i32))
                     / new_n as f64
                 })
                 .collect()
         };
         cache.push(tp);
     }
-    
+
     cache[n].clone()
 }
 
@@ -129,7 +129,7 @@ fn get_tp(n: usize) -> Vec<f64> {
 pub trait SphereGen {
     /// Generates and returns a vector of values
     fn pop(&mut self) -> Vec<f64>;
-    
+
     /// Reseeds the generator with a new seed
     fn reseed(&mut self, seed: u32);
 }
@@ -151,7 +151,7 @@ impl SphereGen for SphereWrapper {
     fn pop(&mut self) -> Vec<f64> {
         self.sphere.pop().to_vec()
     }
-    
+
     fn reseed(&mut self, seed: u32) {
         self.sphere.reseed(seed);
     }
@@ -201,7 +201,7 @@ impl SphereGen for Sphere3 {
         let xi = simple_interp(ti, &self.f2, &self.x);
         let cosxi = xi.cos();
         let sinxi = xi.sin();
-        
+
         let sphere2_point = self.sphere2.pop();
         let mut result = Vec::with_capacity(4);
         for &s in &sphere2_point {
@@ -210,7 +210,7 @@ impl SphereGen for Sphere3 {
         result.push(cosxi);
         result
     }
-    
+
     fn reseed(&mut self, seed: u32) {
         self.vdc.reseed(seed);
         self.sphere2.reseed(seed);
@@ -247,19 +247,19 @@ impl SphereN {
     pub fn new(base: &[u32]) -> Self {
         let n = base.len() - 1;
         assert!(n >= 2, "SphereN requires at least 3 bases (n >= 2)");
-        
+
         let vdc = VdCorput::new(base[0]);
-        
+
         let s_gen: Box<dyn SphereGen> = if n == 2 {
             Box::new(SphereWrapper::new([base[1], base[2]]))
         } else {
             Box::new(SphereN::new(&base[1..]))
         };
-        
+
         let tp = get_tp(n);
         let tp_start = tp[0];
         let range = tp[tp.len() - 1] - tp_start;
-        
+
         Self {
             vdc,
             s_gen,
@@ -279,7 +279,7 @@ impl SphereGen for SphereN {
             let xi = simple_interp(ti, tables.3, tables.0);
             let cosxi = xi.cos();
             let sinxi = xi.sin();
-            
+
             let sphere_point = self.s_gen.pop();
             let mut result = Vec::with_capacity(sphere_point.len() + 1);
             for &s in &sphere_point {
@@ -288,12 +288,12 @@ impl SphereGen for SphereN {
             result.push(cosxi);
             return result;
         }
-        
+
         let vd = self.vdc.pop();
         let ti = self.tp_start + self.range * vd; // map to [t0, tm-1]
         let xi = simple_interp(ti, &self.tp, &SPHERE_TABLES.x);
         let sinphi = xi.sin();
-        
+
         let sphere_point = self.s_gen.pop();
         let mut result = Vec::with_capacity(sphere_point.len() + 1);
         for &s in &sphere_point {
@@ -302,7 +302,7 @@ impl SphereGen for SphereN {
         result.push(xi.cos());
         result
     }
-    
+
     fn reseed(&mut self, seed: u32) {
         self.vdc.reseed(seed);
         self.s_gen.reseed(seed);
@@ -499,7 +499,7 @@ mod tests {
             -0.33333333333333337,
             6.123233995736766e-17,
         ];
-        
+
         let expected_spheren = vec![
             0.4809684718990214,
             0.6031153874276115,

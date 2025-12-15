@@ -33,13 +33,25 @@ public:
 class Sphere3 : public SphereGen {
 public:
     explicit Sphere3(const std::vector<std::uint64_t>& base);
+
+    std::vector<double> pop() override;
+    void reseed(std::uint64_t seed) override;
+
+private:
+    VdCorput vdc_;
+    Sphere sphere2_;
+};
+
+// Wrapper class to make Sphere compatible with SphereGen interface
+class SphereWrapper : public SphereGen {
+public:
+    explicit SphereWrapper(const std::vector<std::uint64_t>& base);
     
     std::vector<double> pop() override;
     void reseed(std::uint64_t seed) override;
     
 private:
-    VdCorput vdc_;
-    Sphere sphere2_;
+    Sphere sphere_;
 };
 
 // Sphere-N sequence generator
@@ -56,5 +68,4 @@ private:
     int n_;
     double range_;
 };
-
 } // namespace lds_gen

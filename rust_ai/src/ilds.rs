@@ -42,7 +42,7 @@ impl VdCorput {
             factor,
         }
     }
-    
+
     /// Generates the next integer value in the sequence
     ///
     /// Increments the count and calculates the next integer value
@@ -52,7 +52,7 @@ impl VdCorput {
         let mut k = self.count;
         let mut vdc = 0;
         let mut factor = self.factor;
-        
+
         while k != 0 {
             factor /= self.base;
             let remainder = k % self.base;
@@ -61,7 +61,7 @@ impl VdCorput {
         }
         vdc
     }
-    
+
     /// Resets the state of the sequence generator to a specific seed value
     ///
     /// # Arguments
@@ -110,14 +110,14 @@ impl Halton {
             vdc1: VdCorput::new(base[1], scale[1]),
         }
     }
-    
+
     /// Generates the next point in the integer Halton sequence
     ///
     /// Returns the next point as a `[u32; 2]`.
     pub fn pop(&mut self) -> [u32; 2] {
         [self.vdc0.pop(), self.vdc1.pop()]
     }
-    
+
     /// Resets the state of the sequence generator to a specific seed value
     ///
     /// # Arguments
@@ -167,7 +167,7 @@ mod tests {
         let res = hgen.pop();
         assert_eq!(res[0], 1024); // 0.5 * 2048
         assert_eq!(res[1], 729);  // 1/3 * 2187
-        
+
         let res = hgen.pop();
         assert_eq!(res[0], 512);  // 0.25 * 2048
         assert_eq!(res[1], 1458); // 2/3 * 2187

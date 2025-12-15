@@ -19,10 +19,10 @@ double vdc(std::uint64_t k, std::uint64_t base = 2);
 class VdCorput {
 public:
     explicit VdCorput(std::uint64_t base = 2);
-    
+
     double pop();
     void reseed(std::uint64_t seed);
-    
+
 private:
     std::uint64_t count_;
     std::uint64_t base_;
@@ -33,10 +33,10 @@ private:
 class Halton {
 public:
     explicit Halton(const std::vector<std::uint64_t>& base);
-    
+
     std::vector<double> pop();
     void reseed(std::uint64_t seed);
-    
+
 private:
     VdCorput vdc0_;
     VdCorput vdc1_;
@@ -46,10 +46,10 @@ private:
 class Circle {
 public:
     explicit Circle(std::uint64_t base);
-    
+
     std::vector<double> pop();
     void reseed(std::uint64_t seed);
-    
+
 private:
     VdCorput vdc_;
 };
@@ -58,10 +58,10 @@ private:
 class Disk {
 public:
     explicit Disk(const std::vector<std::uint64_t>& base);
-    
+
     std::vector<double> pop();
     void reseed(std::uint64_t seed);
-    
+
 private:
     VdCorput vdc0_;
     VdCorput vdc1_;
@@ -71,10 +71,10 @@ private:
 class Sphere {
 public:
     explicit Sphere(const std::vector<std::uint64_t>& base);
-    
+
     std::vector<double> pop();
     void reseed(std::uint64_t seed);
-    
+
 private:
     VdCorput vdc_;
     Circle cirgen_;
@@ -84,10 +84,10 @@ private:
 class Sphere3Hopf {
 public:
     explicit Sphere3Hopf(const std::vector<std::uint64_t>& base);
-    
+
     std::vector<double> pop();
     void reseed(std::uint64_t seed);
-    
+
 private:
     VdCorput vdc0_;
     VdCorput vdc1_;
@@ -98,10 +98,10 @@ private:
 class HaltonN {
 public:
     explicit HaltonN(const std::vector<std::uint64_t>& base);
-    
+
     std::vector<double> pop();
     void reseed(std::uint64_t seed);
-    
+
 private:
     std::vector<VdCorput> vdcs_;
 };

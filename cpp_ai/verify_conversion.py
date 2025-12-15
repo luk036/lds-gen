@@ -25,7 +25,7 @@ def test_vdcorput():
     print("Testing VdCorput class...")
     vgen = VdCorput(2)
     vgen.reseed(0)
-    
+
     expected_values = [0.5, 0.25, 0.75, 0.125, 0.625]
     for i, expected in enumerate(expected_values):
         result = vgen.pop()
@@ -37,7 +37,7 @@ def test_halton():
     print("Testing Halton class...")
     hgen = Halton([2, 3])
     hgen.reseed(0)
-    
+
     result = hgen.pop()
     expected = [0.5, 1/3]
     for i in range(2):
@@ -49,7 +49,7 @@ def test_circle():
     print("Testing Circle class...")
     cgen = Circle(2)
     cgen.reseed(0)
-    
+
     result = cgen.pop()
     expected = [-1.0, 0.0]
     for i in range(2):
@@ -61,7 +61,7 @@ def test_disk():
     print("Testing Disk class...")
     dgen = Disk([2, 3])
     dgen.reseed(0)
-    
+
     result = dgen.pop()
     expected = [-0.5773502691896257, 0.0]
     for i in range(2):
@@ -73,7 +73,7 @@ def test_sphere():
     print("Testing Sphere class...")
     sgen = Sphere([2, 3])
     sgen.reseed(0)
-    
+
     result = sgen.pop()
     expected = [-0.5, 0.8660254037844387, 0.0]
     for i in range(3):
@@ -85,7 +85,7 @@ def test_sphere3hopf():
     print("Testing Sphere3Hopf class...")
     sp3hgen = Sphere3Hopf([2, 3, 5])
     sp3hgen.reseed(0)
-    
+
     result = sp3hgen.pop()
     expected = [-0.22360679774997885, 0.3872983346207417, 0.4472135954999573, -0.7745966692414837]
     for i in range(4):
@@ -97,7 +97,7 @@ def test_haltonn():
     print("Testing HaltonN class...")
     hgen = HaltonN([2, 3, 5])
     hgen.reseed(0)
-    
+
     result = hgen.pop()
     expected = [0.5, 1/3, 0.2]
     for i in range(3):
@@ -108,7 +108,7 @@ def main():
     """Run all tests"""
     print("Verifying Python lds_gen implementation...")
     print("=" * 50)
-    
+
     try:
         test_vdc()
         test_vdcorput()
@@ -118,7 +118,7 @@ def main():
         test_sphere()
         test_sphere3hopf()
         test_haltonn()
-        
+
         print("=" * 50)
         print("All Python tests passed! ✓")
         print("\nThe C++ implementation in ./cpp_ai should produce the same results.")
@@ -126,7 +126,7 @@ def main():
         print("1. Build with CMake: mkdir build && cd build && cmake .. && cmake --build .")
         print("2. Run tests: ctest")
         print("3. Run example: ./example")
-        
+
     except AssertionError as e:
         print(f"\n✗ Test failed: {e}")
         sys.exit(1)

@@ -53,16 +53,16 @@ if(BUILD_TESTS)
             SHOW_PROGRESS
         )
     endif()
-    
+
     add_executable(test_lds tests/test_lds.cpp)
     target_link_libraries(test_lds lds_gen)
-    
+
     add_executable(test_ilds tests/test_ilds.cpp)
     target_link_libraries(test_ilds lds_gen)
-    
+
     add_executable(test_sphere_n tests/test_sphere_n.cpp)
     target_link_libraries(test_sphere_n lds_gen)
-    
+
     # Add test targets
     add_test(NAME test_lds COMMAND test_lds)
     add_test(NAME test_ilds COMMAND test_ilds)

@@ -10,12 +10,12 @@ This library provides a set of low-discrepancy sequence generators that create s
 
 - **Van der Corput sequence**: Base implementation for 1D sequences
 - **Halton sequence**: 2D and N-dimensional sequences using different bases
-- **Geometric sequences**: 
+- **Geometric sequences**:
   - `Circle`: Points on the unit circle
-  - `Disk`: Points in the unit disk  
+  - `Disk`: Points in the unit disk
   - `Sphere`: Points on the unit sphere
   - `Sphere3Hopf`: Points on the 3-sphere using Hopf fibration
-- **N-dimensional spheres**: 
+- **N-dimensional spheres**:
   - `Sphere3`: Points on 3-sphere (4D)
   - `SphereN`: Points on n-sphere for arbitrary dimensions
 - **Integer sequences**: Integer versions of Van der Corput and Halton sequences
@@ -105,7 +105,7 @@ println!("Integer point: {:?}", int_point); // [1024, 729]
 ### Core Types
 
 - `VdCorput`: Van der Corput sequence generator
-- `Halton`: 2D Halton sequence generator  
+- `Halton`: 2D Halton sequence generator
 - `Circle`: Unit circle sequence generator
 - `Disk`: Unit disk sequence generator
 - `Sphere`: Unit sphere sequence generator

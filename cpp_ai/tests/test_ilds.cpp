@@ -17,23 +17,23 @@ TEST_CASE("Test VdCorputInt reseed") {
 TEST_CASE("Test HaltonInt class") {
     lds_gen::HaltonInt hgen({2, 3}, {11, 7});
     hgen.reseed(0);
-    
+
     auto res = hgen.pop();
     CHECK(res[0] == 1024);
     CHECK(res[1] == 729);
-    
+
     res = hgen.pop();
     CHECK(res[0] == 512);
     CHECK(res[1] == 1458);
-    
+
     res = hgen.pop();
     CHECK(res[0] == 1536);
     CHECK(res[1] == 243);
-    
+
     res = hgen.pop();
     CHECK(res[0] == 256);
     CHECK(res[1] == 972);
-    
+
     res = hgen.pop();
     CHECK(res[0] == 1280);
     CHECK(res[1] == 1701);

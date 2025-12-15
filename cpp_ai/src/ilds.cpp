@@ -4,7 +4,7 @@
 
 namespace lds_gen {
 
-VdCorputInt::VdCorputInt(std::uint64_t base, std::uint64_t scale) 
+VdCorputInt::VdCorputInt(std::uint64_t base, std::uint64_t scale)
     : base_(base), scale_(scale), count_(0), factor_(1) {
     for (std::uint64_t i = 0; i < scale_; ++i) {
         factor_ *= base_;
@@ -16,14 +16,14 @@ std::uint64_t VdCorputInt::pop() {
     std::uint64_t k = count_;
     std::uint64_t vdc = 0;
     std::uint64_t factor = factor_;
-    
+
     while (k != 0) {
         factor /= base_;
         std::uint64_t remainder = k % base_;
         k /= base_;
         vdc += remainder * factor;
     }
-    
+
     return vdc;
 }
 
@@ -31,7 +31,7 @@ void VdCorputInt::reseed(std::uint64_t seed) {
     count_ = seed;
 }
 
-HaltonInt::HaltonInt(const std::vector<std::uint64_t>& base, 
+HaltonInt::HaltonInt(const std::vector<std::uint64_t>& base,
                      const std::vector<std::uint64_t>& scale)
     : vdc0_(base[0], scale[0]), vdc1_(base[1], scale[1]) {}
 

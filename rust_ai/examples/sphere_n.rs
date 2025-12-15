@@ -47,21 +47,21 @@ fn main() {
     // Example 4: Reseeding demonstration
     println!("4. Reseeding demonstration for 3-sphere:");
     let mut sgen = Sphere3::new(&[2, 3, 5]);
-    
+
     println!("  Starting from seed 0:");
     sgen.reseed(0);
     for i in 0..2 {
         let point = sgen.pop();
         println!("    Point {}: {:?}", i + 1, point);
     }
-    
+
     println!("  Reseeding to seed 5:");
     sgen.reseed(5);
     for i in 0..2 {
         let point = sgen.pop();
         println!("    Point {}: {:?}", i + 1, point);
     }
-    
+
     println!("  Going back to seed 0:");
     sgen.reseed(0);
     for i in 0..2 {
@@ -74,7 +74,7 @@ fn main() {
     println!("5. Uniformity check (1000 points on 3-sphere):");
     let mut sgen = Sphere3::new(&[2, 3, 7]);
     sgen.reseed(0);
-    
+
     let mut octants = [0; 16]; // 16 octants in 4D
     for _ in 0..1000 {
         let point = sgen.pop();
@@ -86,7 +86,7 @@ fn main() {
         }
         octants[octant] += 1;
     }
-    
+
     let expected_per_octant = 1000.0 / 16.0;
     println!("  Expected points per octant: {:.1}", expected_per_octant);
     println!("  Octant distribution:");

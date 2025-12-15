@@ -57,13 +57,13 @@ int main() {
     for (int i = 0; i < 10; ++i) {
         std::cout << vgen.pop() << "\n";
     }
-    
+
     // Halton sequence
     lds_gen::Halton hgen({2, 3});
     hgen.reseed(0);
     auto point = hgen.pop();
     std::cout << "[" << point[0] << ", " << point[1] << "]\n";
-    
+
     return 0;
 }
 ```

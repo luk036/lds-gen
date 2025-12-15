@@ -59,7 +59,7 @@ pub fn vdc(k: u32, base: u32) -> f64 {
     let mut res = 0.0;
     let mut denom = 1.0;
     let base_f64 = base as f64;
-    
+
     while k != 0 {
         denom *= base_f64;
         let remainder = (k % base) as f64;
@@ -101,19 +101,19 @@ impl VdCorput {
         let mut rev_lst = Vec::with_capacity(64);
         let mut reverse = 1.0;
         let base_f64 = base as f64;
-        
+
         for _ in 0..64 {
             reverse /= base_f64;
             rev_lst.push(reverse);
         }
-        
+
         Self {
             count: 0,
             base,
             rev_lst,
         }
     }
-    
+
     /// Generates the next value in the sequence
     ///
     /// Increments the count and calculates the Van der Corput sequence value
@@ -123,7 +123,7 @@ impl VdCorput {
         let mut k = self.count;
         let mut res = 0.0;
         let mut i = 0;
-        
+
         while k != 0 {
             let remainder = (k % self.base) as f64;
             k /= self.base;
@@ -134,7 +134,7 @@ impl VdCorput {
         }
         res
     }
-    
+
     /// Resets the state of the sequence generator to a specific seed value
     ///
     /// # Arguments
@@ -185,14 +185,14 @@ impl Halton {
             vdc1: VdCorput::new(base[1]),
         }
     }
-    
+
     /// Generates the next point in the Halton sequence
     ///
     /// Returns the next point in the Halton sequence as a `[f64; 2]`.
     pub fn pop(&mut self) -> [f64; 2] {
         [self.vdc0.pop(), self.vdc1.pop()]
     }
-    
+
     /// Resets the state of the sequence generator to a specific seed value
     ///
     /// # Arguments
@@ -234,7 +234,7 @@ impl Circle {
             vdc: VdCorput::new(base),
         }
     }
-    
+
     /// Generates the next point on the unit circle
     ///
     /// Returns the next point on the unit circle as a `[f64; 2]`.
@@ -242,7 +242,7 @@ impl Circle {
         let theta = self.vdc.pop() * TWO_PI; // map to [0, 2π]
         [theta.cos(), theta.sin()]
     }
-    
+
     /// Resets the state of the sequence generator to a specific seed value
     ///
     /// # Arguments
@@ -285,7 +285,7 @@ impl Disk {
             vdc1: VdCorput::new(base[1]),
         }
     }
-    
+
     /// Generates the next point in the unit disk
     ///
     /// Returns the next point in the unit disk as a `[f64; 2]`.
@@ -294,7 +294,7 @@ impl Disk {
         let radius = self.vdc1.pop().sqrt(); // map to [0, 1]
         [radius * theta.cos(), radius * theta.sin()]
     }
-    
+
     /// Resets the state of the sequence generator to a specific seed value
     ///
     /// # Arguments
@@ -338,7 +338,7 @@ impl Sphere {
             cirgen: Circle::new(base[1]),
         }
     }
-    
+
     /// Generates the next point on the unit sphere
     ///
     /// Returns the next point on the unit sphere as a `[f64; 3]`.
@@ -348,7 +348,7 @@ impl Sphere {
         let [c, s] = self.cirgen.pop();
         [sinphi * c, sinphi * s, cosphi]
     }
-    
+
     /// Resets the state of the sequence generator to a specific seed value
     ///
     /// # Arguments
@@ -396,7 +396,7 @@ impl Sphere3Hopf {
             vdc2: VdCorput::new(base[2]),
         }
     }
-    
+
     /// Generates the next point on the 3-sphere using Hopf fibration
     ///
     /// Returns the next point on the 3-sphere as a `[f64; 4]`.
@@ -413,7 +413,7 @@ impl Sphere3Hopf {
             sin_eta * (phi + psy).sin(),
         ]
     }
-    
+
     /// Resets the state of the sequence generator to a specific seed value
     ///
     /// # Arguments
@@ -455,14 +455,14 @@ impl HaltonN {
         let vdcs = base.iter().map(|&b| VdCorput::new(b)).collect();
         Self { vdcs }
     }
-    
+
     /// Generates the next point in the N-dimensional Halton sequence
     ///
     /// Returns the next point as a `Vec<f64>`.
     pub fn pop(&mut self) -> Vec<f64> {
         self.vdcs.iter_mut().map(|vdc| vdc.pop()).collect()
     }
-    
+
     /// Resets the state of the sequence generator to a specific seed value
     ///
     /// # Arguments
@@ -596,7 +596,7 @@ mod tests {
         let res = hgen.pop();
         assert_eq!(res[0], 0.5);
         assert_relative_eq!(res[1], 1.0 / 3.0, epsilon = 1e-10);
-        
+
         let res = hgen.pop();
         assert_eq!(res[0], 0.25);
         assert_relative_eq!(res[1], 2.0 / 3.0, epsilon = 1e-10);
@@ -610,7 +610,7 @@ mod tests {
         // First point should be at angle π (180 degrees)
         assert_relative_eq!(res[0], -1.0, epsilon = 1e-10);
         assert_relative_eq!(res[1], 0.0, epsilon = 1e-10);
-        
+
         let res = cgen.pop();
         // Second point should be at angle π/2 (90 degrees)
         assert_relative_eq!(res[0], 0.0, epsilon = 1e-10);
@@ -622,11 +622,11 @@ mod tests {
         let mut dgen = Disk::new([2, 3]);
         dgen.reseed(0);
         let res = dgen.pop();
-        
+
         // Check that point is within unit disk
         let radius_sq = res[0] * res[0] + res[1] * res[1];
         assert!(radius_sq <= 1.0);
-        
+
         // Generate a few more points and check they're all within unit disk
         for _ in 0..10 {
             let res = dgen.pop();
@@ -640,11 +640,11 @@ mod tests {
         let mut sgen = Sphere::new([2, 3]);
         sgen.reseed(0);
         let res = sgen.pop();
-        
+
         // Check that point is on unit sphere
         let radius_sq = res[0] * res[0] + res[1] * res[1] + res[2] * res[2];
         assert_relative_eq!(radius_sq, 1.0, epsilon = 1e-10);
-        
+
         // Generate a few more points and check they're all on unit sphere
         for _ in 0..5 {
             let res = sgen.pop();
@@ -658,11 +658,11 @@ mod tests {
         let mut sp3hgen = Sphere3Hopf::new([2, 3, 5]);
         sp3hgen.reseed(0);
         let res = sp3hgen.pop();
-        
+
         // Check that point is on 3-sphere
         let radius_sq = res[0] * res[0] + res[1] * res[1] + res[2] * res[2] + res[3] * res[3];
         assert_relative_eq!(radius_sq, 1.0, epsilon = 1e-10);
-        
+
         // Generate a few more points and check they're all on 3-sphere
         for _ in 0..5 {
             let res = sp3hgen.pop();
@@ -676,11 +676,11 @@ mod tests {
         let mut hgen = HaltonN::new(&[2, 3, 5]);
         hgen.reseed(0);
         let res = hgen.pop();
-        
+
         assert_eq!(res[0], 0.5);
         assert_relative_eq!(res[1], 1.0 / 3.0, epsilon = 1e-10);
         assert_relative_eq!(res[2], 0.2, epsilon = 1e-10);
-        
+
         let res = hgen.pop();
         assert_eq!(res[0], 0.25);
         assert_relative_eq!(res[1], 2.0 / 3.0, epsilon = 1e-10);
@@ -695,10 +695,10 @@ mod tests {
         assert_eq!(PRIME_TABLE[2], 5);
         assert_eq!(PRIME_TABLE[3], 7);
         assert_eq!(PRIME_TABLE[4], 11);
-        
+
         // Check table length
         assert_eq!(PRIME_TABLE.len(), 1000);
-        
+
         // Check a prime near the end
         assert_eq!(PRIME_TABLE[999], 7919);
     }

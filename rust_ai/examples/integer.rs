@@ -29,7 +29,7 @@ fn main() {
             point[0] as f64 / 2048.0, // 2^11 = 2048
             point[1] as f64 / 2187.0, // 3^7 = 2187
         ];
-        println!("  Point {}: [{}, {}] (≈ [{:.6}, {:.6}])", 
+        println!("  Point {}: [{}, {}] (≈ [{:.6}, {:.6}])",
                  i + 1, point[0], point[1], float_point[0], float_point[1]);
     }
     println!();
@@ -49,19 +49,19 @@ fn main() {
     // Example 4: Reseeding
     println!("4. Reseeding demonstration:");
     let mut vdc = VdCorput::new(2, 10);
-    
+
     println!("  Starting from seed 0:");
     vdc.reseed(0);
     for i in 0..3 {
         println!("    Value {}: {}", i + 1, vdc.pop());
     }
-    
+
     println!("  Reseeding to seed 5:");
     vdc.reseed(5);
     for i in 0..3 {
         println!("    Value {}: {}", i + 1, vdc.pop());
     }
-    
+
     println!("  Going back to seed 0:");
     vdc.reseed(0);
     for i in 0..3 {
