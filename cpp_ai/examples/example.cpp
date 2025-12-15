@@ -56,8 +56,38 @@ int main() {
     }
     std::cout << "\n";
     
-    // Example 6: Integer version
-    std::cout << "6. Integer Van der Corput sequence (base 2, scale 10):\n";
+    // Example 6: Sphere3 sequence
+    std::cout << "6. Sphere3 sequence (bases [2, 3, 5]):\n";
+    lds_gen::Sphere3 s3gen({2, 3, 5});
+    s3gen.reseed(0);
+    for (int i = 0; i < 3; ++i) {
+        auto point = s3gen.pop();
+        std::cout << "   [";
+        for (std::size_t j = 0; j < point.size(); ++j) {
+            std::cout << point[j];
+            if (j < point.size() - 1) std::cout << ", ";
+        }
+        std::cout << "]\n";
+    }
+    std::cout << "\n";
+    
+    // Example 7: SphereN sequence
+    std::cout << "7. SphereN sequence (bases [2, 3, 5, 7]):\n";
+    lds_gen::SphereN sngen({2, 3, 5, 7});
+    sngen.reseed(0);
+    for (int i = 0; i < 2; ++i) {
+        auto point = sngen.pop();
+        std::cout << "   [";
+        for (std::size_t j = 0; j < point.size(); ++j) {
+            std::cout << point[j];
+            if (j < point.size() - 1) std::cout << ", ";
+        }
+        std::cout << "]\n";
+    }
+    std::cout << "\n";
+    
+    // Example 8: Integer version
+    std::cout << "8. Integer Van der Corput sequence (base 2, scale 10):\n";
     lds_gen::VdCorputInt vdc_int(2, 10);
     vdc_int.reseed(0);
     for (int i = 0; i < 5; ++i) {

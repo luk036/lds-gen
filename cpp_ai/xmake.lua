@@ -5,7 +5,7 @@ set_languages("c++20")
 target("lds_gen")
     set_kind("static")
     add_headerfiles("include/(lds_gen/**.hpp)")
-    add_files("src/lds.cpp", "src/ilds.cpp")
+    add_files("src/lds.cpp", "src/ilds.cpp", "src/sphere_n.cpp")
     add_includedirs("include", {public = true})
     
     -- C++20 features
@@ -37,6 +37,20 @@ target("test_ilds")
     set_kind("binary")
     add_deps("lds_gen")
     add_files("tests/test_ilds.cpp")
+    add_includedirs("include")
+    
+    before_build(function (target)
+        local doctest_path = path.join(target:scriptdir(), "tests", "doctest.h")
+        if not os.isfile(doctest_path) then
+            print("Downloading doctest...")
+            os.execv("curl", {"-L", "https://raw.githubusercontent.com/doctest/doctest/v2.4.11/doctest/doctest.h", "-o", doctest_path})
+        end
+    end)
+
+target("test_sphere_n")
+    set_kind("binary")
+    add_deps("lds_gen")
+    add_files("tests/test_sphere_n.cpp")
     add_includedirs("include")
     
     before_build(function (target)

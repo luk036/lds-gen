@@ -11,6 +11,8 @@ C++20 implementation of the lds-gen Python library for generating low-discrepanc
 - **Sphere sequence**: Points on a unit sphere
 - **Sphere3 Hopf sequence**: Points on a 3-sphere using Hopf fibration
 - **N-dimensional Halton sequence**: Arbitrary dimensional Halton sequences
+- **Sphere3 sequence**: Points on a 3-sphere using cylindrical mapping
+- **SphereN sequence**: Points on n-dimensional spheres
 - **Integer versions**: Integer-based sequences for fixed-point arithmetic
 
 ## Requirements
@@ -79,6 +81,15 @@ int main() {
 - `class Sphere3Hopf`: 3-sphere Hopf sequence generator
 - `class HaltonN`: N-dimensional Halton sequence generator
 - `const std::vector<uint64_t> PRIME_TABLE`: First 1000 prime numbers
+
+### N-dimensional sphere sequences
+
+- `class SphereGen`: Base class for sphere generators
+- `class Sphere3`: 3-sphere sequence generator
+- `class SphereN`: N-dimensional sphere sequence generator
+- `std::vector<double> get_tp(int n)`: Table-lookup of mapping function
+- `double simple_interp(double x, const std::vector<double>& xp, const std::vector<double>& yp)`: 1D interpolation
+- `std::vector<double> linspace(double start, double stop, size_t num)`: Linear spacing
 
 ### Integer sequences
 

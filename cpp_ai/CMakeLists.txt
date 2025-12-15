@@ -17,6 +17,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 add_library(lds_gen
     src/lds.cpp
     src/ilds.cpp
+    src/sphere_n.cpp
 )
 
 target_include_directories(lds_gen PUBLIC
@@ -59,9 +60,13 @@ if(BUILD_TESTS)
     add_executable(test_ilds tests/test_ilds.cpp)
     target_link_libraries(test_ilds lds_gen)
     
+    add_executable(test_sphere_n tests/test_sphere_n.cpp)
+    target_link_libraries(test_sphere_n lds_gen)
+    
     # Add test targets
     add_test(NAME test_lds COMMAND test_lds)
     add_test(NAME test_ilds COMMAND test_ilds)
+    add_test(NAME test_sphere_n COMMAND test_sphere_n)
 endif()
 
 # Examples
