@@ -166,10 +166,10 @@ mod tests {
         hgen.reseed(0);
         let res = hgen.pop();
         assert_eq!(res[0], 1024); // 0.5 * 2048
-        assert_eq!(res[1], 729);  // 1/3 * 2187
+        assert_eq!(res[1], 729); // 1/3 * 2187
 
         let res = hgen.pop();
-        assert_eq!(res[0], 512);  // 0.25 * 2048
+        assert_eq!(res[0], 512); // 0.25 * 2048
         assert_eq!(res[1], 1458); // 2/3 * 2187
     }
 }

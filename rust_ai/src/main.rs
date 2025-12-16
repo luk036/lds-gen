@@ -3,7 +3,7 @@
 //! This binary provides a simple CLI to generate low-discrepancy sequences.
 
 use clap::{Parser, Subcommand};
-use lds_gen::{VdCorput, Halton, Circle, Disk, Sphere, Sphere3Hopf, HaltonN, PRIME_TABLE};
+use lds_gen::{Circle, Halton, PRIME_TABLE, VdCorput};
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
@@ -84,8 +84,16 @@ fn main() {
             }
         }
 
-        Commands::Halton { base1, base2, count, seed } => {
-            println!("Halton sequence (bases: [{}, {}], seed: {}):", base1, base2, seed);
+        Commands::Halton {
+            base1,
+            base2,
+            count,
+            seed,
+        } => {
+            println!(
+                "Halton sequence (bases: [{}, {}], seed: {}):",
+                base1, base2, seed
+            );
             let mut hgen = Halton::new([base1, base2]);
             hgen.reseed(seed);
             for i in 0..count {
@@ -107,8 +115,8 @@ fn main() {
         Commands::Primes { count } => {
             let n = count.min(PRIME_TABLE.len());
             println!("First {} primes:", n);
-            for i in 0..n {
-                print!("{} ", PRIME_TABLE[i]);
+            for (i, prime) in PRIME_TABLE.iter().enumerate().take(n) {
+                print!("{} ", prime);
                 if (i + 1) % 10 == 0 {
                     println!();
                 }

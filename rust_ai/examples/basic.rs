@@ -1,6 +1,6 @@
 //! Basic examples of using the lds-gen library
 
-use lds_gen::{VdCorput, Halton, Circle, Disk, Sphere, Sphere3Hopf, HaltonN, PRIME_TABLE};
+use lds_gen::{Circle, Disk, Halton, HaltonN, PRIME_TABLE, Sphere, Sphere3Hopf, VdCorput};
 
 fn main() {
     println!("=== Basic Low-Discrepancy Sequence Examples ===\n");
@@ -41,7 +41,13 @@ fn main() {
     for i in 0..3 {
         let point = dgen.pop();
         let radius = (point[0] * point[0] + point[1] * point[1]).sqrt();
-        println!("  Point {}: [{:.6}, {:.6}] (radius: {:.6})", i + 1, point[0], point[1], radius);
+        println!(
+            "  Point {}: [{:.6}, {:.6}] (radius: {:.6})",
+            i + 1,
+            point[0],
+            point[1],
+            radius
+        );
     }
     println!();
 
@@ -52,7 +58,14 @@ fn main() {
     for i in 0..3 {
         let point = sgen.pop();
         let radius = (point[0] * point[0] + point[1] * point[1] + point[2] * point[2]).sqrt();
-        println!("  Point {}: [{:.6}, {:.6}, {:.6}] (radius: {:.6})", i + 1, point[0], point[1], point[2], radius);
+        println!(
+            "  Point {}: [{:.6}, {:.6}, {:.6}] (radius: {:.6})",
+            i + 1,
+            point[0],
+            point[1],
+            point[2],
+            radius
+        );
     }
     println!();
 

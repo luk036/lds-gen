@@ -13,8 +13,8 @@
 //! This module implements sphere generators for arbitrary dimensions using
 //! low-discrepancy sequences.
 
-use std::f64::consts::PI;
 use crate::VdCorput;
+use std::f64::consts::PI;
 
 /// Simple implementation of numpy.linspace
 fn linspace(start: f64, stop: f64, num: usize) -> Vec<f64> {
@@ -59,7 +59,8 @@ impl SphereTables {
         let x = linspace(0.0, PI, 300);
         let neg_cosine = x.iter().map(|&x| -x.cos()).collect();
         let sine = x.iter().map(|&x| x.sin()).collect();
-        let f2 = x.iter()
+        let f2 = x
+            .iter()
             .zip(&neg_cosine)
             .zip(&sine)
             .map(|((&x, &nc), &s)| (x + nc * s) / 2.0)
@@ -76,17 +77,24 @@ impl SphereTables {
     }
 
     fn get(&self) -> (&[f64], &[f64], &[f64], &[f64], f64) {
-        (&self.x, &self.neg_cosine, &self.sine, &self.f2, self.half_pi)
+        (
+            &self.x,
+            &self.neg_cosine,
+            &self.sine,
+            &self.f2,
+            self.half_pi,
+        )
     }
 }
 
 /// Thread-safe cached sphere tables
-static SPHERE_TABLES: once_cell::sync::Lazy<SphereTables> = once_cell::sync::Lazy::new(SphereTables::new);
+static SPHERE_TABLES: once_cell::sync::Lazy<SphereTables> =
+    once_cell::sync::Lazy::new(SphereTables::new);
 
 /// Calculates the table-lookup of the mapping function for n
 fn get_tp(n: usize) -> Vec<f64> {
-    use std::sync::Mutex;
     use once_cell::sync::Lazy;
+    use std::sync::Mutex;
 
     static TP_CACHE: Lazy<Mutex<Vec<Vec<f64>>>> = Lazy::new(|| Mutex::new(Vec::new()));
 
@@ -114,8 +122,9 @@ fn get_tp(n: usize) -> Vec<f64> {
             x.iter()
                 .enumerate()
                 .map(|(i, _xi)| {
-                    ((new_n - 1) as f64 * tp_minus2[i] + neg_cosine[i] * sine[i].powi((new_n - 1) as i32))
-                    / new_n as f64
+                    ((new_n - 1) as f64 * tp_minus2[i]
+                        + neg_cosine[i] * sine[i].powi((new_n - 1) as i32))
+                        / new_n as f64
                 })
                 .collect()
         };
@@ -243,7 +252,7 @@ impl SphereN {
     /// # Arguments
     ///
     /// * `base` - Array of integers used as bases for the sequence
-    ///            Length must be at least 3 (produces n+1 dimensional sphere)
+    ///   Length must be at least 3 (produces n+1 dimensional sphere)
     pub fn new(base: &[u32]) -> Self {
         let n = base.len() - 1;
         assert!(n >= 2, "SphereN requires at least 3 bases (n >= 2)");
@@ -388,11 +397,7 @@ mod tests {
 
     #[test]
     fn test_sphere3_consistency() {
-        let bases = vec![
-            vec![2, 3, 5],
-            vec![2, 5, 3],
-            vec![3, 2, 7],
-        ];
+        let bases = vec![vec![2, 3, 5], vec![2, 5, 3], vec![3, 2, 7]];
 
         for base in bases {
             let mut sgen = Sphere3::new(&base);
@@ -402,14 +407,13 @@ mod tests {
 
             for (i, point) in points.iter().enumerate() {
                 let radius_sq = point.iter().map(|&x| x * x).sum::<f64>();
-                assert_relative_eq!(
-                    radius_sq,
-                    1.0,
-                    epsilon = 1e-10
-                );
+                assert_relative_eq!(radius_sq, 1.0, epsilon = 1e-10);
                 // Additional check with custom message if needed
                 if (radius_sq - 1.0).abs() > 1e-10 {
-                    panic!("Base {:?}, Point {}: {:?}, r²={}", base, i, point, radius_sq);
+                    panic!(
+                        "Base {:?}, Point {}: {:?}, r²={}",
+                        base, i, point, radius_sq
+                    );
                 }
             }
         }
@@ -446,7 +450,10 @@ mod tests {
                 break;
             }
         }
-        assert!(different, "Sequences with different seeds should be different");
+        assert!(
+            different,
+            "Sequences with different seeds should be different"
+        );
     }
 
     #[test]

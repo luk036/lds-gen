@@ -1,6 +1,6 @@
 //! Examples of integer low-discrepancy sequences
 
-use lds_gen::ilds::{VdCorput, Halton};
+use lds_gen::ilds::{Halton, VdCorput};
 
 fn main() {
     println!("=== Integer Low-Discrepancy Sequence Examples ===\n");
@@ -29,8 +29,14 @@ fn main() {
             point[0] as f64 / 2048.0, // 2^11 = 2048
             point[1] as f64 / 2187.0, // 3^7 = 2187
         ];
-        println!("  Point {}: [{}, {}] (≈ [{:.6}, {:.6}])",
-                 i + 1, point[0], point[1], float_point[0], float_point[1]);
+        println!(
+            "  Point {}: [{}, {}] (≈ [{:.6}, {:.6}])",
+            i + 1,
+            point[0],
+            point[1],
+            float_point[0],
+            float_point[1]
+        );
     }
     println!();
 
@@ -42,7 +48,10 @@ fn main() {
         let value = vdc.pop();
         let max_value = 2u32.pow(scale);
         let float_value = value as f64 / max_value as f64;
-        println!("  Scale {}: {} / {} = {:.6}", scale, value, max_value, float_value);
+        println!(
+            "  Scale {}: {} / {} = {:.6}",
+            scale, value, max_value, float_value
+        );
     }
     println!();
 

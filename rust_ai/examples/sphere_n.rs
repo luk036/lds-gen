@@ -1,6 +1,6 @@
 //! Examples of n-dimensional sphere sequence generation
 
-use lds_gen::sphere_n::{Sphere3, SphereN, SphereGen};
+use lds_gen::sphere_n::{Sphere3, SphereGen, SphereN};
 
 fn main() {
     println!("=== N-Dimensional Sphere Sequence Examples ===\n");
@@ -40,7 +40,12 @@ fn main() {
         sgen.reseed(0);
         let point = sgen.pop();
         let radius_sq = point.iter().map(|&x| x * x).sum::<f64>();
-        println!("  {}-sphere ({}D): radius² = {:.12}", dim - 1, dim, radius_sq);
+        println!(
+            "  {}-sphere ({}D): radius² = {:.12}",
+            dim - 1,
+            dim,
+            radius_sq
+        );
     }
     println!();
 
@@ -92,6 +97,9 @@ fn main() {
     println!("  Octant distribution:");
     for (i, &count) in octants.iter().enumerate() {
         let deviation = (count as f64 - expected_per_octant) / expected_per_octant * 100.0;
-        println!("    Octant {:04b}: {} points ({:+.1}%)", i, count, deviation);
+        println!(
+            "    Octant {:04b}: {} points ({:+.1}%)",
+            i, count, deviation
+        );
     }
 }
