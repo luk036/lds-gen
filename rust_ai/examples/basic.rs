@@ -1,6 +1,6 @@
 //! Basic examples of using the lds-gen library
 
-use lds_gen::{Circle, Disk, Halton, HaltonN, PRIME_TABLE, Sphere, Sphere3Hopf, VdCorput};
+use lds_gen::{Circle, Disk, Halton, HaltonN, PRIME_TABLE, Sphere, VdCorput};
 
 fn main() {
     println!("=== Basic Low-Discrepancy Sequence Examples ===\n");
