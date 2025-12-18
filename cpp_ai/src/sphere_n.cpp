@@ -24,7 +24,7 @@ std::vector<double> linspace(double start, double stop, std::size_t num) {
     return result;
 }
 
-double simple_interp(double x, const std::vector<double>& xp, const std::vector<double>& yp) {
+double simple_interp(double x, std::span<const double> xp, std::span<const double> yp) {
     if (xp.empty() || yp.empty() || xp.size() != yp.size()) {
         throw std::invalid_argument("xp and yp must be non-empty and same size");
     }
@@ -111,7 +111,7 @@ std::vector<double> get_tp(int n) {
     return get_tp_recursive(n);
 }
 
-Sphere3::Sphere3(const std::vector<std::uint64_t>& base)
+Sphere3::Sphere3(std::span<const std::uint64_t> base)
     : vdc_(base[0]), sphere2_(std::vector<std::uint64_t>{base[1], base[2]}) {
     if (base.size() < 3) {
         throw std::invalid_argument("Sphere3 requires at least 3 bases");
@@ -126,11 +126,10 @@ std::vector<double> Sphere3::pop() {
 
     auto sphere2_point = sphere2_.pop();
     std::vector<double> result;
-    result.reserve(sphere2_point.size() + 1);
-
-    for (double s : sphere2_point) {
-        result.push_back(sinxi * s);
-    }
+    result.reserve(4);
+    result.push_back(sinxi * sphere2_point[0]);
+    result.push_back(sinxi * sphere2_point[1]);
+    result.push_back(sinxi * sphere2_point[2]);
     result.push_back(cosxi);
 
     return result;
@@ -142,19 +141,20 @@ void Sphere3::reseed(std::uint64_t seed) {
 }
 
 // SphereWrapper implementation
-SphereWrapper::SphereWrapper(const std::vector<std::uint64_t>& base)
+SphereWrapper::SphereWrapper(std::span<const std::uint64_t> base)
     : sphere_(base) {
 }
 
 std::vector<double> SphereWrapper::pop() {
-    return sphere_.pop();
+    auto arr = sphere_.pop();
+    return std::vector<double>(arr.begin(), arr.end());
 }
 
 void SphereWrapper::reseed(std::uint64_t seed) {
     sphere_.reseed(seed);
 }
 
-SphereN::SphereN(const std::vector<std::uint64_t>& base) 
+SphereN::SphereN(std::span<const std::uint64_t> base) 
     : vdc_(base[0]), n_(static_cast<int>(base.size()) - 1) {
     
     if (n_ < 2) {

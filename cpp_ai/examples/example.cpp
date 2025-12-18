@@ -2,6 +2,7 @@
 #include <iostream>
 #include <iomanip>
 #include <vector>
+#include <array>
 
 int main() {
     std::cout << "Low-Discrepancy Sequence Generator Examples\n";
@@ -18,7 +19,8 @@ int main() {
 
     // Example 2: Halton sequence
     std::cout << "2. Halton sequence (bases [2, 3]):\n";
-    lds_gen::Halton hgen({2, 3});
+    std::array<std::uint64_t, 2> halton_base = {2, 3};
+    lds_gen::Halton hgen(halton_base);
     hgen.reseed(0);
     for (int i = 0; i < 5; ++i) {
         auto point = hgen.pop();
@@ -38,7 +40,8 @@ int main() {
 
     // Example 4: Disk sequence
     std::cout << "4. Disk sequence (bases [2, 3]):\n";
-    lds_gen::Disk dgen({2, 3});
+    std::array<std::uint64_t, 2> disk_base = {2, 3};
+    lds_gen::Disk dgen(disk_base);
     dgen.reseed(0);
     for (int i = 0; i < 5; ++i) {
         auto point = dgen.pop();
@@ -48,7 +51,8 @@ int main() {
 
     // Example 5: Sphere sequence
     std::cout << "5. Sphere sequence (bases [2, 3]):\n";
-    lds_gen::Sphere sgen({2, 3});
+    std::array<std::uint64_t, 2> sphere_base = {2, 3};
+    lds_gen::Sphere sgen(sphere_base);
     sgen.reseed(0);
     for (int i = 0; i < 3; ++i) {
         auto point = sgen.pop();
@@ -58,7 +62,8 @@ int main() {
 
     // Example 6: Sphere3 sequence
     std::cout << "6. Sphere3 sequence (bases [2, 3, 5]):\n";
-    lds_gen::Sphere3 s3gen({2, 3, 5});
+    std::array<std::uint64_t, 3> sphere3_base = {2, 3, 5};
+    lds_gen::Sphere3 s3gen(sphere3_base);
     s3gen.reseed(0);
     for (int i = 0; i < 3; ++i) {
         auto point = s3gen.pop();
@@ -73,7 +78,8 @@ int main() {
 
     // Example 7: SphereN sequence
     std::cout << "7. SphereN sequence (bases [2, 3, 5, 7]):\n";
-    lds_gen::SphereN sngen({2, 3, 5, 7});
+    std::vector<std::uint64_t> sphereN_base = {2, 3, 5, 7};
+    lds_gen::SphereN sngen(sphereN_base);
     sngen.reseed(0);
     for (int i = 0; i < 2; ++i) {
         auto point = sngen.pop();

@@ -47,10 +47,10 @@ void VdCorput::reseed(std::uint64_t seed) {
     count_ = seed;
 }
 
-Halton::Halton(const std::vector<std::uint64_t>& base)
+Halton::Halton(std::span<const std::uint64_t> base)
     : vdc0_(base[0]), vdc1_(base[1]) {}
 
-std::vector<double> Halton::pop() {
+std::array<double, 2> Halton::pop() {
     return {vdc0_.pop(), vdc1_.pop()};
 }
 
@@ -61,7 +61,7 @@ void Halton::reseed(std::uint64_t seed) {
 
 Circle::Circle(std::uint64_t base) : vdc_(base) {}
 
-std::vector<double> Circle::pop() {
+std::array<double, 2> Circle::pop() {
     double theta = vdc_.pop() * TWO_PI; // map to [0, 2π]
     return {std::cos(theta), std::sin(theta)};
 }
@@ -70,10 +70,10 @@ void Circle::reseed(std::uint64_t seed) {
     vdc_.reseed(seed);
 }
 
-Disk::Disk(const std::vector<std::uint64_t>& base)
+Disk::Disk(std::span<const std::uint64_t> base)
     : vdc0_(base[0]), vdc1_(base[1]) {}
 
-std::vector<double> Disk::pop() {
+std::array<double, 2> Disk::pop() {
     double theta = vdc0_.pop() * TWO_PI; // map to [0, 2π]
     double radius = std::sqrt(vdc1_.pop()); // map to [0, 1]
     return {radius * std::cos(theta), radius * std::sin(theta)};
@@ -84,10 +84,10 @@ void Disk::reseed(std::uint64_t seed) {
     vdc1_.reseed(seed);
 }
 
-Sphere::Sphere(const std::vector<std::uint64_t>& base)
+Sphere::Sphere(std::span<const std::uint64_t> base)
     : vdc_(base[0]), cirgen_(base[1]) {}
 
-std::vector<double> Sphere::pop() {
+std::array<double, 3> Sphere::pop() {
     double cosphi = 2.0 * vdc_.pop() - 1.0; // map to [-1, 1]
     double sinphi = std::sqrt(1.0 - cosphi * cosphi); // cylindrical mapping
     auto circle_vals = cirgen_.pop();
@@ -101,10 +101,10 @@ void Sphere::reseed(std::uint64_t seed) {
     vdc_.reseed(seed);
 }
 
-Sphere3Hopf::Sphere3Hopf(const std::vector<std::uint64_t>& base)
+Sphere3Hopf::Sphere3Hopf(std::span<const std::uint64_t> base)
     : vdc0_(base[0]), vdc1_(base[1]), vdc2_(base[2]) {}
 
-std::vector<double> Sphere3Hopf::pop() {
+std::array<double, 4> Sphere3Hopf::pop() {
     double phi = vdc0_.pop() * TWO_PI; // map to [0, 2π]
     double psy = vdc1_.pop() * TWO_PI; // map to [0, 2π]
     double vdc = vdc2_.pop();
@@ -124,7 +124,7 @@ void Sphere3Hopf::reseed(std::uint64_t seed) {
     vdc2_.reseed(seed);
 }
 
-HaltonN::HaltonN(const std::vector<std::uint64_t>& base) {
+HaltonN::HaltonN(std::span<const std::uint64_t> base) {
     vdcs_.reserve(base.size());
     for (auto b : base) {
         vdcs_.emplace_back(b);

@@ -3,6 +3,7 @@
 #include "lds_gen/lds.hpp"
 #include <vector>
 #include <cmath>
+#include <array>
 
 TEST_CASE("Test vdc function") {
     CHECK(lds_gen::vdc(11, 2) == doctest::Approx(0.8125));
@@ -28,7 +29,8 @@ TEST_CASE("Test VdCorput reseed") {
 }
 
 TEST_CASE("Test Halton class") {
-    lds_gen::Halton hgen({2, 3});
+    std::array<std::uint64_t, 2> base = {2, 3};
+    lds_gen::Halton hgen(base);
     hgen.reseed(0);
 
     auto res = hgen.pop();
@@ -54,7 +56,8 @@ TEST_CASE("Test Circle class") {
 }
 
 TEST_CASE("Test Disk class") {
-    lds_gen::Disk dgen({2, 3});
+    std::array<std::uint64_t, 2> base = {2, 3};
+    lds_gen::Disk dgen(base);
     dgen.reseed(0);
 
     auto res = dgen.pop();
@@ -63,7 +66,8 @@ TEST_CASE("Test Disk class") {
 }
 
 TEST_CASE("Test Sphere class") {
-    lds_gen::Sphere sgen({2, 3});
+    std::array<std::uint64_t, 2> base = {2, 3};
+    lds_gen::Sphere sgen(base);
     sgen.reseed(0);
 
     auto res = sgen.pop();
@@ -73,7 +77,8 @@ TEST_CASE("Test Sphere class") {
 }
 
 TEST_CASE("Test Sphere3Hopf class") {
-    lds_gen::Sphere3Hopf sp3hgen({2, 3, 5});
+    std::array<std::uint64_t, 3> base = {2, 3, 5};
+    lds_gen::Sphere3Hopf sp3hgen(base);
     sp3hgen.reseed(0);
 
     auto res = sp3hgen.pop();
@@ -84,7 +89,8 @@ TEST_CASE("Test Sphere3Hopf class") {
 }
 
 TEST_CASE("Test HaltonN class") {
-    lds_gen::HaltonN hgen({2, 3, 5});
+    std::array<std::uint64_t, 3> base = {2, 3, 5};
+    lds_gen::HaltonN hgen(base);
     hgen.reseed(0);
 
     auto res = hgen.pop();

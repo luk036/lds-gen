@@ -31,11 +31,11 @@ void VdCorputInt::reseed(std::uint64_t seed) {
     count_ = seed;
 }
 
-HaltonInt::HaltonInt(const std::vector<std::uint64_t>& base,
-                     const std::vector<std::uint64_t>& scale)
+HaltonInt::HaltonInt(std::span<const std::uint64_t> base,
+                     std::span<const std::uint64_t> scale)
     : vdc0_(base[0], scale[0]), vdc1_(base[1], scale[1]) {}
 
-std::vector<std::uint64_t> HaltonInt::pop() {
+std::array<std::uint64_t, 2> HaltonInt::pop() {
     return {vdc0_.pop(), vdc1_.pop()};
 }
 

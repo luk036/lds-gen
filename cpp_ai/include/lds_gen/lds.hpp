@@ -7,6 +7,8 @@
 #include <memory>
 #include <algorithm>
 #include <numeric>
+#include <span>
+#include <array>
 
 namespace lds_gen {
 
@@ -32,9 +34,9 @@ private:
 // Halton sequence generator (2D)
 class Halton {
 public:
-    explicit Halton(const std::vector<std::uint64_t>& base);
+    explicit Halton(std::span<const std::uint64_t> base);
 
-    std::vector<double> pop();
+    std::array<double, 2> pop();
     void reseed(std::uint64_t seed);
 
 private:
@@ -47,7 +49,7 @@ class Circle {
 public:
     explicit Circle(std::uint64_t base);
 
-    std::vector<double> pop();
+    std::array<double, 2> pop();
     void reseed(std::uint64_t seed);
 
 private:
@@ -57,9 +59,9 @@ private:
 // Disk sequence generator
 class Disk {
 public:
-    explicit Disk(const std::vector<std::uint64_t>& base);
+    explicit Disk(std::span<const std::uint64_t> base);
 
-    std::vector<double> pop();
+    std::array<double, 2> pop();
     void reseed(std::uint64_t seed);
 
 private:
@@ -70,9 +72,9 @@ private:
 // Sphere sequence generator
 class Sphere {
 public:
-    explicit Sphere(const std::vector<std::uint64_t>& base);
+    explicit Sphere(std::span<const std::uint64_t> base);
 
-    std::vector<double> pop();
+    std::array<double, 3> pop();
     void reseed(std::uint64_t seed);
 
 private:
@@ -83,9 +85,9 @@ private:
 // Sphere3 Hopf sequence generator
 class Sphere3Hopf {
 public:
-    explicit Sphere3Hopf(const std::vector<std::uint64_t>& base);
+    explicit Sphere3Hopf(std::span<const std::uint64_t> base);
 
-    std::vector<double> pop();
+    std::array<double, 4> pop();
     void reseed(std::uint64_t seed);
 
 private:
@@ -97,7 +99,7 @@ private:
 // N-dimensional Halton sequence generator
 class HaltonN {
 public:
-    explicit HaltonN(const std::vector<std::uint64_t>& base);
+    explicit HaltonN(std::span<const std::uint64_t> base);
 
     std::vector<double> pop();
     void reseed(std::uint64_t seed);

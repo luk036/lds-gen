@@ -6,6 +6,8 @@
 #include <vector>
 #include <memory>
 #include <numbers>
+#include <span>
+#include <array>
 
 namespace lds_gen {
 
@@ -16,7 +18,7 @@ constexpr double HALF_PI = PI / 2.0;
 std::vector<double> linspace(double start, double stop, std::size_t num);
 
 // Simple implementation of numpy.interp for 1D interpolation
-double simple_interp(double x, const std::vector<double>& xp, const std::vector<double>& yp);
+double simple_interp(double x, std::span<const double> xp, std::span<const double> yp);
 
 // Calculates the table-lookup of the mapping function for n
 std::vector<double> get_tp(int n);
@@ -32,7 +34,7 @@ public:
 // 3-Sphere sequence generator
 class Sphere3 : public SphereGen {
 public:
-    explicit Sphere3(const std::vector<std::uint64_t>& base);
+    explicit Sphere3(std::span<const std::uint64_t> base);
 
     std::vector<double> pop() override;
     void reseed(std::uint64_t seed) override;
@@ -45,7 +47,7 @@ private:
 // Wrapper class to make Sphere compatible with SphereGen interface
 class SphereWrapper : public SphereGen {
 public:
-    explicit SphereWrapper(const std::vector<std::uint64_t>& base);
+    explicit SphereWrapper(std::span<const std::uint64_t> base);
     
     std::vector<double> pop() override;
     void reseed(std::uint64_t seed) override;
@@ -57,7 +59,7 @@ private:
 // Sphere-N sequence generator
 class SphereN : public SphereGen {
 public:
-    explicit SphereN(const std::vector<std::uint64_t>& base);
+    explicit SphereN(std::span<const std::uint64_t> base);
     
     std::vector<double> pop() override;
     void reseed(std::uint64_t seed) override;

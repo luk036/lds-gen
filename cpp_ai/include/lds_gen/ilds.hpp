@@ -2,6 +2,8 @@
 
 #include <cstdint>
 #include <vector>
+#include <span>
+#include <array>
 
 namespace lds_gen {
 
@@ -23,10 +25,10 @@ private:
 // Integer Halton sequence generator (2D)
 class HaltonInt {
 public:
-    explicit HaltonInt(const std::vector<std::uint64_t>& base,
-                       const std::vector<std::uint64_t>& scale);
+    explicit HaltonInt(std::span<const std::uint64_t> base,
+                       std::span<const std::uint64_t> scale);
 
-    std::vector<std::uint64_t> pop();
+    std::array<std::uint64_t, 2> pop();
     void reseed(std::uint64_t seed);
 
 private:

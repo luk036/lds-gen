@@ -4,6 +4,7 @@
 #include <vector>
 #include <cmath>
 #include <numeric>
+#include <array>
 
 TEST_CASE("Test linspace function") {
     auto result = lds_gen::linspace(0.0, 1.0, 5);
@@ -52,7 +53,8 @@ TEST_CASE("Test get_tp function") {
 }
 
 TEST_CASE("Test Sphere3 basic functionality") {
-    lds_gen::Sphere3 sgen({2, 3, 5});
+    std::vector<std::uint64_t> base = {2, 3, 5};
+    lds_gen::Sphere3 sgen(base);
     sgen.reseed(0);
 
     auto point = sgen.pop();
@@ -95,7 +97,8 @@ TEST_CASE("Test Sphere3 consistency") {
 }
 
 TEST_CASE("Test Sphere3 reseed functionality") {
-    lds_gen::Sphere3 sgen({2, 3, 5});
+    std::vector<std::uint64_t> base = {2, 3, 5};
+    lds_gen::Sphere3 sgen(base);
 
     // Generate sequence with seed 0
     sgen.reseed(0);
@@ -140,7 +143,8 @@ TEST_CASE("Test Sphere3 reseed functionality") {
 
 TEST_CASE("Test SphereN basic functionality") {
     // Test 4-sphere (5D)
-    lds_gen::SphereN sgen({2, 3, 5, 7});
+    std::vector<std::uint64_t> base = {2, 3, 5, 7};
+    lds_gen::SphereN sgen(base);
     sgen.reseed(0);
 
     auto point = sgen.pop();
@@ -153,7 +157,8 @@ TEST_CASE("Test SphereN basic functionality") {
 
 TEST_CASE("Test SphereN higher dimensions") {
     // Test 5-sphere (6D)
-    lds_gen::SphereN sgen({2, 3, 5, 7, 11});
+    std::vector<std::uint64_t> base = {2, 3, 5, 7, 11};
+    lds_gen::SphereN sgen(base);
     sgen.reseed(0);
 
     auto point = sgen.pop();
@@ -165,7 +170,8 @@ TEST_CASE("Test SphereN higher dimensions") {
 }
 
 TEST_CASE("Test SphereN reseed functionality") {
-    lds_gen::SphereN sgen({2, 3, 5, 7});
+    std::vector<std::uint64_t> base = {2, 3, 5, 7};
+    lds_gen::SphereN sgen(base);
 
     // Generate sequence with seed 0
     sgen.reseed(0);
@@ -207,7 +213,8 @@ TEST_CASE("Test comparison with Python implementation") {
     };
 
     // Test Sphere3
-    lds_gen::Sphere3 sgen3({2, 3, 5});
+    std::vector<std::uint64_t> base3 = {2, 3, 5};
+    lds_gen::Sphere3 sgen3(base3);
     sgen3.reseed(0);
     auto result3 = sgen3.pop();
 
@@ -217,7 +224,8 @@ TEST_CASE("Test comparison with Python implementation") {
     }
 
     // Test SphereN
-    lds_gen::SphereN sgenN({2, 3, 5, 7});
+    std::vector<std::uint64_t> baseN = {2, 3, 5, 7};
+    lds_gen::SphereN sgenN(baseN);
     sgenN.reseed(0);
     auto resultN = sgenN.pop();
 
