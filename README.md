@@ -43,7 +43,13 @@ Each generator class has methods for producing the next value in the sequence (p
 
 ### Thread Safety
 
-The `VdCorput` classes in both `lds.py` and `ilds.py` modules are now **thread-safe**. The internal count state is protected by a threading lock, ensuring atomic operations when multiple threads access the same generator instance. This makes the library safe to use in multi-threaded applications without additional synchronization.
+The following generator classes are now **thread-safe**:
+
+- `VdCorput` classes in both `lds.py` and `ilds.py` modules
+- `Sphere3` class in `sphere_n.py` module
+- `SphereN` class in `sphere_n.py` module
+
+The internal state in all these generators is protected by threading locks, ensuring atomic operations when multiple threads access the same generator instance. This makes the library safe to use in multi-threaded applications without additional synchronization. The `pop()` and `reseed()` methods in all thread-safe classes use proper locking to prevent race conditions.
 
 The objective of this library is to provide a toolkit for the generation of sequences of numbers that are distributed in a well-balanced manner. These can be used in place of random numbers in many applications to achieve a more uniform coverage of a given space or surface. This can result in more efficient and accurate outcomes in tasks such as sampling, integration, and optimization.
 

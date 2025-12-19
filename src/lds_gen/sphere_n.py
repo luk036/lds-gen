@@ -31,6 +31,7 @@ Algorithm Overview:
 """
 
 import math
+import threading
 from abc import ABC, abstractmethod
 from functools import cache
 from typing import List, Union
@@ -142,6 +143,7 @@ class Sphere3(SphereGen):
         """
         self.vdc = VdCorput(base[0])
         self.sphere2 = Sphere(base[1:3])
+        self._lock = threading.Lock()
 
     def reseed(self, seed: int) -> None:
         """_summary_
@@ -149,8 +151,9 @@ class Sphere3(SphereGen):
         Args:
             seed (int): _description_
         """
-        self.vdc.reseed(seed)
-        self.sphere2.reseed(seed)
+        with self._lock:
+            self.vdc.reseed(seed)
+            self.sphere2.reseed(seed)
 
     def pop(self) -> List[float]:
         """_summary_
@@ -158,11 +161,12 @@ class Sphere3(SphereGen):
         Returns:
             List[float]: _description_
         """
-        ti = HALF_PI * self.vdc.pop()  # map to [t0, tm-1]
-        xi = simple_interp(ti, F2, X)
-        cosxi = math.cos(xi)
-        sinxi = math.sin(xi)
-        return [sinxi * s for s in self.sphere2.pop()] + [cosxi]
+        with self._lock:
+            ti = HALF_PI * self.vdc.pop()  # map to [t0, tm-1]
+            xi = simple_interp(ti, F2, X)
+            cosxi = math.cos(xi)
+            sinxi = math.sin(xi)
+            return [sinxi * s for s in self.sphere2.pop()] + [cosxi]
 
 
 class SphereN(SphereGen):
@@ -195,6 +199,7 @@ class SphereN(SphereGen):
         self.n = n
         tp = get_tp(n)
         self.range = tp[-1] - tp[0]
+        self._lock = threading.Lock()
 
     def pop(self) -> List[float]:
         """Generates a new point on the n-sphere.
@@ -202,19 +207,20 @@ class SphereN(SphereGen):
         Returns:
             List[float]: A new point on the n-sphere.
         """
-        if self.n == 2:
-            ti = HALF_PI * self.vdc.pop()  # map to [t0, tm-1]
-            xi = simple_interp(ti, F2, X)
-            cosxi = math.cos(xi)
-            sinxi = math.sin(xi)
-            return [sinxi * s for s in self.s_gen.pop()] + [cosxi]
+        with self._lock:
+            if self.n == 2:
+                ti = HALF_PI * self.vdc.pop()  # map to [t0, tm-1]
+                xi = simple_interp(ti, F2, X)
+                cosxi = math.cos(xi)
+                sinxi = math.sin(xi)
+                return [sinxi * s for s in self.s_gen.pop()] + [cosxi]
 
-        vd = self.vdc.pop()
-        tp = get_tp(self.n)
-        ti = tp[0] + self.range * vd  # map to [t0, tm-1]
-        xi = simple_interp(ti, tp, X)
-        sinphi = math.sin(xi)
-        return [xi * sinphi for xi in self.s_gen.pop()] + [math.cos(xi)]
+            vd = self.vdc.pop()
+            tp = get_tp(self.n)
+            ti = tp[0] + self.range * vd  # map to [t0, tm-1]
+            xi = simple_interp(ti, tp, X)
+            sinphi = math.sin(xi)
+            return [xi * sinphi for xi in self.s_gen.pop()] + [math.cos(xi)]
 
     def reseed(self, seed: int) -> None:
         """Reseeds the generator.
@@ -222,8 +228,9 @@ class SphereN(SphereGen):
         Args:
             seed (int): The new seed.
         """
-        self.vdc.reseed(seed)
-        self.s_gen.reseed(seed)
+        with self._lock:
+            self.vdc.reseed(seed)
+            self.s_gen.reseed(seed)
 
 
 if __name__ == "__main__":
