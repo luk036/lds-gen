@@ -37,6 +37,7 @@ but with more uniformity than typical pseudo-random number generators provide. I
 block that can be used in more complex algorithms and simulations.
 """
 
+import threading
 from typing import List, Sequence
 
 
@@ -62,6 +63,7 @@ class VdCorput:
         self._base: int = base
         self._scale: int = scale
         self._count: int = 0
+        self._count_lock = threading.Lock()
         self._factor: int = base**scale
 
     def pop(self) -> int:
@@ -76,8 +78,9 @@ class VdCorput:
             >>> vdc.pop()
             512
         """
-        self._count += 1
-        k = self._count
+        with self._count_lock:
+            self._count += 1
+            k = self._count
         vdc: int = 0
         factor: int = self._factor
         while k != 0:
@@ -102,7 +105,8 @@ class VdCorput:
             >>> vdc.pop()
             512
         """
-        self._count = seed
+        with self._count_lock:
+            self._count = seed
 
 
 class Halton:

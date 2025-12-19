@@ -50,6 +50,7 @@ tasks like sampling, integration, and optimization.
             Random           Low Discrepancy
 """
 
+import threading
 from math import cos, pi, sin, sqrt
 from typing import Final, List, Sequence
 
@@ -138,7 +139,8 @@ class VdCorput:
 
         :type base: int (optional)
         """
-        self.count: int = 0
+        self._count: int = 0
+        self._count_lock = threading.Lock()
         self.base: int = base
         self.rev_lst: List[float] = []
         reverse: float = 1.0
@@ -164,8 +166,9 @@ class VdCorput:
             >>> vgen.pop()
             0.5
         """
-        self.count += 1  # ignore 0
-        k = self.count
+        with self._count_lock:
+            self._count += 1  # ignore 0
+            k = self._count
         res = 0.0
         i = 0
         while k != 0:
@@ -184,7 +187,8 @@ class VdCorput:
 
         :type seed: int
         """
-        self.count = seed
+        with self._count_lock:
+            self._count = seed
 
 
 class Halton:
