@@ -1,3 +1,5 @@
+import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pytest import approx
 
 from lds_gen.lds import (
@@ -181,3 +183,216 @@ def test_halton_n_reseed() -> None:
     assert res[0] == approx(0.5)
     assert res[1] == approx(1 / 3)
     assert res[2] == approx(1 / 5)
+
+
+def test_vdcorput_thread_safety() -> None:
+    """Test that VdCorput class is thread-safe."""
+    vgen = VdCorput(2)
+    vgen.reseed(0)
+    results = []
+    errors = []
+
+    def worker(num_iterations: int) -> None:
+        try:
+            for _ in range(num_iterations):
+                results.append(vgen.pop())
+        except Exception as e:
+            errors.append(e)
+
+    # Create multiple threads that call pop() concurrently
+    threads = []
+    num_threads = 10
+    iterations_per_thread = 100
+
+    for _ in range(num_threads):
+        thread = threading.Thread(target=worker, args=(iterations_per_thread,))
+        threads.append(thread)
+
+    # Start all threads
+    for thread in threads:
+        thread.start()
+
+    # Wait for all threads to complete
+    for thread in threads:
+        thread.join()
+
+    # Verify no errors occurred
+    assert len(errors) == 0, f"Errors occurred: {errors}"
+
+    # Verify we got the expected number of results
+    assert len(results) == num_threads * iterations_per_thread
+
+    # Verify all results are unique (no duplicates from race conditions)
+    assert len(set(results)) == len(
+        results
+    ), "Duplicate values found - possible race condition"
+
+    # Verify results are within expected range [0, 1]
+    for result in results:
+        assert 0.0 <= result <= 1.0, f"Result {result} out of range"
+
+
+def test_vdcorput_concurrent_reseed() -> None:
+    """Test that VdCorput handles concurrent reseed() calls safely."""
+    vgen = VdCorput(3)
+    results = []
+    errors = []
+
+    def worker(seed: int, num_iterations: int) -> None:
+        try:
+            vgen.reseed(seed)
+            for _ in range(num_iterations):
+                results.append((seed, vgen.pop()))
+        except Exception as e:
+            errors.append(e)
+
+    # Create multiple threads that reseed and pop concurrently
+    threads = []
+    num_threads = 5
+    iterations_per_thread = 20
+
+    for i in range(num_threads):
+        thread = threading.Thread(target=worker, args=(i * 10, iterations_per_thread))
+        threads.append(thread)
+
+    # Start all threads
+    for thread in threads:
+        thread.start()
+
+    # Wait for all threads to complete
+    for thread in threads:
+        thread.join()
+
+    # Verify no errors occurred
+    assert len(errors) == 0, f"Errors occurred: {errors}"
+
+    # Verify we got the expected number of results
+    assert len(results) == num_threads * iterations_per_thread
+
+
+def test_halton_thread_safety() -> None:
+    """Test that Halton class is thread-safe."""
+    hgen = Halton([2, 3])
+    hgen.reseed(0)
+    results = []
+    errors = []
+
+    def worker(num_iterations: int) -> None:
+        try:
+            for _ in range(num_iterations):
+                results.append(hgen.pop())
+        except Exception as e:
+            errors.append(e)
+
+    # Create multiple threads that call pop() concurrently
+    threads = []
+    num_threads = 8
+    iterations_per_thread = 50
+
+    for _ in range(num_threads):
+        thread = threading.Thread(target=worker, args=(iterations_per_thread,))
+        threads.append(thread)
+
+    # Start all threads
+    for thread in threads:
+        thread.start()
+
+    # Wait for all threads to complete
+    for thread in threads:
+        thread.join()
+
+    # Verify no errors occurred
+    assert len(errors) == 0, f"Errors occurred: {errors}"
+
+    # Verify we got the expected number of results
+    assert len(results) == num_threads * iterations_per_thread
+
+    # Verify all results are unique (no duplicates from race conditions)
+    result_tuples = [tuple(result) for result in results]
+    assert len(set(result_tuples)) == len(
+        result_tuples
+    ), "Duplicate values found - possible race condition"
+
+    # Verify results are within expected range
+    for result in results:
+        assert len(result) == 2
+        assert 0.0 <= result[0] <= 1.0, f"Result[0] {result[0]} out of range"
+        assert 0.0 <= result[1] <= 1.0, f"Result[1] {result[1]} out of range"
+
+
+def test_composite_thread_safety() -> None:
+    """Test that composite classes (Circle, Disk, Sphere) are thread-safe."""
+    test_classes = [
+        (Circle, [2]),
+        (Disk, [[2, 3]]),
+        (Sphere, [[2, 3]]),
+        (Sphere3Hopf, [[2, 3, 5]]),
+        (HaltonN, [[2, 3, 5, 7]]),
+    ]
+
+    for cls, args in test_classes:
+        gen = cls(*args)
+        gen.reseed(0)
+        results = []
+        errors = []
+
+        def worker(num_iterations: int) -> None:
+            try:
+                for _ in range(num_iterations):
+                    results.append(gen.pop())
+            except Exception as e:
+                errors.append(e)
+
+        # Create multiple threads that call pop() concurrently
+        threads = []
+        num_threads = 5
+        iterations_per_thread = 20
+
+        for _ in range(num_threads):
+            thread = threading.Thread(target=worker, args=(iterations_per_thread,))
+            threads.append(thread)
+
+        # Start all threads
+        for thread in threads:
+            thread.start()
+
+        # Wait for all threads to complete
+        for thread in threads:
+            thread.join()
+
+        # Verify no errors occurred
+        assert len(errors) == 0, f"Errors occurred in {cls.__name__}: {errors}"
+
+        # Verify we got the expected number of results
+        assert len(results) == num_threads * iterations_per_thread
+
+        # Verify all results are unique (no duplicates from race conditions)
+        result_tuples = [tuple(result) for result in results]
+        assert len(set(result_tuples)) == len(
+            result_tuples
+        ), f"Duplicate values found in {cls.__name__} - possible race condition"
+
+
+def test_thread_pool_executor() -> None:
+    """Test thread safety using ThreadPoolExecutor."""
+    vgen = VdCorput(2)
+    vgen.reseed(0)
+    results = []
+
+    def worker(num_iterations: int) -> list:
+        return [vgen.pop() for _ in range(num_iterations)]
+
+    # Use ThreadPoolExecutor for concurrent execution
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        futures = [executor.submit(worker, 50) for _ in range(10)]
+
+        for future in as_completed(futures):
+            results.extend(future.result())
+
+    # Verify we got the expected number of results
+    assert len(results) == 500  # 10 workers * 50 iterations each
+
+    # Verify all results are unique
+    assert len(set(results)) == len(
+        results
+    ), "Duplicate values found - possible race condition"

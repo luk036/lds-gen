@@ -7,9 +7,10 @@ import sys
 import os
 
 # Add the Python lds_gen to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from lds_gen.sphere_n import Sphere3, SphereN, linspace, simple_interp, get_tp
+
 
 def test_linspace():
     """Test linspace function"""
@@ -18,8 +19,11 @@ def test_linspace():
     expected = [0.0, 0.25, 0.5, 0.75, 1.0]
     assert len(result) == 5
     for i, val in enumerate(result):
-        assert abs(val - expected[i]) < 1e-10, f"linspace[{i}] = {val}, expected {expected[i]}"
+        assert (
+            abs(val - expected[i]) < 1e-10
+        ), f"linspace[{i}] = {val}, expected {expected[i]}"
     print(f"  ✓ linspace(0.0, 1.0, 5) = {result}")
+
 
 def test_simple_interp():
     """Test simple_interp function"""
@@ -29,13 +33,18 @@ def test_simple_interp():
 
     result = simple_interp(0.5, xp, yp)
     expected = 1.0
-    assert abs(result - expected) < 1e-10, f"simple_interp(0.5) = {result}, expected {expected}"
+    assert (
+        abs(result - expected) < 1e-10
+    ), f"simple_interp(0.5) = {result}, expected {expected}"
     print(f"  ✓ simple_interp(0.5) = {result}")
 
     result = simple_interp(1.5, xp, yp)
     expected = 3.0
-    assert abs(result - expected) < 1e-10, f"simple_interp(1.5) = {result}, expected {expected}"
+    assert (
+        abs(result - expected) < 1e-10
+    ), f"simple_interp(1.5) = {result}, expected {expected}"
     print(f"  ✓ simple_interp(1.5) = {result}")
+
 
 def test_get_tp():
     """Test get_tp function"""
@@ -52,6 +61,7 @@ def test_get_tp():
     assert abs(tp1[-1] - 1.0) < 1e-10
     print(f"  ✓ get_tp(1): size={len(tp1)}, first={tp1[0]}, last={tp1[-1]}")
 
+
 def test_sphere3():
     """Test Sphere3 class"""
     print("Testing Sphere3 class...")
@@ -59,17 +69,25 @@ def test_sphere3():
     sgen.reseed(0)
 
     result = sgen.pop()
-    expected = [0.2913440162992141, 0.8966646826186098, -0.33333333333333337, 6.123233995736766e-17]
+    expected = [
+        0.2913440162992141,
+        0.8966646826186098,
+        -0.33333333333333337,
+        6.123233995736766e-17,
+    ]
 
     assert len(result) == 4
     for i in range(4):
-        assert abs(result[i] - expected[i]) < 1e-10, f"Sphere3[{i}] = {result[i]}, expected {expected[i]}"
+        assert (
+            abs(result[i] - expected[i]) < 1e-10
+        ), f"Sphere3[{i}] = {result[i]}, expected {expected[i]}"
 
     # Check if point is on unit sphere
     radius_sq = sum(x * x for x in result)
     assert abs(radius_sq - 1.0) < 1e-10, f"Point not on unit sphere: r²={radius_sq}"
 
     print(f"  ✓ Sphere3 first point: {result}")
+
 
 def test_sphereN():
     """Test SphereN class"""
@@ -78,17 +96,26 @@ def test_sphereN():
     sgen.reseed(0)
 
     result = sgen.pop()
-    expected = [0.4809684718990214, 0.6031153874276115, -0.5785601510223212, 0.2649326520763179, 6.123233995736766e-17]
+    expected = [
+        0.4809684718990214,
+        0.6031153874276115,
+        -0.5785601510223212,
+        0.2649326520763179,
+        6.123233995736766e-17,
+    ]
 
     assert len(result) == 5
     for i in range(5):
-        assert abs(result[i] - expected[i]) < 1e-10, f"SphereN[{i}] = {result[i]}, expected {expected[i]}"
+        assert (
+            abs(result[i] - expected[i]) < 1e-10
+        ), f"SphereN[{i}] = {result[i]}, expected {expected[i]}"
 
     # Check if point is on unit sphere
     radius_sq = sum(x * x for x in result)
     assert abs(radius_sq - 1.0) < 1e-10, f"Point not on unit sphere: r²={radius_sq}"
 
     print(f"  ✓ SphereN first point: {result}")
+
 
 def main():
     """Run all tests"""
@@ -106,7 +133,9 @@ def main():
         print("All Python sphere_n tests passed! ✓")
         print("\nThe C++ implementation in ./cpp_ai should produce the same results.")
         print("To verify the C++ implementation:")
-        print("1. Build with CMake: mkdir build && cd build && cmake .. && cmake --build .")
+        print(
+            "1. Build with CMake: mkdir build && cd build && cmake .. && cmake --build ."
+        )
         print("2. Run sphere_n tests: ./test_sphere_n")
         print("3. Run example: ./example")
 
@@ -117,6 +146,7 @@ def main():
         print(f"\n✗ Could not import lds_gen: {e}")
         print("Make sure you're running from the lds-gen project root directory.")
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

@@ -8,9 +8,19 @@ import sys
 import os
 
 # Add the Python lds_gen to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from lds_gen.lds import vdc, VdCorput, Halton, Circle, Disk, Sphere, Sphere3Hopf, HaltonN
+from lds_gen.lds import (
+    vdc,
+    VdCorput,
+    Halton,
+    Circle,
+    Disk,
+    Sphere,
+    Sphere3Hopf,
+    HaltonN,
+)
+
 
 def test_vdc():
     """Test vdc function"""
@@ -19,6 +29,7 @@ def test_vdc():
     expected = 0.8125
     assert abs(result - expected) < 1e-10, f"vdc(11, 2) = {result}, expected {expected}"
     print(f"  ✓ vdc(11, 2) = {result}")
+
 
 def test_vdcorput():
     """Test VdCorput class"""
@@ -29,8 +40,11 @@ def test_vdcorput():
     expected_values = [0.5, 0.25, 0.75, 0.125, 0.625]
     for i, expected in enumerate(expected_values):
         result = vgen.pop()
-        assert abs(result - expected) < 1e-10, f"VdCorput[{i}] = {result}, expected {expected}"
+        assert (
+            abs(result - expected) < 1e-10
+        ), f"VdCorput[{i}] = {result}, expected {expected}"
         print(f"  ✓ VdCorput[{i}] = {result}")
+
 
 def test_halton():
     """Test Halton class"""
@@ -39,10 +53,13 @@ def test_halton():
     hgen.reseed(0)
 
     result = hgen.pop()
-    expected = [0.5, 1/3]
+    expected = [0.5, 1 / 3]
     for i in range(2):
-        assert abs(result[i] - expected[i]) < 1e-10, f"Halton[0][{i}] = {result[i]}, expected {expected[i]}"
+        assert (
+            abs(result[i] - expected[i]) < 1e-10
+        ), f"Halton[0][{i}] = {result[i]}, expected {expected[i]}"
     print(f"  ✓ Halton[0] = {result}")
+
 
 def test_circle():
     """Test Circle class"""
@@ -53,8 +70,11 @@ def test_circle():
     result = cgen.pop()
     expected = [-1.0, 0.0]
     for i in range(2):
-        assert abs(result[i] - expected[i]) < 1e-10, f"Circle[0][{i}] = {result[i]}, expected {expected[i]}"
+        assert (
+            abs(result[i] - expected[i]) < 1e-10
+        ), f"Circle[0][{i}] = {result[i]}, expected {expected[i]}"
     print(f"  ✓ Circle[0] = {result}")
+
 
 def test_disk():
     """Test Disk class"""
@@ -65,8 +85,11 @@ def test_disk():
     result = dgen.pop()
     expected = [-0.5773502691896257, 0.0]
     for i in range(2):
-        assert abs(result[i] - expected[i]) < 1e-10, f"Disk[0][{i}] = {result[i]}, expected {expected[i]}"
+        assert (
+            abs(result[i] - expected[i]) < 1e-10
+        ), f"Disk[0][{i}] = {result[i]}, expected {expected[i]}"
     print(f"  ✓ Disk[0] = {result}")
+
 
 def test_sphere():
     """Test Sphere class"""
@@ -77,8 +100,11 @@ def test_sphere():
     result = sgen.pop()
     expected = [-0.5, 0.8660254037844387, 0.0]
     for i in range(3):
-        assert abs(result[i] - expected[i]) < 1e-10, f"Sphere[0][{i}] = {result[i]}, expected {expected[i]}"
+        assert (
+            abs(result[i] - expected[i]) < 1e-10
+        ), f"Sphere[0][{i}] = {result[i]}, expected {expected[i]}"
     print(f"  ✓ Sphere[0] = {result}")
+
 
 def test_sphere3hopf():
     """Test Sphere3Hopf class"""
@@ -87,10 +113,18 @@ def test_sphere3hopf():
     sp3hgen.reseed(0)
 
     result = sp3hgen.pop()
-    expected = [-0.22360679774997885, 0.3872983346207417, 0.4472135954999573, -0.7745966692414837]
+    expected = [
+        -0.22360679774997885,
+        0.3872983346207417,
+        0.4472135954999573,
+        -0.7745966692414837,
+    ]
     for i in range(4):
-        assert abs(result[i] - expected[i]) < 1e-10, f"Sphere3Hopf[0][{i}] = {result[i]}, expected {expected[i]}"
+        assert (
+            abs(result[i] - expected[i]) < 1e-10
+        ), f"Sphere3Hopf[0][{i}] = {result[i]}, expected {expected[i]}"
     print(f"  ✓ Sphere3Hopf[0] = {result}")
+
 
 def test_haltonn():
     """Test HaltonN class"""
@@ -99,10 +133,13 @@ def test_haltonn():
     hgen.reseed(0)
 
     result = hgen.pop()
-    expected = [0.5, 1/3, 0.2]
+    expected = [0.5, 1 / 3, 0.2]
     for i in range(3):
-        assert abs(result[i] - expected[i]) < 1e-10, f"HaltonN[0][{i}] = {result[i]}, expected {expected[i]}"
+        assert (
+            abs(result[i] - expected[i]) < 1e-10
+        ), f"HaltonN[0][{i}] = {result[i]}, expected {expected[i]}"
     print(f"  ✓ HaltonN[0] = {result}")
+
 
 def main():
     """Run all tests"""
@@ -123,7 +160,9 @@ def main():
         print("All Python tests passed! ✓")
         print("\nThe C++ implementation in ./cpp_ai should produce the same results.")
         print("To verify the C++ implementation:")
-        print("1. Build with CMake: mkdir build && cd build && cmake .. && cmake --build .")
+        print(
+            "1. Build with CMake: mkdir build && cd build && cmake .. && cmake --build ."
+        )
         print("2. Run tests: ctest")
         print("3. Run example: ./example")
 
@@ -134,6 +173,7 @@ def main():
         print(f"\n✗ Could not import lds_gen: {e}")
         print("Make sure you're running from the lds-gen project root directory.")
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

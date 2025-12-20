@@ -3,6 +3,8 @@
 import math
 import sys
 import os
+import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 from lds_gen.sphere_n import Sphere3, SphereN, linspace, simple_interp, get_tp
@@ -257,3 +259,258 @@ def test_uniformity() -> None:
     for count in octants:
         # Allow for some variation (±30%)
         assert expected_per_octant * 0.7 <= count <= expected_per_octant * 1.3
+
+
+def test_sphere3_thread_safety() -> None:
+    """Test that Sphere3 class is thread-safe."""
+    sgen = Sphere3([2, 3, 5])
+    sgen.reseed(0)
+    results = []
+    errors = []
+
+    def worker(num_iterations: int) -> None:
+        try:
+            for _ in range(num_iterations):
+                point = sgen.pop()
+                results.append(point)
+                # Verify point is on unit 3-sphere
+                radius_sq = sum(x * x for x in point)
+                assert abs(radius_sq - 1.0) < 1e-10
+        except Exception as e:
+            errors.append(e)
+
+    # Create multiple threads that call pop() concurrently
+    threads = []
+    num_threads = 8
+    iterations_per_thread = 30
+
+    for _ in range(num_threads):
+        thread = threading.Thread(target=worker, args=(iterations_per_thread,))
+        threads.append(thread)
+
+    # Start all threads
+    for thread in threads:
+        thread.start()
+
+    # Wait for all threads to complete
+    for thread in threads:
+        thread.join()
+
+    # Verify no errors occurred
+    assert len(errors) == 0, f"Errors occurred: {errors}"
+
+    # Verify we got the expected number of results
+    assert len(results) == num_threads * iterations_per_thread
+
+    # Verify all results are unique (no duplicates from race conditions)
+    result_tuples = [tuple(point) for point in results]
+    assert len(set(result_tuples)) == len(
+        result_tuples
+    ), "Duplicate values found - possible race condition"
+
+
+def test_sphere3_concurrent_reseed() -> None:
+    """Test that Sphere3 handles concurrent reseed() calls safely."""
+    sgen = Sphere3([3, 5, 7])
+    results = []
+    errors = []
+
+    def worker(seed: int, num_iterations: int) -> None:
+        try:
+            sgen.reseed(seed)
+            for _ in range(num_iterations):
+                results.append((seed, sgen.pop()))
+        except Exception as e:
+            errors.append(e)
+
+    # Create multiple threads that reseed and pop concurrently
+    threads = []
+    num_threads = 5
+    iterations_per_thread = 20
+
+    for i in range(num_threads):
+        thread = threading.Thread(target=worker, args=(i * 10, iterations_per_thread))
+        threads.append(thread)
+
+    # Start all threads
+    for thread in threads:
+        thread.start()
+
+    # Wait for all threads to complete
+    for thread in threads:
+        thread.join()
+
+    # Verify no errors occurred
+    assert len(errors) == 0, f"Errors occurred: {errors}"
+
+    # Verify we got the expected number of results
+    assert len(results) == num_threads * iterations_per_thread
+
+
+def test_spheren_thread_safety() -> None:
+    """Test that SphereN class is thread-safe."""
+    # Test with 4-sphere (5D)
+    sgen = SphereN([2, 3, 5, 7])
+    sgen.reseed(0)
+    results = []
+    errors = []
+
+    def worker(num_iterations: int) -> None:
+        try:
+            for _ in range(num_iterations):
+                point = sgen.pop()
+                results.append(point)
+                # Verify point is on unit 4-sphere
+                radius_sq = sum(x * x for x in point)
+                assert abs(radius_sq - 1.0) < 1e-10
+        except Exception as e:
+            errors.append(e)
+
+    # Create multiple threads that call pop() concurrently
+    threads = []
+    num_threads = 6
+    iterations_per_thread = 25
+
+    for _ in range(num_threads):
+        thread = threading.Thread(target=worker, args=(iterations_per_thread,))
+        threads.append(thread)
+
+    # Start all threads
+    for thread in threads:
+        thread.start()
+
+    # Wait for all threads to complete
+    for thread in threads:
+        thread.join()
+
+    # Verify no errors occurred
+    assert len(errors) == 0, f"Errors occurred: {errors}"
+
+    # Verify we got the expected number of results
+    assert len(results) == num_threads * iterations_per_thread
+
+    # Verify all results are unique (no duplicates from race conditions)
+    result_tuples = [tuple(point) for point in results]
+    assert len(set(result_tuples)) == len(
+        result_tuples
+    ), "Duplicate values found - possible race condition"
+
+
+def test_spheren_higher_dimension_thread_safety() -> None:
+    """Test SphereN thread safety with higher dimensions."""
+    # Test with 6-sphere (7D)
+    sgen = SphereN([2, 3, 5, 7, 11, 13])
+    sgen.reseed(0)
+    results = []
+    errors = []
+
+    def worker(num_iterations: int) -> None:
+        try:
+            for _ in range(num_iterations):
+                point = sgen.pop()
+                results.append(point)
+                # Verify point is on unit 6-sphere
+                radius_sq = sum(x * x for x in point)
+                assert abs(radius_sq - 1.0) < 1e-10
+        except Exception as e:
+            errors.append(e)
+
+    # Create multiple threads that call pop() concurrently
+    threads = []
+    num_threads = 4
+    iterations_per_thread = 20
+
+    for _ in range(num_threads):
+        thread = threading.Thread(target=worker, args=(iterations_per_thread,))
+        threads.append(thread)
+
+    # Start all threads
+    for thread in threads:
+        thread.start()
+
+    # Wait for all threads to complete
+    for thread in threads:
+        thread.join()
+
+    # Verify no errors occurred
+    assert len(errors) == 0, f"Errors occurred: {errors}"
+
+    # Verify we got the expected number of results
+    assert len(results) == num_threads * iterations_per_thread
+
+    # Verify all results are unique (no duplicates from race conditions)
+    result_tuples = [tuple(point) for point in results]
+    assert len(set(result_tuples)) == len(
+        result_tuples
+    ), "Duplicate values found - possible race condition"
+
+
+def test_spheren_concurrent_reseed() -> None:
+    """Test that SphereN handles concurrent reseed() calls safely."""
+    sgen = SphereN([2, 3, 5, 7])
+    results = []
+    errors = []
+
+    def worker(seed: int, num_iterations: int) -> None:
+        try:
+            sgen.reseed(seed)
+            for _ in range(num_iterations):
+                results.append((seed, sgen.pop()))
+        except Exception as e:
+            errors.append(e)
+
+    # Create multiple threads that reseed and pop concurrently
+    threads = []
+    num_threads = 4
+    iterations_per_thread = 15
+
+    for i in range(num_threads):
+        thread = threading.Thread(target=worker, args=(i * 5, iterations_per_thread))
+        threads.append(thread)
+
+    # Start all threads
+    for thread in threads:
+        thread.start()
+
+    # Wait for all threads to complete
+    for thread in threads:
+        thread.join()
+
+    # Verify no errors occurred
+    assert len(errors) == 0, f"Errors occurred: {errors}"
+
+    # Verify we got the expected number of results
+    assert len(results) == num_threads * iterations_per_thread
+
+
+def test_sphere_thread_pool_executor() -> None:
+    """Test thread safety using ThreadPoolExecutor."""
+    sgen = Sphere3([2, 3, 5])
+    sgen.reseed(0)
+    results = []
+
+    def worker(num_iterations: int) -> list:
+        points = []
+        for _ in range(num_iterations):
+            point = sgen.pop()
+            # Verify point is on unit 3-sphere
+            radius_sq = sum(x * x for x in point)
+            assert abs(radius_sq - 1.0) < 1e-10
+            points.append(point)
+        return points
+
+    # Use ThreadPoolExecutor for concurrent execution
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        futures = [executor.submit(worker, 25) for _ in range(8)]
+
+        for future in as_completed(futures):
+            results.extend(future.result())
+
+    # Verify we got the expected number of results
+    assert len(results) == 200  # 8 workers * 25 iterations each
+
+    # Verify all results are unique
+    result_tuples = [tuple(point) for point in results]
+    assert len(set(result_tuples)) == len(
+        result_tuples
+    ), "Duplicate values found - possible race condition"
