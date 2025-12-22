@@ -51,10 +51,10 @@ def fib(n: int) -> int:
       int: n-th Fibonacci number
     """
     assert n > 0
-    a, b = 1, 1
+    first, second = 1, 1
     for _i in range(n - 1):
-        a, b = b, a + b
-    return a
+        first, second = second, first + second
+    return first
 
 
 # ---- CLI ----

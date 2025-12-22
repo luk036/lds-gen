@@ -168,14 +168,14 @@ class VdCorput:
         """
         with self._count_lock:
             self._count += 1  # ignore 0
-            k = self._count
+            count = self._count
         res = 0.0
-        i = 0
-        while k != 0:
-            k, remainder = divmod(k, self.base)
+        idx = 0
+        while count != 0:
+            count, remainder = divmod(count, self.base)
             if remainder != 0:
-                res += remainder * self.rev_lst[i]
-            i += 1
+                res += remainder * self.rev_lst[idx]
+            idx += 1
         return res
 
     def reseed(self, seed: int) -> None:

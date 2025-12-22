@@ -67,43 +67,43 @@ def simple_interp(x: float, xp: List[float], yp: List[float]) -> float:
     for i in range(len(xp) - 1):
         if xp[i] <= x <= xp[i + 1]:
             # Linear interpolation
-            t = (x - xp[i]) / (xp[i + 1] - xp[i])
-            return yp[i] + t * (yp[i + 1] - yp[i])
+            t_val = (x - xp[i]) / (xp[i + 1] - xp[i])
+            return yp[i] + t_val * (yp[i + 1] - yp[i])
 
     return yp[-1]  # fallback
 
 
 @cache
-def get_tp_recursive(n: int) -> List[float]:
+def get_tp_recursive(ndim: int) -> List[float]:
     """Recursively calculates the table-lookup of the mapping function for n.
 
     Args:
-        n (int): The dimension.
+        ndim (int): The dimension.
 
     Returns:
         List[float]: The table-lookup of the mapping function.
     """
-    if n == 0:
+    if ndim == 0:
         return X
-    if n == 1:
+    if ndim == 1:
         return NEG_COSINE
-    tp_minus2 = get_tp_recursive(n - 2)
+    tp_minus2 = get_tp_recursive(ndim - 2)
     return [
-        ((n - 1) * tp_minus2[i] + NEG_COSINE[i] * (SINE[i] ** (n - 1))) / n
+        ((ndim - 1) * tp_minus2[i] + NEG_COSINE[i] * (SINE[i] ** (ndim - 1))) / ndim
         for i in range(len(tp_minus2))
     ]
 
 
-def get_tp(n: int) -> List[float]:
+def get_tp(ndim: int) -> List[float]:
     """Calculates the table-lookup of the mapping function for n.
 
     Args:
-        n (int): The dimension.
+        ndim (int): The dimension.
 
     Returns:
         List[float]: The table-lookup of the mapping function.
     """
-    return get_tp_recursive(n)
+    return get_tp_recursive(ndim)
 
 
 class SphereGen(ABC):
@@ -162,10 +162,10 @@ class Sphere3(SphereGen):
             List[float]: _description_
         """
         with self._lock:
-            ti = HALF_PI * self.vdc.pop()  # map to [t0, tm-1]
-            xi = simple_interp(ti, F2, X)
-            cosxi = math.cos(xi)
-            sinxi = math.sin(xi)
+            theta = HALF_PI * self.vdc.pop()  # map to [t0, tm-1]
+            x_val = simple_interp(theta, F2, X)
+            cosxi = math.cos(x_val)
+            sinxi = math.sin(x_val)
             return [sinxi * s for s in self.sphere2.pop()] + [cosxi]
 
 
@@ -189,16 +189,16 @@ class SphereN(SphereGen):
         Args:
             base (List[int]): The base for the van der Corput sequence.
         """
-        n = len(base) - 1
-        assert n >= 2
+        ndim = len(base) - 1
+        assert ndim >= 2
         self.vdc = VdCorput(base[0])
-        if n == 2:
+        if ndim == 2:
             self.s_gen = Sphere(base[1:3])
         else:
             self.s_gen = SphereN(base[1:])
-        self.n = n
-        tp = get_tp(n)
-        self.range = tp[-1] - tp[0]
+        self.n = ndim
+        tp_val = get_tp(ndim)
+        self.range = tp_val[-1] - tp_val[0]
         self._lock = threading.Lock()
 
     def pop(self) -> List[float]:
@@ -209,18 +209,18 @@ class SphereN(SphereGen):
         """
         with self._lock:
             if self.n == 2:
-                ti = HALF_PI * self.vdc.pop()  # map to [t0, tm-1]
-                xi = simple_interp(ti, F2, X)
-                cosxi = math.cos(xi)
-                sinxi = math.sin(xi)
+                theta = HALF_PI * self.vdc.pop()  # map to [t0, tm-1]
+                x_val = simple_interp(theta, F2, X)
+                cosxi = math.cos(x_val)
+                sinxi = math.sin(x_val)
                 return [sinxi * s for s in self.s_gen.pop()] + [cosxi]
 
-            vd = self.vdc.pop()
-            tp = get_tp(self.n)
-            ti = tp[0] + self.range * vd  # map to [t0, tm-1]
-            xi = simple_interp(ti, tp, X)
-            sinphi = math.sin(xi)
-            return [xi * sinphi for xi in self.s_gen.pop()] + [math.cos(xi)]
+            vdc_val = self.vdc.pop()
+            tp_val = get_tp(self.n)
+            theta = tp_val[0] + self.range * vdc_val  # map to [t0, tm-1]
+            x_val = simple_interp(theta, tp_val, X)
+            sinphi = math.sin(x_val)
+            return [x_val * sinphi for x_val in self.s_gen.pop()] + [math.cos(x_val)]
 
     def reseed(self, seed: int) -> None:
         """Reseeds the generator.

@@ -34,16 +34,16 @@ fn main() {
     // Example 3: Higher dimensions
     println!("3. Higher dimensional spheres:");
     let dimensions = [3, 4, 5, 6];
-    for &dim in &dimensions {
-        let bases: Vec<u32> = (0..dim).map(|i| lds_gen::PRIME_TABLE[i] as u32).collect();
+    for &ndim in &dimensions {
+        let bases: Vec<u32> = (0..ndim).map(|i| lds_gen::PRIME_TABLE[i] as u32).collect();
         let mut sgen = SphereN::new(&bases);
         sgen.reseed(0);
         let point = sgen.pop();
         let radius_sq = point.iter().map(|&x| x * x).sum::<f64>();
         println!(
             "  {}-sphere ({}D): radius² = {:.12}",
-            dim - 1,
-            dim,
+            ndim - 1,
+            ndim,
             radius_sq
         );
     }

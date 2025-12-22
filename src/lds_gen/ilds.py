@@ -80,13 +80,13 @@ class VdCorput:
         """
         with self._count_lock:
             self._count += 1
-            k = self._count
+            count = self._count
         vdc: int = 0
         factor: int = self._factor
-        while k != 0:
+        while count != 0:
             factor //= self._base
-            remainder: int = k % self._base
-            k //= self._base
+            remainder: int = count % self._base
+            count //= self._base
             vdc += remainder * factor
         return vdc
 
