@@ -58,7 +58,7 @@ def main():
     print("k=1, base=[2,3]:")
     print(f"  Float: x={x:.10f}, y={y:.10f}")
     print(f"  Fixed-point: x=0x{x_fp:08x} ({x_fp}), y=0x{y_fp:08x} ({y_fp})")
-    print(f"  Converted back: x={x_fp/65536.0:.10f}, y={y_fp/65536.0:.10f}")
+    print(f"  Converted back: x={x_fp / 65536.0:.10f}, y={y_fp / 65536.0:.10f}")
 
 
 if __name__ == "__main__":

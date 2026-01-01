@@ -59,7 +59,7 @@ def test_cordic() -> None:
         x_error = abs(x_cordic - x_expected)
         y_error = abs(y_cordic - y_expected)
 
-        print(f"\nAngle: {angle:.6f} rad ({angle*180/math.pi:.1f}°)")
+        print(f"\nAngle: {angle:.6f} rad ({angle * 180 / math.pi:.1f}°)")
         print(f"  CORDIC: cos={x_cordic:.6f}, sin={y_cordic:.6f}")
         print(f"  Expected: cos={x_expected:.6f}, sin={y_expected:.6f}")
         print(f"  Error: cos={x_error:.6f}, sin={y_error:.6f}")

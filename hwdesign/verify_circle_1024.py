@@ -123,8 +123,8 @@ def main():
         y_error = abs(y_expected - y_actual)
 
         print(f"\nk={k}, base={base}:")
-        print(f"  x error: {x_error:.6f} ({x_error*100:.2f}%)")
-        print(f"  y error: {y_error:.6f} ({y_error*100:.2f}%)")
+        print(f"  x error: {x_error:.6f} ({x_error * 100:.2f}%)")
+        print(f"  y error: {y_error:.6f} ({y_error * 100:.2f}%)")
 
 
 if __name__ == "__main__":

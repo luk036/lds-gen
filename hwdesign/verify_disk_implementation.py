@@ -90,7 +90,7 @@ def main():
 
         print(f"\nk={k}, base=[{base0},{base1}]:")
         print(f"  VdCorput: angle={vdc0:.6f}, radius^2={vdc1:.6f}")
-        print(f"  Angle: {angle:.6f} rad ({angle*180/math.pi:.1f}°)")
+        print(f"  Angle: {angle:.6f} rad ({angle * 180 / math.pi:.1f}°)")
         print(f"  Radius: exact={radius_exact:.6f}, approx={radius:.6f}")
         print(f"  Result: exact=({x_exact:.6f}, {y_exact:.6f})")
         print(f"           hw=({x_hw:.6f}, {y_hw:.6f})")

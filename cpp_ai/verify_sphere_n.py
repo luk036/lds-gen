@@ -19,9 +19,9 @@ def test_linspace():
     expected = [0.0, 0.25, 0.5, 0.75, 1.0]
     assert len(result) == 5
     for i, val in enumerate(result):
-        assert (
-            abs(val - expected[i]) < 1e-10
-        ), f"linspace[{i}] = {val}, expected {expected[i]}"
+        assert abs(val - expected[i]) < 1e-10, (
+            f"linspace[{i}] = {val}, expected {expected[i]}"
+        )
     print(f"  ✓ linspace(0.0, 1.0, 5) = {result}")
 
 
@@ -33,16 +33,16 @@ def test_simple_interp():
 
     result = simple_interp(0.5, xp, yp)
     expected = 1.0
-    assert (
-        abs(result - expected) < 1e-10
-    ), f"simple_interp(0.5) = {result}, expected {expected}"
+    assert abs(result - expected) < 1e-10, (
+        f"simple_interp(0.5) = {result}, expected {expected}"
+    )
     print(f"  ✓ simple_interp(0.5) = {result}")
 
     result = simple_interp(1.5, xp, yp)
     expected = 3.0
-    assert (
-        abs(result - expected) < 1e-10
-    ), f"simple_interp(1.5) = {result}, expected {expected}"
+    assert abs(result - expected) < 1e-10, (
+        f"simple_interp(1.5) = {result}, expected {expected}"
+    )
     print(f"  ✓ simple_interp(1.5) = {result}")
 
 
@@ -78,9 +78,9 @@ def test_sphere3():
 
     assert len(result) == 4
     for i in range(4):
-        assert (
-            abs(result[i] - expected[i]) < 1e-10
-        ), f"Sphere3[{i}] = {result[i]}, expected {expected[i]}"
+        assert abs(result[i] - expected[i]) < 1e-10, (
+            f"Sphere3[{i}] = {result[i]}, expected {expected[i]}"
+        )
 
     # Check if point is on unit sphere
     radius_sq = sum(x * x for x in result)
@@ -106,9 +106,9 @@ def test_sphereN():
 
     assert len(result) == 5
     for i in range(5):
-        assert (
-            abs(result[i] - expected[i]) < 1e-10
-        ), f"SphereN[{i}] = {result[i]}, expected {expected[i]}"
+        assert abs(result[i] - expected[i]) < 1e-10, (
+            f"SphereN[{i}] = {result[i]}, expected {expected[i]}"
+        )
 
     # Check if point is on unit sphere
     radius_sq = sum(x * x for x in result)

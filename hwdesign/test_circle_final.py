@@ -150,7 +150,7 @@ def main():
         print(f"\nk={k}, base={base}:")
         print(f"  VdCorput: {result['vdc']:.6f}")
         print(
-            f"  Angle: {result['angle']:.6f} rad ({result['angle']*180/math.pi:.1f}°)"
+            f"  Angle: {result['angle']:.6f} rad ({result['angle'] * 180 / math.pi:.1f}°)"
         )
         print(f"  Result: x={result['x']:.6f}, y={result['y']:.6f}")
         print(f"  Expected: x={x_expected:.6f}, y={y_expected:.6f}")
@@ -159,7 +159,7 @@ def main():
     print("\n" + "=" * 60)
     print(f"Maximum error: x={max_x_error:.6f}, y={max_y_error:.6f}")
     print(
-        f"Maximum error percentage: x={max_x_error*100:.2f}%, y={max_y_error*100:.2f}%"
+        f"Maximum error percentage: x={max_x_error * 100:.2f}%, y={max_y_error * 100:.2f}%"
     )
 
     print("\n\nFixed-point conversion test:")
