@@ -1,6 +1,7 @@
 import pytest
+from unittest.mock import patch
 
-from lds_gen.skeleton import fib, main
+from lds_gen.skeleton import fib, main, run
 
 __author__ = "Wai-Shing Luk"
 __copyright__ = "Wai-Shing Luk"
@@ -23,3 +24,11 @@ def test_main(capsys: pytest.CaptureFixture) -> None:
     main(["7"])
     captured = capsys.readouterr()
     assert "The 7-th Fibonacci number is 13" in captured.out
+
+
+def test_run(capsys: pytest.CaptureFixture) -> None:
+    """Test run() function that calls main with sys.argv"""
+    with patch("sys.argv", ["skeleton", "5"]):
+        run()
+        captured = capsys.readouterr()
+        assert "The 5-th Fibonacci number is 5" in captured.out
