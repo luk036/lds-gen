@@ -31,7 +31,10 @@ sys.path.insert(0, os.path.abspath("../src"))
 # This part is only for documentation generation and may cause mypy issues
 # We'll handle this with a try block that mypy can ignore
 import sphinx
-from sphinx import apidoc  # type: ignore[attr-defined, no-redef]
+try:
+    from sphinx.ext import apidoc  # type: ignore[attr-defined, no-redef]
+except ImportError:
+    from sphinx import apidoc  # type: ignore[attr-defined, no-redef]
 
 output_dir = os.path.join(__location__, "api")
 module_dir = os.path.join(__location__, "../src/lds_gen")
