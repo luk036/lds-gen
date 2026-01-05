@@ -478,8 +478,8 @@ class Sphere:
         """
         cosphi = 2.0 * self.vdc.pop() - 1.0  # map to [-1, 1]
         sinphi = sqrt(1.0 - cosphi * cosphi)  # cylindrical mapping
-        [c, s] = self.cirgen.pop()
-        return [sinphi * c, sinphi * s, cosphi]
+        [cos, sin] = self.cirgen.pop()
+        return [sinphi * cos, sinphi * sin, cosphi]
 
     def reseed(self, seed: int) -> None:
         """

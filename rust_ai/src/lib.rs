@@ -345,8 +345,8 @@ impl Sphere {
     pub fn pop(&mut self) -> [f64; 3] {
         let cosphi = 2.0 * self.vdc.pop() - 1.0; // map to [-1, 1]
         let sinphi = (1.0 - cosphi * cosphi).sqrt(); // cylindrical mapping
-        let [c, s] = self.cirgen.pop();
-        [sinphi * c, sinphi * s, cosphi]
+        let [cos, sin] = self.cirgen.pop();
+        [sinphi * cos, sinphi * sin, cosphi]
     }
 
     /// Resets the state of the sequence generator to a specific seed value
