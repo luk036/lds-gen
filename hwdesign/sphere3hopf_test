@@ -904,7 +904,7 @@ TD_sphere3hopf_fsm_32bit_simple_tb.run_test ;
     %store/vec4 v0000017382af7000_0, 0, 2;
     %load/vec4 v0000017382af5fc0_0;
     %store/vec4 v0000017382af7820_0, 0, 2;
-    %vpi_call 2 56 "$display", "Starting test: k=%0d, waiting for ready...", v0000017382af6060_0 {0 0 0};
+    %vpi_call 2 56 "$display", "Starting test: count=%0d, waiting for ready...", v0000017382af6060_0 {0 0 0};
 T_1.4 ;
     %load/vec4 v0000017382af6240_0;
     %pad/u 32;
@@ -945,7 +945,7 @@ T_1.7 ;
     %load/vec4 v0000017382af5fc0_0;
     %pad/u 32;
     %addi 2, 0, 32;
-    %vpi_call 2 69 "$display", "k=%0d, bases=[%0d,%0d,%0d]", v0000017382af6060_0, S<2,vec4,u32>, S<1,vec4,u32>, S<0,vec4,u32> {3 0 0};
+    %vpi_call 2 69 "$display", "count=%0d, bases=[%0d,%0d,%0d]", v0000017382af6060_0, S<2,vec4,u32>, S<1,vec4,u32>, S<0,vec4,u32> {3 0 0};
     %load/vec4 v0000017382af8220_0;
     %cvt/rv/s;
     %pushi/real 1073741824, 4082; load=65536.0

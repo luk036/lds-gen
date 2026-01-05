@@ -15,7 +15,7 @@ namespace lds_gen {
 constexpr double TWO_PI = 2.0 * std::numbers::pi;
 
 // Van der Corput sequence function
-double vdc(std::uint64_t k, std::uint64_t base = 2);
+double vdc(std::uint64_t count, std::uint64_t base = 2);
 
 // Van der Corput sequence generator class
 class VdCorput {

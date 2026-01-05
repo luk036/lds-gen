@@ -56,8 +56,8 @@ module disk_fsm_32bit_simple_fixed_tb;
         $display("Starting Disk FSM Testbench (Fixed)");
         $display("==========================================");
 
-        // Test 1: Base [2,3], k=1
-        $display("\nTest 1: Base [2,3], k=1");
+        // Test 1: Base [2,3], count=1
+        $display("\nTest 1: Base [2,3], count=1");
         wait(ready == 1'b1);
         @(posedge clk);
         k_in = 32'd1;
@@ -71,8 +71,8 @@ module disk_fsm_32bit_simple_fixed_tb;
         @(posedge clk);
         $display("Result: x=0x%08h, y=0x%08h", result_x, result_y);
 
-        // Test 2: Base [2,3], k=2
-        $display("\nTest 2: Base [2,3], k=2");
+        // Test 2: Base [2,3], count=2
+        $display("\nTest 2: Base [2,3], count=2");
         wait(ready == 1'b1);
         @(posedge clk);
         k_in = 32'd2;
@@ -86,8 +86,8 @@ module disk_fsm_32bit_simple_fixed_tb;
         @(posedge clk);
         $display("Result: x=0x%08h, y=0x%08h", result_x, result_y);
 
-        // Test 3: Base [3,7], k=1
-        $display("\nTest 3: Base [3,7], k=1");
+        // Test 3: Base [3,7], count=1
+        $display("\nTest 3: Base [3,7], count=1");
         wait(ready == 1'b1);
         @(posedge clk);
         k_in = 32'd1;

@@ -11,7 +11,7 @@ Inputs:
 - clk: System clock
 - rst_n: Active-low reset
 - start: Start signal to begin computation
-- k_in[31:0]: Input integer k (32-bit)
+- k_in[31:0]: Input integer count (32-bit)
 - base_sel0[1:0]: Base selection for first VdCorput (00: base 2, 01: base 3, 10: base 7)
 - base_sel1[1:0]: Base selection for second VdCorput
 

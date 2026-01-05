@@ -57,7 +57,7 @@ module sphere_fsm_32bit_simple_tb;
             @(posedge clk);
 
             // Display results in hex and approximate float
-            $display("k=%0d, bases=[%0d,%0d]", test_k, test_base0+2, test_base1+2);
+            $display("count=%0d, bases=[%0d,%0d]", test_k, test_base0+2, test_base1+2);
             $display("  result_x=%h (≈%0.3f)", result_x, $signed(result_x) / 65536.0);
             $display("  result_y=%h (≈%0.3f)", result_y, $signed(result_y) / 65536.0);
             $display("  result_z=%h (≈%0.3f)", result_z, $signed(result_z) / 65536.0);
@@ -82,18 +82,18 @@ module sphere_fsm_32bit_simple_tb;
         $display("=================================");
 
         // Test cases based on Python examples
-        // Python example: [-0.4999999999999998, 0.8660254037844387, 0.0] for k=1, base=[2,3]
+        // Python example: [-0.4999999999999998, 0.8660254037844387, 0.0] for count=1, base=[2,3]
 
         $display("\nTesting base combination [2,3]:");
-        run_test(32'd1, 2'b00, 2'b01);  // k=1
-        run_test(32'd2, 2'b00, 2'b01);  // k=2
-        run_test(32'd3, 2'b00, 2'b01);  // k=3
+        run_test(32'd1, 2'b00, 2'b01);  // count=1
+        run_test(32'd2, 2'b00, 2'b01);  // count=2
+        run_test(32'd3, 2'b00, 2'b01);  // count=3
 
         $display("\nTesting base combination [2,7]:");
-        run_test(32'd1, 2'b00, 2'b10);  // k=1
+        run_test(32'd1, 2'b00, 2'b10);  // count=1
 
         $display("\nTesting base combination [3,7]:");
-        run_test(32'd1, 2'b01, 2'b10);  // k=1
+        run_test(32'd1, 2'b01, 2'b10);  // count=1
 
         $display("\nAll tests completed");
         $finish;

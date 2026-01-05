@@ -3,14 +3,14 @@ VdCorput FSM-Based Sequential Implementation (32-bit)
 Supports bases 2, 3, and 7
 
 This module implements the Van der Corput sequence generator using a Finite State Machine (FSM) approach.
-The algorithm converts an integer k to a floating point value by repeatedly dividing by base and
+The algorithm converts an integer count to a floating point value by repeatedly dividing by base and
 accumulating remainders divided by decreasing powers of the base.
 
 Inputs:
 - clk: System clock
 - rst_n: Active-low reset
 - start: Start signal to begin computation
-- k_in[31:0]: Input integer k (32-bit)
+- k_in[31:0]: Input integer count (32-bit)
 - base_sel[1:0]: Base selection (00: base 2, 01: base 3, 10: base 7)
 
 Outputs:
@@ -23,8 +23,8 @@ FSM States:
 - INIT: Initialize registers
 - DIVIDE: Perform division by base
 - ACCUMULATE: Accumulate remainder * power_of_base
-- UPDATE: Update k and power_of_base
-- CHECK: Check if k == 0
+- UPDATE: Update count and power_of_base
+- CHECK: Check if count == 0
 - FINISH: Output result
 
 The module uses 32-bit fixed-point arithmetic with 16 integer bits and 16 fractional bits.
@@ -55,7 +55,7 @@ module vdcorput_fsm_32bit (
     state_t current_state, next_state;
 
     // Internal registers
-    reg [31:0] k_reg;          // Current k value
+    reg [31:0] k_reg;          // Current count value
     reg [31:0] power_reg;      // Current power of base (1/base^i in fixed-point)
     reg [31:0] acc_reg;        // Accumulator for result
     reg [31:0] base_reg;       // Current base value
@@ -190,7 +190,7 @@ module vdcorput_fsm_32bit (
                     end
                 end
                 UPDATE: begin
-                    // Update k and power_of_base
+                    // Update count and power_of_base
                     k_reg <= quotient_reg;
                     // power_reg = power_reg / base_reg (fixed-point division)
                     case (base_reg)

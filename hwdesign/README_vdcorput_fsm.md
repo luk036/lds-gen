@@ -17,11 +17,11 @@ This directory contains a hardware implementation of the Van der Corput sequence
 
 ## Algorithm
 
-The Van der Corput sequence converts an integer `k` to a floating-point value by:
-1. Repeatedly dividing `k` by the base
+The Van der Corput sequence converts an integer `count` to a floating-point value by:
+1. Repeatedly dividing `count` by the base
 2. Accumulating remainders divided by decreasing powers of the base
 
-Mathematically: `vdc(k, base) = Σ (remainder_i / base^(i+1))`
+Mathematically: `vdc(count, base) = Σ (remainder_i / base^(i+1))`
 
 ## FSM Design
 
@@ -29,10 +29,10 @@ The implementation uses a 7-state FSM:
 
 1. **IDLE** - Wait for start signal
 2. **INIT** - Initialize registers based on base selection
-3. **DIVIDE** - Perform division (k / base)
+3. **DIVIDE** - Perform division (count / base)
 4. **ACCUMULATE** - Add remainder * power_of_base to accumulator
-5. **UPDATE** - Update k = quotient, power_of_base /= base
-6. **CHECK** - Check if k == 0
+5. **UPDATE** - Update count = quotient, power_of_base /= base
+6. **CHECK** - Check if count == 0
 7. **FINISH** - Output result
 
 ## Fixed-Point Representation
@@ -53,7 +53,7 @@ Key constants (16.16 format):
 - `clk` - System clock
 - `rst_n` - Active-low reset
 - `start` - Start computation
-- `k_in[31:0]` - Input integer k
+- `k_in[31:0]` - Input integer count
 - `base_sel[1:0]` - Base selection (00=2, 01=3, 10=7)
 
 ### Outputs
@@ -65,9 +65,9 @@ Key constants (16.16 format):
 
 ### Test Cases
 The testbench verifies 18 test cases (6 per base):
-- Base 2: k = 1, 2, 3, 4, 5, 11
-- Base 3: k = 1, 2, 3, 4, 5, 11
-- Base 7: k = 1, 2, 3, 4, 5, 11
+- Base 2: count = 1, 2, 3, 4, 5, 11
+- Base 3: count = 1, 2, 3, 4, 5, 11
+- Base 7: count = 1, 2, 3, 4, 5, 11
 
 ### Expected Results (from Python `vdc` function)
 ```
@@ -117,8 +117,8 @@ python vdcorput_sequential_test.py
 
 ## Performance
 
-- **Clock cycles per computation**: ~7 + (number of digits in base representation of k)
-- **Maximum k value**: 2^32 - 1 (4,294,967,295)
+- **Clock cycles per computation**: ~7 + (number of digits in base representation of count)
+- **Maximum count value**: 2^32 - 1 (4,294,967,295)
 - **Throughput**: Can pipeline computations for continuous sequence generation
 
 ## Design Notes

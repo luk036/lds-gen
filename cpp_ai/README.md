@@ -72,7 +72,7 @@ int main() {
 
 ### Floating-point sequences
 
-- `double vdc(uint64_t k, uint64_t base = 2)`: Van der Corput function
+- `double vdc(uint64_t count, uint64_t base = 2)`: Van der Corput function
 - `class VdCorput`: Van der Corput sequence generator
 - `class Halton`: 2D Halton sequence generator
 - `class Circle`: Unit circle sequence generator

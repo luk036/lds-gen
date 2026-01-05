@@ -5,9 +5,9 @@ This testbench verifies the functionality of the circle_fsm_32bit_simple module
 for bases 2, 3, and 7. It compares hardware results with Python reference values.
 
 Test cases:
-1. Base 2: k = 1 to 5
-2. Base 3: k = 1 to 5
-3. Base 7: k = 1 to 5
+1. Base 2: count = 1 to 5
+2. Base 3: count = 1 to 5
+3. Base 7: count = 1 to 5
 
 Note: Due to CORDIC precision limitations and fixed-point arithmetic,
 results may have small errors compared to floating-point Python results.
@@ -73,7 +73,7 @@ module circle_fsm_32bit_simple_tb;
 
     // Initialize test vectors
     initial begin
-        // Test k values
+        // Test count values
         test_k[0] = 32'd1;
         test_k[1] = 32'd2;
         test_k[2] = 32'd3;
@@ -113,18 +113,18 @@ module circle_fsm_32bit_simple_tb;
             // For Circle sequence with CORDIC, we do basic sanity checks:
             // 1. Values are within range [-1.2, 1.2] in fixed-point
             // 2. Outputs are not zero (unless at specific angles)
-            // 3. Different k values produce different outputs
+            // 3. Different count values produce different outputs
 
             // Check if values are within reasonable range
             // In 16.16 fixed-point, 1.0 = 0x00010000, -1.0 = 0xFFFF0000
             // Allow some margin: ±1.2 = ±0x00013333
             if ($signed(result_x) <= 32'sh00013333 && $signed(result_x) >= -32'sh00013333 &&
                 $signed(result_y) <= 32'sh00013333 && $signed(result_y) >= -32'sh00013333) begin
-                $display("PASS: k=%0d, base_sel=%b, values in range", k_val, base_val);
+                $display("PASS: count=%0d, base_sel=%b, values in range", k_val, base_val);
                 $display("      x=0x%08h, y=0x%08h", result_x, result_y);
                 test_passed = test_passed + 1;
             end else begin
-                $display("FAIL: k=%0d, base_sel=%b, values out of range", k_val, base_val);
+                $display("FAIL: count=%0d, base_sel=%b, values out of range", k_val, base_val);
                 $display("      x=0x%08h, y=0x%08h", result_x, result_y);
                 test_failed = test_failed + 1;
                 error_count = error_count + 1;

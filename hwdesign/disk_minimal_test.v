@@ -69,10 +69,10 @@ module disk_minimal_test;
 
             if ((vdc0_result >= expected - tolerance) &&
                 (vdc0_result <= expected + tolerance)) begin
-                $display("PASS: k=%0d, base=%0d, result=%h, expected=%h",
+                $display("PASS: count=%0d, base=%0d, result=%h, expected=%h",
                          test_k, test_base+2, vdc0_result, expected);
             end else begin
-                $display("FAIL: k=%0d, base=%0d, result=%h, expected=%h",
+                $display("FAIL: count=%0d, base=%0d, result=%h, expected=%h",
                          test_k, test_base+2, vdc0_result, expected);
             end
 
@@ -98,19 +98,19 @@ module disk_minimal_test;
         // Test VdCorput with base 2
         base_sel0 = 2'b00;  // Base 2
 
-        // k=1: 0.5 in fixed-point = 0.5 * 65536 = 32768
+        // count=1: 0.5 in fixed-point = 0.5 * 65536 = 32768
         run_vdc_test(32'd1, 2'b00, 32'h00008000, 32'd100);
 
-        // k=2: 0.25 in fixed-point = 0.25 * 65536 = 16384
+        // count=2: 0.25 in fixed-point = 0.25 * 65536 = 16384
         run_vdc_test(32'd2, 2'b00, 32'h00004000, 32'd100);
 
         // Test VdCorput with base 3
         base_sel0 = 2'b01;  // Base 3
 
-        // k=1: 1/3 ≈ 0.33333 in fixed-point = 0.33333 * 65536 = 21845
+        // count=1: 1/3 ≈ 0.33333 in fixed-point = 0.33333 * 65536 = 21845
         run_vdc_test(32'd1, 2'b01, 32'h00005555, 32'd100);
 
-        // k=2: 2/3 ≈ 0.66667 in fixed-point = 0.66667 * 65536 = 43690
+        // count=2: 2/3 ≈ 0.66667 in fixed-point = 0.66667 * 65536 = 43690
         run_vdc_test(32'd2, 2'b01, 32'h0000AAAA, 32'd100);
 
         $display("\nAll basic tests completed");

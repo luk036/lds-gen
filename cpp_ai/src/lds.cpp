@@ -6,13 +6,13 @@
 
 namespace lds_gen {
 
-double vdc(std::uint64_t k, std::uint64_t base) {
+double vdc(std::uint64_t count, std::uint64_t base) {
     double res = 0.0;
     double denom = 1.0;
-    while (k != 0) {
+    while (count != 0) {
         denom *= static_cast<double>(base);
-        std::uint64_t remainder = k % base;
-        k /= base;
+        std::uint64_t remainder = count % base;
+        count /= base;
         res += static_cast<double>(remainder) / denom;
     }
     return res;
@@ -29,12 +29,12 @@ VdCorput::VdCorput(std::uint64_t base) : count_(0), base_(base) {
 
 double VdCorput::pop() {
     ++count_; // ignore 0
-    std::uint64_t k = count_;
+    std::uint64_t count = count_;
     double res = 0.0;
     std::size_t i = 0;
-    while (k != 0) {
-        std::uint64_t remainder = k % base_;
-        k /= base_;
+    while (count != 0) {
+        std::uint64_t remainder = count % base_;
+        count /= base_;
         if (remainder != 0) {
             res += static_cast<double>(remainder) * rev_lst_[i];
         }

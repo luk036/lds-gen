@@ -57,15 +57,15 @@ from typing import Final, List, Sequence
 TWO_PI: Final[float] = 2.0 * pi
 
 
-def vdc(k: int, base: int = 2) -> float:
+def vdc(count: int, base: int = 2) -> float:
     """Van der Corput sequence
 
-    The function `vdc` converts a given number `k` from base `base` to a floating point number.
+    The function `vdc` converts a given number `count` from base `base` to a floating point number.
 
-    :param k: The parameter `k` represents the number for which we want to calculate the van der Corput
+    :param count: The parameter `count` represents the number for which we want to calculate the van der Corput
               sequence value
 
-    :type k: int
+    :type count: int
 
     :param base: The `base` parameter represents the base of the number system being used. In this case,
                  it is set to 2, which means the number system is binary (base 2), defaults to 2
@@ -77,26 +77,12 @@ def vdc(k: int, base: int = 2) -> float:
     Examples:
         >>> vdc(11, 2)
         0.8125
-
-    .. svgbob::
-       :align: center
-
-            Base 2 Van der Corput Sequence
-          (Example: k=5 -> 0.625)
-
-              k=5 in base 2: 101
-
-              Original:  1  0  1
-                        |  |  |
-              Reversed:  1  0  1  <- after decimal point
-
-              Result: 0.101 (base 2) = 0.625 (base 10)
     """
     res = 0.0
     denom = 1.0
-    while k != 0:
+    while count != 0:
         denom *= base
-        k, remainder = divmod(k, base)
+        count, remainder = divmod(count, base)
         res += remainder / denom
     return res
 

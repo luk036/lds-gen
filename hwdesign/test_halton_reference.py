@@ -5,13 +5,13 @@ to verify hardware implementation results.
 """
 
 
-def vdc(k: int, base: int = 2) -> float:
+def vdc(count: int, base: int = 2) -> float:
     """Van der Corput sequence"""
     res = 0.0
     denom = 1.0
-    while k != 0:
+    while count != 0:
         denom *= base
-        k, remainder = divmod(k, base)
+        count, remainder = divmod(count, base)
         res += remainder / denom
     return res
 
@@ -25,11 +25,11 @@ class Halton:
     """Halton sequence generator (Python reference)"""
 
     def __init__(self, base):
-        self.vdc0 = lambda k: vdc(k, base[0])
-        self.vdc1 = lambda k: vdc(k, base[1])
+        self.vdc0 = lambda count: vdc(count, base[0])
+        self.vdc1 = lambda count: vdc(count, base[1])
 
-    def pop(self, k):
-        return [self.vdc0(k), self.vdc1(k)]
+    def pop(self, count):
+        return [self.vdc0(count), self.vdc1(count)]
 
 
 def test_halton_values() -> None:
@@ -52,12 +52,12 @@ def test_halton_values() -> None:
         halton = Halton(bases)
         num_tests = 10 if bases == [2, 3] else 5
 
-        for k in range(1, num_tests + 1):
-            x, y = halton.pop(k)
+        for count in range(1, num_tests + 1):
+            x, y = halton.pop(count)
             x_fixed = float_to_fixed16_16(x)
             y_fixed = float_to_fixed16_16(y)
 
-            print(f"k={k:2d}: [{x:.10f}, {y:.10f}]")
+            print(f"count={count:2d}: [{x:.10f}, {y:.10f}]")
             print(f"      x=0x{x_fixed:08x}, y=0x{y_fixed:08x}")
 
     # Compare with hardware test vectors
@@ -67,11 +67,11 @@ def test_halton_values() -> None:
     # Base [2,3] specific values from testbench
     print("\nBase [2,3] - First 5 values:")
     halton = Halton([2, 3])
-    for k in [1, 2, 3, 4, 5]:
-        x, y = halton.pop(k)
+    for count in [1, 2, 3, 4, 5]:
+        x, y = halton.pop(count)
         x_fixed = float_to_fixed16_16(x)
         y_fixed = float_to_fixed16_16(y)
-        print(f"k={k}: x=0x{x_fixed:08x}, y=0x{y_fixed:08x}")
+        print(f"count={count}: x=0x{x_fixed:08x}, y=0x{y_fixed:08x}")
 
 
 if __name__ == "__main__":

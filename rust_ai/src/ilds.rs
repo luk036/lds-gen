@@ -49,14 +49,14 @@ impl VdCorput {
     /// in the Van der Corput sequence.
     pub fn pop(&mut self) -> u32 {
         self.count += 1;
-        let mut k = self.count;
+        let mut count = self.count;
         let mut vdc = 0;
         let mut factor = self.factor;
 
-        while k != 0 {
+        while count != 0 {
             factor /= self.base;
-            let remainder = k % self.base;
-            k /= self.base;
+            let remainder = count % self.base;
+            count /= self.base;
             vdc += remainder * factor;
         }
         vdc

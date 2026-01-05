@@ -367,7 +367,7 @@ T_0.3 ;
     %load/vec4 v0000026152e355c0_0;
     %pad/u 32;
     %addi 2, 0, 32;
-    %vpi_call 2 59 "$display", "k=%0d, bases=[%0d,%0d]", v0000026152e34bc0_0, S<1,vec4,u32>, S<0,vec4,u32> {2 0 0};
+    %vpi_call 2 59 "$display", "count=%0d, bases=[%0d,%0d]", v0000026152e34bc0_0, S<1,vec4,u32>, S<0,vec4,u32> {2 0 0};
     %vpi_call 2 60 "$display", "  result_x=%h, result_y=%h, result_z=%h", v0000026152e34620_0, v0000026152e350c0_0, v0000026152e34c60_0 {0 0 0};
     %delay 50000, 0;
     %end;

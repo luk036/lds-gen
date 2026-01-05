@@ -19,8 +19,8 @@ This directory contains SystemVerilog implementations of the Van der Corput low-
 ## Implementation Details
 
 ### Algorithm
-The Van der Corput sequence converts integer `k` to a reversed base representation:
-1. Repeatedly divide `k` by the base, collecting remainders
+The Van der Corput sequence converts integer `count` to a reversed base representation:
+1. Repeatedly divide `count` by the base, collecting remainders
 2. Multiply each remainder by decreasing powers of the base
 3. Sum the results to get the Van der Corput value
 
@@ -52,21 +52,21 @@ module vdcorput_32bit #(
 
 ### Base 2 (scale=10)
 ```
-k= 1: 512    k= 2: 256    k= 3: 768    k= 4: 128    k= 5: 640
-k= 6: 384    k= 7: 896    k= 8: 64     k= 9: 576    k=10: 320
+count= 1: 512    count= 2: 256    count= 3: 768    count= 4: 128    count= 5: 640
+count= 6: 384    count= 7: 896    count= 8: 64     count= 9: 576    count=10: 320
 ```
 
 ### Base 3 (scale=10)
 ```
-k= 1: 19683   k= 2: 39366   k= 3: 6561    k= 4: 26244   k= 5: 45927
-k= 6: 13122   k= 7: 32805   k= 8: 52488   k= 9: 2187    k=10: 21870
+count= 1: 19683   count= 2: 39366   count= 3: 6561    count= 4: 26244   count= 5: 45927
+count= 6: 13122   count= 7: 32805   count= 8: 52488   count= 9: 2187    count=10: 21870
 ```
 
 ### Base 7 (scale=10)
 ```
-k= 1: 40353607   k= 2: 80707214   k= 3: 121060821  k= 4: 161414428
-k= 5: 201768035  k= 6: 242121642  k= 7: 5764801    k= 8: 46118408
-k= 9: 86472015   k=10: 126825622
+count= 1: 40353607   count= 2: 80707214   count= 3: 121060821  count= 4: 161414428
+count= 5: 201768035  count= 6: 242121642  count= 7: 5764801    count= 8: 46118408
+count= 9: 86472015   count=10: 126825622
 ```
 
 ## Simulation

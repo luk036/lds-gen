@@ -31,6 +31,7 @@ sys.path.insert(0, os.path.abspath("../src"))
 # This part is only for documentation generation and may cause mypy issues
 # We'll handle this with a try block that mypy can ignore
 import sphinx
+
 try:
     from sphinx.ext import apidoc  # type: ignore[attr-defined, no-redef]
 except ImportError:

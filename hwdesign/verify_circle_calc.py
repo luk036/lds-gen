@@ -6,13 +6,13 @@ Verify Circle module calculations
 import math
 
 
-def vdc(k, base=2):
+def vdc(count, base=2):
     """Van der Corput sequence"""
     res = 0.0
     denom = 1.0
-    while k != 0:
+    while count != 0:
         denom *= base
-        k, remainder = divmod(k, base)
+        count, remainder = divmod(count, base)
         res += remainder / denom
     return res
 
@@ -27,10 +27,10 @@ def fixed_to_float(value):
     return value / 65536.0
 
 
-def calculate_circle_point(k, base):
+def calculate_circle_point(count, base):
     """Calculate Circle point using fixed-point arithmetic"""
     # 1. VdCorput result
-    vdc_val = vdc(k, base)
+    vdc_val = vdc(count, base)
     vdc_fp = fixed_point_16_16(vdc_val)
 
     # 2. Angle = vdc * 2π
@@ -54,7 +54,7 @@ def calculate_circle_point(k, base):
     y_fp = fixed_point_16_16(y)
 
     return {
-        "k": k,
+        "count": count,
         "base": base,
         "vdc": vdc_val,
         "vdc_fp": f"0x{vdc_fp:08x}",
@@ -83,9 +83,9 @@ def main():
         (5, 2),  # 5π/4
     ]
 
-    for k, base in test_cases:
-        result = calculate_circle_point(k, base)
-        print(f"\nk={k}, base={base}:")
+    for count, base in test_cases:
+        result = calculate_circle_point(count, base)
+        print(f"\nk={count}, base={base}:")
         print(f"  VdCorput: {result['vdc']:.6f} ({result['vdc_fp']})")
         print(f"  Angle: {result['angle_rad']:.6f} rad ({result['angle_fp']})")
         print(f"  LUT index: {result['lut_index']} ({result['lut_index_hex']})")
@@ -95,14 +95,14 @@ def main():
 
     print("\n\nExpected values from Python direct calculation:")
     print("=" * 50)
-    for k, base in test_cases:
-        vdc_val = vdc(k, base)
+    for count, base in test_cases:
+        vdc_val = vdc(count, base)
         angle = vdc_val * 2 * math.pi
         x = math.cos(angle)
         y = math.sin(angle)
         x_fp = fixed_point_16_16(x)
         y_fp = fixed_point_16_16(y)
-        print(f"\nk={k}, base={base}:")
+        print(f"\nk={count}, base={base}:")
         print(f"  VdCorput: {vdc_val:.6f}")
         print(f"  Angle: {angle:.6f} rad")
         print(f"  Result: x={x:.6f}, y={y:.6f}")

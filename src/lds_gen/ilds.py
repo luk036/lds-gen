@@ -9,8 +9,8 @@ sampling, optimization, or numerical integration.
 The code defines three main components: a function called vdc_i, and two classes named
 VdCorput and Halton.
 
-The vdc_i function is the core of the Van der Corput sequence generation. It takes an integer k,
-a base (default 2), and a scale (default 10) as inputs. It converts the number k from the given
+The vdc_i function is the core of the Van der Corput sequence generation. It takes an integer count,
+a base (default 2), and a scale (default 10) as inputs. It converts the number count from the given
 base to a decimal number, using the specified scale for integer output. This function is used to
 generate individual elements of the Van der Corput sequence.
 

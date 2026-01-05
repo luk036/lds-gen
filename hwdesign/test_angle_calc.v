@@ -8,7 +8,7 @@ module test_angle_calc;
         $display("Testing angle calculation for Circle sequence");
         $display("=============================================");
 
-        // Test case: base=2, k=1
+        // Test case: base=2, count=1
         // Python: vdc(1,2) = 0.5
         // Angle = 0.5 * 2π = π ≈ 3.14159
 
@@ -46,7 +46,7 @@ module test_angle_calc;
         // Expected: π corresponds to 180° = 128 in 0-255 range
         $display("Expected LUT entry for π: 0x80 (128)");
 
-        $display("\nTest case: base=2, k=2");
+        $display("\nTest case: base=2, count=2");
         // Python: vdc(2,2) = 0.25
         // Angle = 0.25 * 2π = π/2 ≈ 1.5708
 

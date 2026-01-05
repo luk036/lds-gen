@@ -5,13 +5,13 @@ to verify hardware implementation results.
 """
 
 
-def vdc(k: int, base: int = 2) -> float:
+def vdc(count: int, base: int = 2) -> float:
     """Van der Corput sequence"""
     res = 0.0
     denom = 1.0
-    while k != 0:
+    while count != 0:
         denom *= base
-        k, remainder = divmod(k, base)
+        count, remainder = divmod(count, base)
         res += remainder / denom
     return res
 
@@ -48,12 +48,12 @@ def test_vdc_values() -> None:
     print("Python VdCorput Reference Values (16.16 fixed-point):")
     print("=" * 60)
 
-    for k, base, expected in test_cases:
-        result = vdc(k, base)
+    for count, base, expected in test_cases:
+        result = vdc(count, base)
         fixed_result = float_to_fixed16_16(result)
         fixed_expected = float_to_fixed16_16(expected)
 
-        print(f"vdc({k}, {base}) = {result:.10f}")
+        print(f"vdc({count}, {base}) = {result:.10f}")
         print(f"  Float: {result:.10f}")
         print(f"  Fixed (16.16): 0x{fixed_result:08x}")
         print(f"  Expected fixed: 0x{fixed_expected:08x}")

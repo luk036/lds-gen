@@ -6,22 +6,22 @@ for various base combinations. It compares hardware results with Python referenc
 values from the lds_gen library.
 
 Test cases (from Python Halton class examples):
-1. Base [2, 3]: k = 1 to 10
-2. Base [2, 7]: k = 1 to 5
-3. Base [3, 7]: k = 1 to 5
+1. Base [2, 3]: count = 1 to 10
+2. Base [2, 7]: count = 1 to 5
+3. Base [3, 7]: count = 1 to 5
 
 Expected results (from Python Halton class):
 Base [2, 3]:
-  k=1: [0.5, 0.3333333333333333]
-  k=2: [0.25, 0.6666666666666666]
-  k=3: [0.75, 0.1111111111111111]
-  k=4: [0.125, 0.4444444444444444]
-  k=5: [0.625, 0.7777777777777777]
-  k=6: [0.375, 0.2222222222222222]
-  k=7: [0.875, 0.5555555555555556]
-  k=8: [0.0625, 0.8888888888888888]
-  k=9: [0.5625, 0.037037037037037035]
-  k=10: [0.3125, 0.37037037037037035]
+  count=1: [0.5, 0.3333333333333333]
+  count=2: [0.25, 0.6666666666666666]
+  count=3: [0.75, 0.1111111111111111]
+  count=4: [0.125, 0.4444444444444444]
+  count=5: [0.625, 0.7777777777777777]
+  count=6: [0.375, 0.2222222222222222]
+  count=7: [0.875, 0.5555555555555556]
+  count=8: [0.0625, 0.8888888888888888]
+  count=9: [0.5625, 0.037037037037037035]
+  count=10: [0.3125, 0.37037037037037035]
 */
 
 `timescale 1ns/1ps
@@ -80,7 +80,7 @@ module halton_fsm_32bit_simple_tb;
 
     // Initialize test vectors
     initial begin
-        // Test k values
+        // Test count values
         test_k[0] = 32'd1;
         test_k[1] = 32'd2;
         test_k[2] = 32'd3;
@@ -167,11 +167,11 @@ module halton_fsm_32bit_simple_tb;
             // Check results with tolerance
             if (result_x >= expected_x - 32'h00000100 && result_x <= expected_x + 32'h00000100 &&
                 result_y >= expected_y - 32'h00000100 && result_y <= expected_y + 32'h00000100) begin
-                $display("PASS: k=%0d, bases=[%b,%b], x=0x%08h, y=0x%08h",
+                $display("PASS: count=%0d, bases=[%b,%b], x=0x%08h, y=0x%08h",
                          k_val, base0_val, base1_val, result_x, result_y);
                 test_passed = test_passed + 1;
             end else begin
-                $display("FAIL: k=%0d, bases=[%b,%b]", k_val, base0_val, base1_val);
+                $display("FAIL: count=%0d, bases=[%b,%b]", k_val, base0_val, base1_val);
                 $display("  Expected: x=0x%08h, y=0x%08h", expected_x, expected_y);
                 $display("  Got:      x=0x%08h, y=0x%08h", result_x, result_y);
                 test_failed = test_failed + 1;

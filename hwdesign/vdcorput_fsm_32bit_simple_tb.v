@@ -106,11 +106,11 @@ module vdcorput_fsm_32bit_simple_tb;
 
             // Check result with tolerance
             if (result >= expected_val - 32'h00000100 && result <= expected_val + 32'h00000100) begin
-                $display("PASS: k=%0d, base_sel=%b, expected=0x%08h, got=0x%08h",
+                $display("PASS: count=%0d, base_sel=%b, expected=0x%08h, got=0x%08h",
                          k_val, base_val, expected_val, result);
                 test_passed = test_passed + 1;
             end else begin
-                $display("FAIL: k=%0d, base_sel=%b, expected=0x%08h, got=0x%08h",
+                $display("FAIL: count=%0d, base_sel=%b, expected=0x%08h, got=0x%08h",
                          k_val, base_val, expected_val, result);
                 test_failed = test_failed + 1;
                 error_count = error_count + 1;

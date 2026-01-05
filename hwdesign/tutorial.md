@@ -124,8 +124,8 @@ vvp vdcorput_test
 # ==========================================
 # Testing Base 2:
 # ----------------
-# PASS: k=1, base_sel=00, expected=0x00008000, got=0x00008000
-# PASS: k=2, base_sel=00, expected=0x00004000, got=0x00004000
+# PASS: count=1, base_sel=00, expected=0x00008000, got=0x00008000
+# PASS: count=2, base_sel=00, expected=0x00004000, got=0x00004000
 # ... (共18个测试)
 # All tests PASSED!
 # ==========================================
@@ -282,30 +282,30 @@ Starting VdCorput FSM Testbench (Simple)
 
 Testing Base 2:
 ----------------
-PASS: k=1, base_sel=00, expected=0x00008000, got=0x00008000
-PASS: k=2, base_sel=00, expected=0x00004000, got=0x00004000
-PASS: k=3, base_sel=00, expected=0x0000c000, got=0x0000c000
-PASS: k=4, base_sel=00, expected=0x00002000, got=0x00002000
-PASS: k=5, base_sel=00, expected=0x0000a000, got=0x0000a000
-PASS: k=11, base_sel=00, expected=0x0000d000, got=0x0000d000
+PASS: count=1, base_sel=00, expected=0x00008000, got=0x00008000
+PASS: count=2, base_sel=00, expected=0x00004000, got=0x00004000
+PASS: count=3, base_sel=00, expected=0x0000c000, got=0x0000c000
+PASS: count=4, base_sel=00, expected=0x00002000, got=0x00002000
+PASS: count=5, base_sel=00, expected=0x0000a000, got=0x0000a000
+PASS: count=11, base_sel=00, expected=0x0000d000, got=0x0000d000
 
 Testing Base 3:
 ----------------
-PASS: k=1, base_sel=01, expected=0x00005555, got=0x00005555
-PASS: k=2, base_sel=01, expected=0x0000aaaa, got=0x0000aaaa
-PASS: k=3, base_sel=01, expected=0x00001c71, got=0x00001c71
-PASS: k=4, base_sel=01, expected=0x000071c7, got=0x000071c6
-PASS: k=5, base_sel=01, expected=0x0000c71c, got=0x0000c71b
-PASS: k=11, base_sel=01, expected=0x0000b425, got=0x0000b424
+PASS: count=1, base_sel=01, expected=0x00005555, got=0x00005555
+PASS: count=2, base_sel=01, expected=0x0000aaaa, got=0x0000aaaa
+PASS: count=3, base_sel=01, expected=0x00001c71, got=0x00001c71
+PASS: count=4, base_sel=01, expected=0x000071c7, got=0x000071c6
+PASS: count=5, base_sel=01, expected=0x0000c71c, got=0x0000c71b
+PASS: count=11, base_sel=01, expected=0x0000b425, got=0x0000b424
 
 Testing Base 7:
 ----------------
-PASS: k=1, base_sel=10, expected=0x00002492, got=0x00002492
-PASS: k=2, base_sel=10, expected=0x00004924, got=0x00004924
-PASS: k=3, base_sel=10, expected=0x00006db6, got=0x00006db6
-PASS: k=4, base_sel=10, expected=0x00009249, got=0x00009248
-PASS: k=5, base_sel=10, expected=0x0000b6db, got=0x0000b6da
-PASS: k=11, base_sel=10, expected=0x00009782, got=0x00009781
+PASS: count=1, base_sel=10, expected=0x00002492, got=0x00002492
+PASS: count=2, base_sel=10, expected=0x00004924, got=0x00004924
+PASS: count=3, base_sel=10, expected=0x00006db6, got=0x00006db6
+PASS: count=4, base_sel=10, expected=0x00009249, got=0x00009248
+PASS: count=5, base_sel=10, expected=0x0000b6db, got=0x0000b6da
+PASS: count=11, base_sel=10, expected=0x00009782, got=0x00009781
 
 ==========================================
 Test Summary:

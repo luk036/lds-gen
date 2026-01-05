@@ -161,7 +161,7 @@ Van der Corput序列是最基本的一维低差异序列，生成算法为：
 
 数学表达式为：
 ```
-vdc(k, b) = Σ(d_i * b^(-i))
+vdc(count, b) = Σ(d_i * b^(-i))
 ```
 其中d_i是k在基数b下的第i位数字。
 
@@ -368,15 +368,15 @@ This script generates reference values and compares them with the expected value
 used in the testbenches.
 """
 
-def vdc_i(k: int, base: int, scale: int) -> int:
+def vdc_i(count: int, base: int, scale: int) -> int:
     """Python implementation of Van der Corput sequence (integer version)"""
     vdc = 0
     factor = base ** scale
 
-    while k != 0:
+    while count != 0:
         factor //= base
-        remainder = k % base
-        k //= base
+        remainder = count % base
+        count //= base
         vdc += remainder * factor
 
     return vdc
@@ -393,7 +393,7 @@ def generate_reference_values():
         print(f"\nBase {base}:")
         for i in range(1, 11):
             val = vdc_i(i, base, scale)
-            print(f"k={i:2d}: {val}")
+            print(f"count={i:2d}: {val}")
 ```
 
 ### 4.4 验证结果分析
@@ -477,7 +477,7 @@ points in the interval [0, 1]. This implementation generates 32-bit integer outp
 scaled by base^scale.
 
 The algorithm works by:
-1. Converting the input integer k to the specified base representation
+1. Converting the input integer count to the specified base representation
 2. Reversing the digits of the base representation
 3. Scaling the result by base^scale
 

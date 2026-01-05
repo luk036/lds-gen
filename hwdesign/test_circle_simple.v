@@ -48,9 +48,9 @@ module test_circle_simple;
         $display("Testing Circle module with updated angle calculation");
         $display("=====================================================");
 
-        // Test 1: base=2, k=1
+        // Test 1: base=2, count=1
         // Expected: vdc(1,2) = 0.5, angle = π, cos(π) = -1, sin(π) = 0
-        $display("\nTest 1: base=2, k=1");
+        $display("\nTest 1: base=2, count=1");
         k_in = 32'd1;
         base_sel = 2'b00;
 
@@ -69,9 +69,9 @@ module test_circle_simple;
 
         #(CLK_PERIOD * 5);
 
-        // Test 2: base=2, k=2
+        // Test 2: base=2, count=2
         // Expected: vdc(2,2) = 0.25, angle = π/2, cos(π/2) = 0, sin(π/2) = 1
-        $display("\nTest 2: base=2, k=2");
+        $display("\nTest 2: base=2, count=2");
         k_in = 32'd2;
 
         wait(ready == 1);
@@ -89,9 +89,9 @@ module test_circle_simple;
 
         #(CLK_PERIOD * 5);
 
-        // Test 3: base=2, k=3
+        // Test 3: base=2, count=3
         // Expected: vdc(3,2) = 0.75, angle = 3π/2, cos(3π/2) = 0, sin(3π/2) = -1
-        $display("\nTest 3: base=2, k=3");
+        $display("\nTest 3: base=2, count=3");
         k_in = 32'd3;
 
         wait(ready == 1);
@@ -109,9 +109,9 @@ module test_circle_simple;
 
         #(CLK_PERIOD * 5);
 
-        // Test 4: base=2, k=4
+        // Test 4: base=2, count=4
         // Expected: vdc(4,2) = 0.125, angle = π/4, cos(π/4) = 0.7071, sin(π/4) = 0.7071
-        $display("\nTest 4: base=2, k=4");
+        $display("\nTest 4: base=2, count=4");
         k_in = 32'd4;
 
         wait(ready == 1);

@@ -66,9 +66,9 @@ module sphere_final_test;
             if ((result_x >= expected_x - tolerance) && (result_x <= expected_x + tolerance) &&
                 (result_y >= expected_y - tolerance) && (result_y <= expected_y + tolerance) &&
                 (result_z >= expected_z - tolerance) && (result_z <= expected_z + tolerance)) begin
-                $display("PASS: k=%0d, bases=[%0d,%0d]", test_k, test_base0+2, test_base1+2);
+                $display("PASS: count=%0d, bases=[%0d,%0d]", test_k, test_base0+2, test_base1+2);
             end else begin
-                $display("FAIL: k=%0d, bases=[%0d,%0d]", test_k, test_base0+2, test_base1+2);
+                $display("FAIL: count=%0d, bases=[%0d,%0d]", test_k, test_base0+2, test_base1+2);
                 $display("  got: x=%h, y=%h, z=%h", result_x, result_y, result_z);
                 $display("  exp: x=%h, y=%h, z=%h", expected_x, expected_y, expected_z);
             end
@@ -97,10 +97,10 @@ module sphere_final_test;
         // Tolerance: 0.25 in fixed-point = 0.25 * 65536 = 16384
 
         $display("\nTesting base combination [2,3]:");
-        // k=1: Expected z ≈ 0.0
+        // count=1: Expected z ≈ 0.0
         run_test(32'd1, 2'b00, 2'b01, 32'h00000000, 32'h00000000, 32'h00000000, 32'd16384);
 
-        // k=2: Expected z ≈ -0.5
+        // count=2: Expected z ≈ -0.5
         run_test(32'd2, 2'b00, 2'b01, 32'h00000000, 32'h00000000, 32'hFFFF8000, 32'd16384);
 
         $display("\nAll tests completed");

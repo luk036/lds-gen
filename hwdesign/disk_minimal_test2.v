@@ -54,7 +54,7 @@ module disk_minimal_test2;
             wait(done == 1);
             @(posedge clk);
 
-            $display("k=%0d, bases=[%0d,%0d], result_x=%h, result_y=%h",
+            $display("count=%0d, bases=[%0d,%0d], result_x=%h, result_y=%h",
                      test_k, test_base0+2, test_base1+2,
                      result_x, result_y);
 
@@ -78,9 +78,9 @@ module disk_minimal_test2;
         $display("===========================");
 
         // Test a few cases
-        run_test(32'd1, 2'b00, 2'b01);  // base=[2,3], k=1
-        run_test(32'd2, 2'b00, 2'b01);  // base=[2,3], k=2
-        run_test(32'd3, 2'b00, 2'b01);  // base=[2,3], k=3
+        run_test(32'd1, 2'b00, 2'b01);  // base=[2,3], count=1
+        run_test(32'd2, 2'b00, 2'b01);  // base=[2,3], count=2
+        run_test(32'd3, 2'b00, 2'b01);  // base=[2,3], count=3
 
         $display("\nAll tests completed");
         $finish;

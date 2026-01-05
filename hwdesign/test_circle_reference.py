@@ -7,13 +7,13 @@ to verify hardware implementation results.
 import math
 
 
-def vdc(k: int, base: int = 2) -> float:
+def vdc(count: int, base: int = 2) -> float:
     """Van der Corput sequence"""
     res = 0.0
     denom = 1.0
-    while k != 0:
+    while count != 0:
         denom *= base
-        k, remainder = divmod(k, base)
+        count, remainder = divmod(count, base)
         res += remainder / denom
     return res
 
@@ -27,10 +27,10 @@ class Circle:
     """Circle sequence generator (Python reference)"""
 
     def __init__(self, base):
-        self.vdc = lambda k: vdc(k, base)
+        self.vdc = lambda count: vdc(count, base)
 
-    def pop(self, k):
-        theta = self.vdc(k) * 2 * math.pi
+    def pop(self, count):
+        theta = self.vdc(count) * 2 * math.pi
         return [math.cos(theta), math.sin(theta)]
 
 
@@ -50,12 +50,12 @@ def test_circle_values() -> None:
         circle = Circle(base)
 
         # Test first 5 values
-        for k in range(1, 6):
-            x, y = circle.pop(k)
+        for count in range(1, 6):
+            x, y = circle.pop(count)
             x_fixed = float_to_fixed16_16(x)
             y_fixed = float_to_fixed16_16(y)
 
-            print(f"k={k}: [{x:.10f}, {y:.10f}]")
+            print(f"count={count}: [{x:.10f}, {y:.10f}]")
             print(f"      x=0x{x_fixed:08x}, y=0x{y_fixed:08x}")
 
     # Special test cases from Python examples
@@ -63,7 +63,7 @@ def test_circle_values() -> None:
     print("=" * 70)
 
     circle2 = Circle(2)
-    print("\nBase 2, k=1 (from example):")
+    print("\nBase 2, count=1 (from example):")
     x, y = circle2.pop(1)
     print("  Expected: [-1.0, 1.2246467991473532e-16]")
     print(f"  Got:      [{x:.10f}, {y:.10f}]")
@@ -71,7 +71,7 @@ def test_circle_values() -> None:
         f"  Fixed:    x=0x{float_to_fixed16_16(x):08x}, y=0x{float_to_fixed16_16(y):08x}"
     )
 
-    print("\nBase 2, k=2 (from example):")
+    print("\nBase 2, count=2 (from example):")
     x, y = circle2.pop(2)
     print("  Expected: [6.123233995736766e-17, 1.0]")
     print(f"  Got:      [{x:.10f}, {y:.10f}]")

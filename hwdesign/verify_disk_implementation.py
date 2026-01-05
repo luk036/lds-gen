@@ -6,13 +6,13 @@ Verify Disk implementation calculations
 import math
 
 
-def vdc(k, base=2):
+def vdc(count, base=2):
     """Van der Corput sequence"""
     res = 0.0
     denom = 1.0
-    while k != 0:
+    while count != 0:
         denom *= base
-        k, remainder = divmod(k, base)
+        count, remainder = divmod(count, base)
         res += remainder / denom
     return res
 
@@ -36,13 +36,13 @@ def cordic_rotation(angle, iterations=16):
     return math.cos(angle), math.sin(angle)
 
 
-def disk_point_hw(k, base0, base1):
+def disk_point_hw(count, base0, base1):
     """Simulate hardware Disk implementation"""
     # 1. VdCorput for angle
-    vdc0 = vdc(k, base0)
+    vdc0 = vdc(count, base0)
 
     # 2. VdCorput for radius^2
-    vdc1 = vdc(k, base1)
+    vdc1 = vdc(count, base1)
 
     # 3. Angle = vdc0 * 2π
     angle = vdc0 * 2 * math.pi
@@ -75,20 +75,20 @@ def main():
     print("\nComparison of exact vs hardware approximation:")
     print("-" * 60)
 
-    for k, base0, base1 in test_cases:
+    for count, base0, base1 in test_cases:
         # Exact calculation
-        theta_exact = vdc(k, base0) * 2 * math.pi
-        radius_exact = math.sqrt(vdc(k, base1))
+        theta_exact = vdc(count, base0) * 2 * math.pi
+        radius_exact = math.sqrt(vdc(count, base1))
         x_exact = radius_exact * math.cos(theta_exact)
         y_exact = radius_exact * math.sin(theta_exact)
 
         # Hardware approximation
-        x_hw, y_hw, vdc0, vdc1, angle, radius = disk_point_hw(k, base0, base1)
+        x_hw, y_hw, vdc0, vdc1, angle, radius = disk_point_hw(count, base0, base1)
 
         x_error = abs(x_exact - x_hw)
         y_error = abs(y_exact - y_hw)
 
-        print(f"\nk={k}, base=[{base0},{base1}]:")
+        print(f"\nk={count}, base=[{base0},{base1}]:")
         print(f"  VdCorput: angle={vdc0:.6f}, radius^2={vdc1:.6f}")
         print(f"  Angle: {angle:.6f} rad ({angle * 180 / math.pi:.1f}°)")
         print(f"  Radius: exact={radius_exact:.6f}, approx={radius:.6f}")

@@ -29,7 +29,7 @@ module vdcorput_fsm_32bit_simple (
     reg [2:0] current_state, next_state;
 
     // Internal registers
-    reg [31:0] k_reg;          // Current k value
+    reg [31:0] k_reg;          // Current count value
     reg [31:0] power_reg;      // Current power of base (1/base^i in fixed-point)
     reg [31:0] acc_reg;        // Accumulator for result
     reg [31:0] base_reg;       // Current base value
@@ -165,7 +165,7 @@ module vdcorput_fsm_32bit_simple (
                     end
                 end
                 UPDATE: begin
-                    // Update k and power_of_base
+                    // Update count and power_of_base
                     k_reg <= quotient_reg;
                     // power_reg = power_reg / base_reg (fixed-point division)
                     case (base_reg)

@@ -56,7 +56,7 @@ module sphere_minimal_test;
             wait(done == 1);
             @(posedge clk);
 
-            $display("k=%0d, bases=[%0d,%0d]", test_k, test_base0+2, test_base1+2);
+            $display("count=%0d, bases=[%0d,%0d]", test_k, test_base0+2, test_base1+2);
             $display("  result_x=%h, result_y=%h, result_z=%h",
                      result_x, result_y, result_z);
 
@@ -80,8 +80,8 @@ module sphere_minimal_test;
         $display("=============================");
 
         // Test a few cases
-        run_test(32'd1, 2'b00, 2'b01);  // base=[2,3], k=1
-        run_test(32'd2, 2'b00, 2'b01);  // base=[2,3], k=2
+        run_test(32'd1, 2'b00, 2'b01);  // base=[2,3], count=1
+        run_test(32'd2, 2'b00, 2'b01);  // base=[2,3], count=2
 
         $display("\nAll tests completed");
         $finish;

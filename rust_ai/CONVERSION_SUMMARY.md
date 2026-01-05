@@ -93,7 +93,7 @@ Successfully converted the Python `lds-gen` library to Rust in the `./rust_ai` d
 ✅ **Builds successfully**: `cargo build`
 ✅ **Tests pass**: `cargo test` (15 tests)
 ✅ **Examples work**: `cargo run --example basic`
-✅ **CLI works**: `cargo run -- vdc --count 5`
+✅ **CLI works**: `cargo run -- vdc --k 5`
 
 ## Performance Comparison
 While not benchmarked, the Rust implementation provides:
@@ -144,9 +144,9 @@ cargo run --example basic
 cargo run --example integer
 
 # Use CLI
-cargo run -- vdc --count 10
-cargo run -- halton --count 5
-cargo run -- primes --count 20
+cargo run -- vdc --k 10
+cargo run -- halton --k 5
+cargo run -- primes --k 20
 ```
 
 The conversion is complete and production-ready.

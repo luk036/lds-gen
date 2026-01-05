@@ -809,7 +809,7 @@ T_3.23 ;
     %load/vec4 v00000186602ab440_0;
     %pad/u 32;
     %addi 2, 0, 32;
-    %vpi_call 2 57 "$display", "k=%0d, bases=[%0d,%0d], result_x=%h, result_y=%h", v00000186602ab940_0, S<1,vec4,u32>, S<0,vec4,u32>, v00000186602aa180_0, v00000186602aa220_0 {2 0 0};
+    %vpi_call 2 57 "$display", "count=%0d, bases=[%0d,%0d], result_x=%h, result_y=%h", v00000186602ab940_0, S<1,vec4,u32>, S<0,vec4,u32>, v00000186602aa180_0, v00000186602aa220_0 {2 0 0};
     %delay 50000, 0;
     %end;
     .scope S_00000186601af2c0;

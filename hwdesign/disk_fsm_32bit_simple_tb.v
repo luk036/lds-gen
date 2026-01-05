@@ -66,11 +66,11 @@ module disk_fsm_32bit_simple_tb;
                 (result_x_float <= expected_x + tolerance) &&
                 (result_y_float >= expected_y - tolerance) &&
                 (result_y_float <= expected_y + tolerance)) begin
-                $display("PASS: k=%0d, bases=[%0d,%0d], result=(%0.6f, %0.6f), expected=(%0.6f, %0.6f)",
+                $display("PASS: count=%0d, bases=[%0d,%0d], result=(%0.6f, %0.6f), expected=(%0.6f, %0.6f)",
                          test_k, test_base0+2, test_base1+2,
                          result_x_float, result_y_float, expected_x, expected_y);
             end else begin
-                $display("FAIL: k=%0d, bases=[%0d,%0d], result=(%0.6f, %0.6f), expected=(%0.6f, %0.6f)",
+                $display("FAIL: count=%0d, bases=[%0d,%0d], result=(%0.6f, %0.6f), expected=(%0.6f, %0.6f)",
                          test_k, test_base0+2, test_base1+2,
                          result_x_float, result_y_float, expected_x, expected_y);
             end
@@ -98,32 +98,32 @@ module disk_fsm_32bit_simple_tb;
         // Note: Python output has floating point inaccuracies
         // We'll use a tolerance of 0.01 for comparison
 
-        // Test 1: base=[2,3], k=1
+        // Test 1: base=[2,3], count=1
         // Python: (-0.5773502692, 0.0000000000)
         run_test(32'd1, 2'b00, 2'b01, -0.57735, 0.0, 0.01);
 
-        // Test 2: base=[2,3], k=2
+        // Test 2: base=[2,3], count=2
         // Python: (0.0000000000, 0.8164965809)
         run_test(32'd2, 2'b00, 2'b01, 0.0, 0.81650, 0.01);
 
-        // Test 3: base=[2,3], k=3
+        // Test 3: base=[2,3], count=3
         // Python: (-0.0000000000, -0.3333333333)
         run_test(32'd3, 2'b00, 2'b01, 0.0, -0.33333, 0.01);
 
-        // Test 4: base=[2,3], k=4
+        // Test 4: base=[2,3], count=4
         // Python: (0.4714045208, 0.4714045208)
         run_test(32'd4, 2'b00, 2'b01, 0.47140, 0.47140, 0.01);
 
-        // Test 5: base=[2,3], k=5
+        // Test 5: base=[2,3], count=5
         // Python: (-0.6236095645, -0.6236095645)
         run_test(32'd5, 2'b00, 2'b01, -0.62361, -0.62361, 0.01);
 
-        // Test 6: base=[2,7], k=1
+        // Test 6: base=[2,7], count=1
         // Python: (-0.3779644730, 0.0000000000)
         $display("\nTesting base combination [2,7]:");
         run_test(32'd1, 2'b00, 2'b10, -0.37796, 0.0, 0.01);
 
-        // Test 7: base=[3,7], k=1
+        // Test 7: base=[3,7], count=1
         // Python: (-0.1889822365, 0.3273268354)
         $display("\nTesting base combination [3,7]:");
         run_test(32'd1, 2'b01, 2'b10, -0.18898, 0.32733, 0.01);

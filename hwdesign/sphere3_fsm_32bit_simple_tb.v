@@ -53,7 +53,7 @@ module sphere3_fsm_32bit_simple_tb;
             base_sel1 = test_base1;
             base_sel2 = test_base2;
 
-            $display("Starting test: k=%0d, waiting for ready...", test_k);
+            $display("Starting test: count=%0d, waiting for ready...", test_k);
             wait(ready == 1);
             $display("  Module is ready, starting computation");
             @(posedge clk);
@@ -66,7 +66,7 @@ module sphere3_fsm_32bit_simple_tb;
             @(posedge clk);
 
             // Display results in hex and approximate float
-            $display("k=%0d, bases=[%0d,%0d,%0d]", test_k,
+            $display("count=%0d, bases=[%0d,%0d,%0d]", test_k,
                      test_base0 == 2'b00 ? 2 : test_base0 == 2'b01 ? 3 : 7,
                      test_base1 == 2'b00 ? 2 : test_base1 == 2'b01 ? 3 : 7,
                      test_base2 == 2'b00 ? 2 : test_base2 == 2'b01 ? 3 : 7);
@@ -102,21 +102,21 @@ module sphere3_fsm_32bit_simple_tb;
 
         // Test cases based on Python examples
         // Python example from sphere_n.py: [0.2913440162992141, 0.8966646826186098, -0.33333333333333337, 6.123233995736766e-17]
-        // for k=0, base=[2,3,5]
+        // for count=0, base=[2,3,5]
 
         $display("\nTesting base combination [2,3,7]:");
-        run_test(32'd0, 2'b00, 2'b01, 2'b10);  // k=0, bases [2,3,7]
-        run_test(32'd1, 2'b00, 2'b01, 2'b10);  // k=1
-        run_test(32'd2, 2'b00, 2'b01, 2'b10);  // k=2
+        run_test(32'd0, 2'b00, 2'b01, 2'b10);  // count=0, bases [2,3,7]
+        run_test(32'd1, 2'b00, 2'b01, 2'b10);  // count=1
+        run_test(32'd2, 2'b00, 2'b01, 2'b10);  // count=2
 
         $display("\nTesting base combination [2,3,5]:");
-        run_test(32'd0, 2'b00, 2'b01, 2'b01);  // k=0, bases [2,3,5] (closest to Python example)
+        run_test(32'd0, 2'b00, 2'b01, 2'b01);  // count=0, bases [2,3,5] (closest to Python example)
 
         $display("\nTesting base combination [3,5,7]:");
-        run_test(32'd0, 2'b01, 2'b01, 2'b10);  // k=0, bases [3,5,7]
+        run_test(32'd0, 2'b01, 2'b01, 2'b10);  // count=0, bases [3,5,7]
 
         $display("\nTesting base combination [2,7,3]:");
-        run_test(32'd0, 2'b00, 2'b10, 2'b01);  // k=0, bases [2,7,3]
+        run_test(32'd0, 2'b00, 2'b10, 2'b01);  // count=0, bases [2,7,3]
 
         $display("\nAll tests completed");
         $finish;

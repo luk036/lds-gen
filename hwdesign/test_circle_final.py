@@ -6,13 +6,13 @@ Final test of Circle implementation with CORDIC
 import math
 
 
-def vdc(k, base=2):
+def vdc(count, base=2):
     """Van der Corput sequence"""
     res = 0.0
     denom = 1.0
-    while k != 0:
+    while count != 0:
         denom *= base
-        k, remainder = divmod(k, base)
+        count, remainder = divmod(count, base)
         res += remainder / denom
     return res
 
@@ -90,10 +90,10 @@ def cordic_rotation(angle, iterations=16):
     return cos_val, sin_val
 
 
-def calculate_circle_point_cordic(k, base):
+def calculate_circle_point_cordic(count, base):
     """Calculate Circle point using CORDIC"""
     # 1. VdCorput result
-    vdc_val = vdc(k, base)
+    vdc_val = vdc(count, base)
 
     # 2. Angle = vdc * 2π
     angle = vdc_val * 2 * math.pi
@@ -102,7 +102,7 @@ def calculate_circle_point_cordic(k, base):
     x, y = cordic_rotation(angle)
 
     return {
-        "k": k,
+        "count": count,
         "base": base,
         "vdc": vdc_val,
         "angle": angle,
@@ -132,11 +132,11 @@ def main():
     max_x_error = 0
     max_y_error = 0
 
-    for k, base in test_cases:
-        result = calculate_circle_point_cordic(k, base)
+    for count, base in test_cases:
+        result = calculate_circle_point_cordic(count, base)
 
         # Expected values
-        vdc_val = vdc(k, base)
+        vdc_val = vdc(count, base)
         angle = vdc_val * 2 * math.pi
         x_expected = math.cos(angle)
         y_expected = math.sin(angle)
@@ -147,7 +147,7 @@ def main():
         max_x_error = max(max_x_error, x_error)
         max_y_error = max(max_y_error, y_error)
 
-        print(f"\nk={k}, base={base}:")
+        print(f"\nk={count}, base={base}:")
         print(f"  VdCorput: {result['vdc']:.6f}")
         print(
             f"  Angle: {result['angle']:.6f} rad ({result['angle'] * 180 / math.pi:.1f}°)"

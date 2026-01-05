@@ -183,13 +183,13 @@ graph TD
 # Python: Type flexibility with optional hints
 from typing import List, Sequence
 
-def vdc(k: int, base: int = 2) -> float:
+def vdc(count: int, base: int = 2) -> float:
     # Types are checked at runtime
     res = 0.0
     denom = 1.0
-    while k != 0:
+    while count != 0:
         denom *= base  # Dynamic type conversion
-        k, remainder = divmod(k, base)
+        count, remainder = divmod(count, base)
         res += remainder / denom
     return res
 
@@ -201,16 +201,16 @@ result = vdc(11, 2)  # Works
 #### Rust (Static with Inference)
 ```rust
 // Rust: Strong static typing with inference
-pub fn vdc(k: u32, base: u32) -> f64 {
-    let mut k = k;
+pub fn vdc(count: u32, base: u32) -> f64 {
+    let mut count = count;
     let mut res = 0.0;
     let mut denom = 1.0;
     let base_f64 = base as f64; // Explicit conversion
 
-    while k != 0 {
+    while count != 0 {
         denom *= base_f64;
-        let remainder = (k % base) as f64;
-        k /= base;
+        let remainder = (count % base) as f64;
+        count /= base;
         res += remainder / denom;
     }
     res
@@ -223,14 +223,14 @@ pub fn vdc(k: u32, base: u32) -> f64 {
 #### Modern C++ (Static with Templates)
 ```cpp
 // C++: Strong static typing with templates
-double vdc(std::uint64_t k, std::uint64_t base = 2) {
+double vdc(std::uint64_t count, std::uint64_t base = 2) {
     double res = 0.0;
     double denom = 1.0;
     
-    while (k != 0) {
+    while (count != 0) {
         denom *= static_cast<double>(base); // Explicit conversion
-        std::uint64_t remainder = k % base;
-        k /= base;
+        std::uint64_t remainder = count % base;
+        count /= base;
         res += static_cast<double>(remainder) / denom;
     }
     return res;
@@ -412,16 +412,16 @@ import numpy as np
 
 def vdc_vectorized(n: int, base: int = 2) -> np.ndarray:
     """Vectorized Van der Corput sequence generation"""
-    k = np.arange(1, n + 1)
+    count = np.arange(1, n + 1)
     result = np.zeros(n)
     
     denom = base
     power = 1
     
-    while np.any(k > 0):
-        remainder = k % base
+    while np.any(count > 0):
+        remainder = count % base
         result += remainder / denom
-        k //= base
+        count //= base
         denom *= base
         power += 1
     
@@ -440,13 +440,13 @@ pub struct VdCorput {
 impl VdCorput {
     pub fn pop(&mut self) -> f64 {
         self.count += 1;
-        let mut k = self.count;
+        let mut count = self.count;
         let mut res = 0.0;
         let mut i = 0;
         
-        while k != 0 {
-            let remainder = (k % self.base) as f64;
-            k /= self.base;
+        while count != 0 {
+            let remainder = (count % self.base) as f64;
+            count /= self.base;
             if remainder != 0.0 {
                 res += remainder * self.rev_lst[i]; // Use precomputed
             }
@@ -469,13 +469,13 @@ private:
 public:
     double pop() noexcept {
         ++count_;
-        std::uint64_t k = count_;
+        std::uint64_t count = count_;
         double res = 0.0;
         std::size_t i = 0;
         
-        while (k != 0) {
-            std::uint64_t remainder = k % base_;
-            k /= base_;
+        while (count != 0) {
+            std::uint64_t remainder = count % base_;
+            count /= base_;
             if (remainder != 0) {
                 res += static_cast<double>(remainder) * rev_lst_[i];
             }
@@ -585,7 +585,7 @@ cpack
 # src/lds_gen/lds.py
 from typing import List, Sequence
 
-def vdc(k: int, base: int = 2) -> float:
+def vdc(count: int, base: int = 2) -> float:
     """Van der Corput sequence
     
     >>> vdc(11, 2)
@@ -593,9 +593,9 @@ def vdc(k: int, base: int = 2) -> float:
     """
     res = 0.0
     denom = 1.0
-    while k != 0:
+    while count != 0:
         denom *= base
-        k, remainder = divmod(k, base)
+        count, remainder = divmod(count, base)
         res += remainder / denom
     return res
 
@@ -614,11 +614,11 @@ class VdCorput:
     def pop(self) -> float:
         with self._count_lock:
             self._count += 1
-            k = self._count
+            count = self._count
         res = 0.0
         i = 0
-        while k != 0:
-            k, remainder = divmod(k, self.base)
+        while count != 0:
+            count, remainder = divmod(count, self.base)
             if remainder != 0:
                 res += remainder * self.rev_lst[i]
             i += 1
@@ -636,16 +636,16 @@ use std::f64::consts::PI;
 
 pub const TWO_PI: f64 = 2.0 * PI;
 
-pub fn vdc(k: u32, base: u32) -> f64 {
-    let mut k = k;
+pub fn vdc(count: u32, base: u32) -> f64 {
+    let mut count = count;
     let mut res = 0.0;
     let mut denom = 1.0;
     let base_f64 = base as f64;
 
-    while k != 0 {
+    while count != 0 {
         denom *= base_f64;
-        let remainder = (k % base) as f64;
-        k /= base;
+        let remainder = (count % base) as f64;
+        count /= base;
         res += remainder / denom;
     }
     res
@@ -677,13 +677,13 @@ impl VdCorput {
 
     pub fn pop(&mut self) -> f64 {
         self.count += 1;
-        let mut k = self.count;
+        let mut count = self.count;
         let mut res = 0.0;
         let mut i = 0;
 
-        while k != 0 {
-            let remainder = (k % self.base) as f64;
-            k /= self.base;
+        while count != 0 {
+            let remainder = (count % self.base) as f64;
+            count /= self.base;
             if remainder != 0.0 {
                 res += remainder * self.rev_lst[i];
             }
@@ -711,13 +711,13 @@ namespace lds_gen {
 
 constexpr double TWO_PI = 2.0 * std::numbers::pi;
 
-double vdc(std::uint64_t k, std::uint64_t base) {
+double vdc(std::uint64_t count, std::uint64_t base) {
     double res = 0.0;
     double denom = 1.0;
-    while (k != 0) {
+    while (count != 0) {
         denom *= static_cast<double>(base);
-        std::uint64_t remainder = k % base;
-        k /= base;
+        std::uint64_t remainder = count % base;
+        count /= base;
         res += static_cast<double>(remainder) / denom;
     }
     return res;
@@ -734,12 +734,12 @@ VdCorput::VdCorput(std::uint64_t base) : count_(0), base_(base) {
 
 double VdCorput::pop() {
     ++count_;
-    std::uint64_t k = count_;
+    std::uint64_t count = count_;
     double res = 0.0;
     std::size_t i = 0;
-    while (k != 0) {
-        std::uint64_t remainder = k % base_;
-        k /= base_;
+    while (count != 0) {
+        std::uint64_t remainder = count % base_;
+        count /= base_;
         if (remainder != 0) {
             res += static_cast<double>(remainder) * rev_lst_[i];
         }

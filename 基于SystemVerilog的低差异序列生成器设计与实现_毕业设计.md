@@ -39,7 +39,7 @@ Van der Corput序列是最基本的一维低差异序列，其生成算法为：
 
 数学表达式为：
 ```
-vdc(k, b) = Σ(d_i * b^(-i))
+vdc(count, b) = Σ(d_i * b^(-i))
 ```
 其中d_i是k在基数b下的第i位数字。
 
@@ -97,13 +97,13 @@ Van der Corput序列生成器是所有其他序列生成器的基础，其设计
 核心算法实现：
 ```systemverilog
 function [31:0] calculate_vdc;
-    input [31:0] k;
+    input [31:0] count;
     reg [31:0] k_temp;
     reg [31:0] vdc_val;
     reg [31:0] factor_temp;
     reg [31:0] remainder;
     begin
-        k_temp = k;
+        k_temp = count;
         vdc_val = 32'd0;
         factor_temp = factor;
 

@@ -71,7 +71,7 @@
 ## 主要功能
 
 ### Van der Corput 序列
-- `vdc(k, base)` 函数：将整数 k 转换为指定基数的 Van der Corput 序列值
+- `vdc(count, base)` 函数：将整数 count 转换为指定基数的 Van der Corput 序列值
 - `VdCorput` 类：Van der Corput 序列生成器，包含 `pop()` 和 `reseed()` 方法
 
 ### Halton 序列

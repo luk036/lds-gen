@@ -41,11 +41,11 @@ pub const TWO_PI: f64 = 2.0 * PI;
 
 /// Van der Corput sequence function
 ///
-/// Converts a given number `k` from base `base` to a floating point number.
+/// Converts a given number `count` from base `base` to a floating point number.
 ///
 /// # Arguments
 ///
-/// * `k` - The number for which we want to calculate the van der Corput sequence value
+/// * `count` - The number for which we want to calculate the van der Corput sequence value
 /// * `base` - The base of the number system being used (defaults to 2)
 ///
 /// # Examples
@@ -54,16 +54,16 @@ pub const TWO_PI: f64 = 2.0 * PI;
 /// use lds_gen::vdc;
 /// assert_eq!(vdc(11, 2), 0.8125);
 /// ```
-pub fn vdc(k: u32, base: u32) -> f64 {
-    let mut k = k;
+pub fn vdc(count: u32, base: u32) -> f64 {
+    let mut count = count;
     let mut res = 0.0;
     let mut denom = 1.0;
     let base_f64 = base as f64;
 
-    while k != 0 {
+    while count != 0 {
         denom *= base_f64;
-        let remainder = (k % base) as f64;
-        k /= base;
+        let remainder = (count % base) as f64;
+        count /= base;
         res += remainder / denom;
     }
     res
@@ -120,13 +120,13 @@ impl VdCorput {
     /// for that count and base.
     pub fn pop(&mut self) -> f64 {
         self.count += 1; // ignore 0
-        let mut k = self.count;
+        let mut count = self.count;
         let mut res = 0.0;
         let mut i = 0;
 
-        while k != 0 {
-            let remainder = (k % self.base) as f64;
-            k /= self.base;
+        while count != 0 {
+            let remainder = (count % self.base) as f64;
+            count /= self.base;
             if remainder != 0.0 {
                 res += remainder * self.rev_lst[i];
             }

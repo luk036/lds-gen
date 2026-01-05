@@ -92,9 +92,9 @@ vvp vdcorput_test
 ```
 Testing VdCorput sequence generator
 ===================================
-PASS: k=1, base=2, result=00008000, expected=00008000
-PASS: k=2, base=2, result=00004000, expected=00004000
-PASS: k=3, base=2, result=0000c000, expected=0000c000
+PASS: count=1, base=2, result=00008000, expected=00008000
+PASS: count=2, base=2, result=00004000, expected=00004000
+PASS: count=3, base=2, result=0000c000, expected=0000c000
 ...
 All tests passed
 ```
@@ -146,8 +146,8 @@ vvp halton_test
 Testing Halton sequence generator
 =================================
 Testing base combination [2,3]:
-PASS: k=1, bases=[2,3], result_x=00008000, result_y=00005555
-PASS: k=2, bases=[2,3], result_x=00004000, result_y=0000aaaa
+PASS: count=1, bases=[2,3], result_x=00008000, result_y=00005555
+PASS: count=2, bases=[2,3], result_x=00004000, result_y=0000aaaa
 ...
 All tests passed
 ```
@@ -178,8 +178,8 @@ vvp circle_test
 Testing Circle sequence generator
 =================================
 Testing base=2:
-PASS: k=1, base=2, result_x=ffff0000, result_y=00000000
-PASS: k=2, base=2, result_x=00000000, result_y=00010000
+PASS: count=1, base=2, result_x=ffff0000, result_y=00000000
+PASS: count=2, base=2, result_x=00000000, result_y=00010000
 ...
 All tests passed
 ```

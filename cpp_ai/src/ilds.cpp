@@ -13,14 +13,14 @@ VdCorputInt::VdCorputInt(std::uint64_t base, std::uint64_t scale)
 
 std::uint64_t VdCorputInt::pop() {
     ++count_;
-    std::uint64_t k = count_;
+    std::uint64_t count = count_;
     std::uint64_t vdc = 0;
     std::uint64_t factor = factor_;
 
-    while (k != 0) {
+    while (count != 0) {
         factor /= base_;
-        std::uint64_t remainder = k % base_;
-        k /= base_;
+        std::uint64_t remainder = count % base_;
+        count /= base_;
         vdc += remainder * factor;
     }
 

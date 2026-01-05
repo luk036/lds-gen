@@ -64,8 +64,8 @@ module debug_circle_angle;
         $display("Debugging Circle angle calculation");
         $display("==================================");
 
-        // Test base 2, k=1
-        $display("\nTest: base=2, k=1");
+        // Test base 2, count=1
+        $display("\nTest: base=2, count=1");
         debug_k_reg = 32'd1;
         base_sel = 2'b00;
 
