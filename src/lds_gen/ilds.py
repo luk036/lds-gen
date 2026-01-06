@@ -81,14 +81,14 @@ class VdCorput:
         with self._count_lock:
             self._count += 1
             count = self._count
-        vdc: int = 0
+        reslt: int = 0
         factor: int = self._factor
         while count != 0:
-            factor //= self._base
             remainder: int = count % self._base
+            factor //= self._base
             count //= self._base
-            vdc += remainder * factor
-        return vdc
+            reslt += remainder * factor
+        return reslt
 
     def reseed(self, seed: int) -> None:
         """
