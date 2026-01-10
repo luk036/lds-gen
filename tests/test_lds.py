@@ -223,9 +223,9 @@ def test_vdcorput_thread_safety() -> None:
     assert len(results) == num_threads * iterations_per_thread
 
     # Verify all results are unique (no duplicates from race conditions)
-    assert len(set(results)) == len(results), (
-        "Duplicate values found - possible race condition"
-    )
+    assert len(set(results)) == len(
+        results
+    ), "Duplicate values found - possible race condition"
 
     # Verify results are within expected range [0, 1]
     for result in results:
@@ -309,9 +309,9 @@ def test_halton_thread_safety() -> None:
 
     # Verify all results are unique (no duplicates from race conditions)
     result_tuples = [tuple(result) for result in results]
-    assert len(set(result_tuples)) == len(result_tuples), (
-        "Duplicate values found - possible race condition"
-    )
+    assert len(set(result_tuples)) == len(
+        result_tuples
+    ), "Duplicate values found - possible race condition"
 
     # Verify results are within expected range
     for result in results:
@@ -371,9 +371,9 @@ def test_composite_thread_safety() -> None:
 
         # Verify all results are unique (no duplicates from race conditions)
         result_tuples = [tuple(result) for result in results]
-        assert len(set(result_tuples)) == len(result_tuples), (
-            f"Duplicate values found in {cls.__name__} - possible race condition"
-        )
+        assert len(set(result_tuples)) == len(
+            result_tuples
+        ), f"Duplicate values found in {cls.__name__} - possible race condition"
 
 
 def test_thread_pool_executor() -> None:
@@ -396,6 +396,6 @@ def test_thread_pool_executor() -> None:
     assert len(results) == 500  # 10 workers * 50 iterations each
 
     # Verify all results are unique
-    assert len(set(results)) == len(results), (
-        "Duplicate values found - possible race condition"
-    )
+    assert len(set(results)) == len(
+        results
+    ), "Duplicate values found - possible race condition"
