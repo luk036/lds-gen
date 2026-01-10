@@ -6,8 +6,9 @@ import os
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 from lds_gen.sphere_n import Sphere3, SphereN, linspace, simple_interp, get_tp
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 
 def test_linspace() -> None:

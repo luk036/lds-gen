@@ -30,7 +30,8 @@ are well-distributed between 0 and N (when properly scaled).
 
 The Halton sequence extends this idea to multiple dimensions by using different bases for each dimension. In this implementation, it generates 2D points by combining two Van der Corput sequences.
 
-The code doesn't take any direct input from the user. Instead, it provides classes and functions that can be used in other programs to generate these sequences. The output of these generators are individual numbers (for Van der Corput) or pairs of numbers (for Halton) that form the respective sequences.
+The code doesn't take any direct input from the user. Instead, it provides classes and functions that can be used in other programs to generate these sequences.
+    The output of these generators are individual numbers (for Van der Corput) or pairs of numbers (for Halton) that form the respective sequences.
 
 This code is particularly useful for applications that need well-distributed random-like numbers,
 but with more uniformity than typical pseudo-random number generators provide. It's a building

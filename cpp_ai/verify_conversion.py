@@ -7,9 +7,6 @@ This script runs the Python lds_gen library and compares expected outputs.
 import sys
 import os
 
-# Add the Python lds_gen to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-
 from lds_gen.lds import (
     vdc,
     VdCorput,
@@ -20,6 +17,9 @@ from lds_gen.lds import (
     Sphere3Hopf,
     HaltonN,
 )
+
+# Add the Python lds_gen to path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 
 def test_vdc():

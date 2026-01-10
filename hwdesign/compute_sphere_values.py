@@ -5,8 +5,9 @@ Compute expected Sphere sequence values for verification
 
 import sys
 
-sys.path.append("../src")
 from lds_gen.lds import Sphere
+
+sys.path.append("../src")
 
 
 def compute_sphere_values():

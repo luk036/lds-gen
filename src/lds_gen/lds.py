@@ -16,7 +16,8 @@ The code defines several classes, each representing a different type of low-disc
 6. 3-Sphere Hopf sequence
 7. N-dimensional Halton sequence
 
-Each generator takes specific inputs, usually in the form of base numbers or sequences of base numbers. These bases determine how the sequences are generated. The generators produce outputs in the form of floating-point numbers or lists of floating-point numbers, depending on the dimensionality of the sequence.
+Each generator takes specific inputs, usually in the form of base numbers or sequences of base numbers. These bases determine how the sequences are generated.
+    The generators produce outputs in the form of floating-point numbers or lists of floating-point numbers, depending on the dimensionality of the sequence.
 
 The core algorithm used in most of these generators is the Van der Corput sequence. This sequence
 is created by expressing integers in a given base, reversing the digits, and placing them after a

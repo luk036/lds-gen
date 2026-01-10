@@ -6,10 +6,10 @@ Verify that the C++ sphere_n implementation matches the Python implementation.
 import sys
 import os
 
+from lds_gen.sphere_n import Sphere3, SphereN, linspace, simple_interp, get_tp
+
 # Add the Python lds_gen to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-
-from lds_gen.sphere_n import Sphere3, SphereN, linspace, simple_interp, get_tp
 
 
 def test_linspace():
