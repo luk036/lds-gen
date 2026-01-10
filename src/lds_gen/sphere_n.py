@@ -36,7 +36,6 @@ from abc import ABC, abstractmethod
 from functools import cache
 from typing import List, Union
 
-
 from lds_gen.lds import Sphere, VdCorput  # low-discrepancy sequence generators
 
 PI: float = math.pi

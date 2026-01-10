@@ -23,15 +23,15 @@ graph TD
     A[Programming Languages] --> B[Python]
     A --> C[Rust]
     A --> D[Modern C++]
-    
+
     B --> B1[Dynamically Typed]
     B --> B2[Interpreted]
     B --> B3[Rapid Development]
-    
+
     C --> C1[Memory Safe]
     C --> C2[Zero-cost Abstractions]
     C --> C3[Systems Programming]
-    
+
     D --> D1[High Performance]
     D --> D2[Backward Compatibility]
     D --> D3[Complex Syntax]
@@ -55,13 +55,13 @@ graph LR
         P2[Object-Oriented]
         P3[Functional]
     end
-    
+
     subgraph Rust
         R1[Procedural]
         R2[Object-Oriented]
         R3[Functional]
     end
-    
+
     subgraph C++
         C1[Procedural]
         C2[Object-Oriented]
@@ -90,15 +90,15 @@ graph TD
     A[Memory Management] --> B[Python]
     A --> C[Rust]
     A --> D[Modern C++]
-    
+
     B --> B1[Reference Counting]
     B --> B2[Garbage Collection]
     B --> B3[Automatic]
-    
+
     C --> C1[Ownership System]
     C --> C2[Borrowing]
     C --> C3[Lifetimes]
-    
+
     D --> D1[RAII]
     D --> D2[Smart Pointers]
     D --> D3[Manual Control]
@@ -162,15 +162,15 @@ graph TD
     A[Type Systems] --> B[Python]
     A --> C[Rust]
     A --> D[Modern C++]
-    
+
     B --> B1[Dynamic Typing]
     B --> B2[Duck Typing]
     B --> B3[Runtime Checks]
-    
+
     C --> C1[Static Typing]
     C --> C2[Type Inference]
     C --> C3[Compile-time Checks]
-    
+
     D --> D1[Static Typing]
     D --> D2[Templates]
     D --> D3[Compile-time Checks]
@@ -226,7 +226,7 @@ pub fn vdc(count: u32, base: u32) -> f64 {
 double vdc(std::uint64_t count, std::uint64_t base = 2) {
     double res = 0.0;
     double denom = 1.0;
-    
+
     while (count != 0) {
         denom *= static_cast<double>(base); // Explicit conversion
         std::uint64_t remainder = count % base;
@@ -251,15 +251,15 @@ graph TD
     A[Error Handling] --> B[Python]
     A --> C[Rust]
     A --> D[Modern C++]
-    
+
     B --> B1[Exceptions]
     B --> B2[Try/Except]
     B --> B3[Return Codes]
-    
+
     C --> C1[Result<T, E>]
     C --> C2[Option<T>]
     C --> C3[Panics]
-    
+
     D --> D1[Exceptions]
     D --> D2[Error Codes]
     D --> D3[std::optional]
@@ -273,7 +273,7 @@ graph TD
 def generate_sequence(base: int) -> List[float]:
     if base < 2:
         raise ValueError("Base must be >= 2")
-    
+
     try:
         sequence = []
         for i in range(100):
@@ -315,7 +315,7 @@ fn generate_sequence(base: u32) -> Result<Vec<f64>, SequenceError> {
     if base < 2 {
         return Err(SequenceError::InvalidBase);
     }
-    
+
     let mut sequence = Vec::new();
     for i in 0..100 {
         sequence.push(vdc(i, base));
@@ -347,14 +347,14 @@ std::optional<std::vector<double>> generate_sequence(std::uint64_t base) {
         if (base < 2) {
             throw SequenceError("Base must be >= 2");
         }
-        
+
         std::vector<double> sequence;
         sequence.reserve(100);
-        
+
         for (std::uint64_t i = 0; i < 100; ++i) {
             sequence.push_back(vdc(i, base));
         }
-        
+
         return sequence;
     } catch (const std::exception& e) {
         return std::nullopt;
@@ -381,15 +381,15 @@ graph TD
     A[Performance] --> B[Execution Speed]
     A --> C[Memory Usage]
     A --> D[Startup Time]
-    
+
     B --> B1[Rust: Fastest]
     B --> B2[C++: Very Fast]
     B --> B3[Python: Slower]
-    
+
     C --> C1[Rust: Efficient]
     C --> C2[C++: Efficient]
     C --> C3[Python: Higher Usage]
-    
+
     D --> D1[Rust: Fast]
     D --> D2[C++: Fast]
     D --> D3[Python: Fastest]
@@ -414,17 +414,17 @@ def vdc_vectorized(n: int, base: int = 2) -> np.ndarray:
     """Vectorized Van der Corput sequence generation"""
     count = np.arange(1, n + 1)
     result = np.zeros(n)
-    
+
     denom = base
     power = 1
-    
+
     while np.any(count > 0):
         remainder = count % base
         result += remainder / denom
         count //= base
         denom *= base
         power += 1
-    
+
     return result
 ```
 
@@ -443,7 +443,7 @@ impl VdCorput {
         let mut count = self.count;
         let mut res = 0.0;
         let mut i = 0;
-        
+
         while count != 0 {
             let remainder = (count % self.base) as f64;
             count /= self.base;
@@ -472,7 +472,7 @@ public:
         std::uint64_t count = count_;
         double res = 0.0;
         std::size_t i = 0;
-        
+
         while (count != 0) {
             std::uint64_t remainder = count % base_;
             count /= base_;
@@ -497,15 +497,15 @@ graph TD
     A[Development Tools] --> B[Python]
     A --> C[Rust]
     A --> D[Modern C++]
-    
+
     B --> B1[pip/conda]
     B --> B2[pytest]
     B --> B3[black/flake8]
-    
+
     C --> C1[cargo]
     C --> C2[cargo test]
     C --> C3[rustfmt/clippy]
-    
+
     D --> D1[package managers]
     D --> D2[CTest/GTest]
     D --> D3[clang-format]
@@ -587,7 +587,7 @@ from typing import List, Sequence
 
 def vdc(count: int, base: int = 2) -> float:
     """Van der Corput sequence
-    
+
     >>> vdc(11, 2)
     0.8125
     """
@@ -601,7 +601,7 @@ def vdc(count: int, base: int = 2) -> float:
 
 class VdCorput:
     """Van der Corput sequence generator"""
-    
+
     def __init__(self, base: int = 2) -> None:
         self._count: int = 0
         self.base: int = base
@@ -761,7 +761,7 @@ void VdCorput::reseed(std::uint64_t seed) {
 ```python
 class Halton:
     """Halton sequence generator"""
-    
+
     def __init__(self, base: Sequence[int]) -> None:
         self.vdc0 = VdCorput(base[0])
         self.vdc1 = VdCorput(base[1])
@@ -833,13 +833,13 @@ graph TD
     A[Choose Language] --> B{Performance Critical?}
     B -->|Yes| C{Memory Safety Critical?}
     B -->|No| D{Rapid Prototyping?}
-    
+
     C -->|Yes| E[Rust]
     C -->|No| F[Modern C++]
-    
+
     D -->|Yes| G[Python]
     D -->|No| H{Existing Codebase?}
-    
+
     H -->|C++| I[Modern C++]
     H -->|Systems| J[Rust]
     H -->|Data Science| K[Python]
@@ -867,12 +867,12 @@ graph LR
         P1[Prototype] --> P2[Rust Extension]
         P1 --> P3[C++ Extension]
     end
-    
+
     subgraph "From C++"
         C1[Legacy Code] --> C2[Rust Rewrite]
         C1 --> C3[Incremental Rust]
     end
-    
+
     subgraph "To Rust"
         R1[New Project] --> R2[Full Rust]
         R1 --> R3[Hybrid Approach]
@@ -930,15 +930,15 @@ graph TD
     A[Future Trends] --> B[Python]
     A --> C[Rust]
     A --> D[Modern C++]
-    
+
     B --> B1[Performance Improvements]
     B --> B2[Type Hints Evolution]
     B --> B3[Async/Await Enhancement]
-    
+
     C --> C1[Const Generics]
     C --> C2[Async/Await Stabilization]
     C --> C3[Growing Ecosystem]
-    
+
     D --> D1[Modules System]
     D --> D2[Concepts]
     D --> D3[Ranges Library]
@@ -972,13 +972,13 @@ graph TD
     A[Start with Requirements] --> B{Need Maximum Performance?}
     B -->|Yes| C{Need Memory Safety?}
     B -->|No| D{Need Rapid Development?}
-    
+
     C -->|Yes| E[Rust]
     C -->|No| F[Modern C++]
-    
+
     D -->|Yes| G[Python]
     D -->|No| H{Complex System?}
-    
+
     H -->|Yes| I[Rust/Modern C++]
     H -->|No| J[Evaluate Further]
 ```

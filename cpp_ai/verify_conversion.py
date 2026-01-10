@@ -4,18 +4,18 @@ Verify that the C++ implementation matches the Python implementation.
 This script runs the Python lds_gen library and compares expected outputs.
 """
 
-import sys
 import os
+import sys
 
 from lds_gen.lds import (
-    vdc,
-    VdCorput,
-    Halton,
     Circle,
     Disk,
+    Halton,
+    HaltonN,
     Sphere,
     Sphere3Hopf,
-    HaltonN,
+    VdCorput,
+    vdc,
 )
 
 # Add the Python lds_gen to path

@@ -1,5 +1,6 @@
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
+
 from pytest import approx
 
 from lds_gen.lds import (

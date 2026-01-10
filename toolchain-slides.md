@@ -24,15 +24,15 @@ graph TD
     A[Toolchains] --> B[Python]
     A --> C[Rust]
     A --> D[Modern C++]
-    
+
     B --> B1[pip/setuptools]
     B --> B2[pytest]
     B --> B3[pre-commit]
-    
+
     C --> C1[Cargo]
     C --> C2[cargo test]
     C --> C3[rustfmt/clippy]
-    
+
     D --> D1[CMake/XMake]
     D --> D2[GTest/CTest]
     D --> D3[clang-format]
@@ -59,14 +59,14 @@ graph LR
     B --> C[Compiler]
     C --> D[Linker]
     D --> E[Executable/Library]
-    
+
     F[Dependencies] --> G[Package Manager]
     G --> H[Resolver]
     H --> C
-    
+
     I[Tests] --> J[Test Runner]
     J --> K[Test Results]
-    
+
     L[Linter] --> A
     M[Formatter] --> A
 ```
@@ -90,19 +90,19 @@ graph TD
     A --> C[Package Management]
     A --> D[Testing]
     A --> E[Quality Assurance]
-    
+
     B --> B1[setuptools]
     B --> B2[build]
     B --> B3[PyScaffold]
-    
+
     C --> C1[pip]
     C --> C2[conda]
     C --> C3[poetry]
-    
+
     D --> D1[pytest]
     D --> D2[unittest]
     D --> D3[doctest]
-    
+
     E --> E1[black]
     E --> E2[flake8]
     E --> E3[mypy]
@@ -164,7 +164,7 @@ docs =
 ```
 requirements/
 ├── default.txt      # Runtime dependencies
-├── test.txt         # Test dependencies  
+├── test.txt         # Test dependencies
 ├── doc.txt          # Documentation dependencies
 └── README.md        # Requirements documentation
 ```
@@ -263,7 +263,7 @@ graph TD
     C --> D[pip install -e .]
     D --> E[pre-commit install]
     E --> F[Development Cycle]
-    
+
     F --> G[Make Changes]
     G --> H[black/isort/flake8]
     H --> I[pytest]
@@ -286,17 +286,17 @@ graph TD
     B --> D[Testing]
     B --> E[Documentation]
     B --> F[Package Management]
-    
+
     C --> C1[cargo build]
     C --> C2[cargo check]
     C --> C3[cargo clippy]
-    
+
     D --> D1[cargo test]
     D --> D2[cargo bench]
-    
+
     E --> E1[cargo doc]
     E --> E2[cargo doc --open]
-    
+
     F --> F1[crates.io]
     F --> F2[Cargo.lock]
     F --> F3[Feature Flags]
@@ -459,7 +459,7 @@ use lds_gen::VdCorput;
 fn bench_vdcorput_pop(c: &mut Criterion) {
     let mut vgen = VdCorput::new(2);
     vgen.reseed(0);
-    
+
     c.bench_function("vdcorput_pop", |b| {
         b.iter(|| {
             vgen.pop();
@@ -480,7 +480,7 @@ graph TD
     C --> D[cargo clippy]
     D --> E[cargo fmt]
     E --> F[Development Cycle]
-    
+
     F --> G[Make Changes]
     G --> H[cargo check]
     H --> I[cargo test]
@@ -505,20 +505,20 @@ graph TD
     A --> C[Package Managers]
     A --> D[Compilers]
     A --> E[Testing Frameworks]
-    
+
     B --> B1[CMake]
     B --> B2[XMake]
     B --> B3[Meson]
     B --> B4[Bazel]
-    
+
     C --> C1[vcpkg]
     C --> C2[Conan]
     C --> C3[Hunter]
-    
+
     D --> D1[GCC]
     D --> D2[Clang]
     D --> D3[MSVC]
-    
+
     E --> E1[Google Test]
     E --> E2[Catch2]
     E --> E3[doctest]
@@ -709,13 +709,13 @@ TEST_CASE("VdCorput class") {
         CHECK(vgen.pop() == 0.5);
         CHECK(vgen.pop() == 0.25);
     }
-    
+
     SUBCASE("Custom base") {
         VdCorput vgen(3);
         vgen.reseed(0);
         CHECK(vgen.pop() == doctest::Approx(1.0/3.0));
     }
-    
+
     SUBCASE("Reseed functionality") {
         VdCorput vgen;
         vgen.reseed(5);
@@ -728,7 +728,7 @@ TEST_CASE("VdCorput class") {
 TEST_CASE("Halton sequence") {
     Halton hgen({2, 3});
     hgen.reseed(0);
-    
+
     auto result = hgen.pop();
     CHECK(result[0] == 0.5);
     CHECK(result[1] == doctest::Approx(1.0/3.0));
@@ -758,28 +758,28 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    
+
     - name: Install dependencies (Ubuntu)
       if: runner.os == 'Linux'
       run: |
         sudo apt update
         sudo apt install -y cmake ninja-build
-    
+
     - name: Install dependencies (macOS)
       if: runner.os == 'macOS'
       run: |
         brew install cmake ninja
-    
+
     - name: Configure CMake
       run: |
         cmake -B build -S . \
           -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
           -DBUILD_TESTS=ON \
           -G "Ninja"
-    
+
     - name: Build
       run: cmake --build build --config ${{ matrix.build_type }}
-    
+
     - name: Test
       run: |
         cd build
@@ -795,7 +795,7 @@ graph TD
     D --> E[Run Tests]
     E --> F[Static Analysis]
     F --> G[Development Cycle]
-    
+
     G --> H[Make Changes]
     H --> I[Incremental Build]
     I --> J[Run Tests]
@@ -831,15 +831,15 @@ graph TD
     A[Build Time Comparison] --> B[Small Project]
     A --> C[Medium Project]
     A --> D[Large Project]
-    
+
     B --> B1[Python: 2s]
     B --> B2[Rust: 5s]
     B --> B3[C++: 15s]
-    
+
     C --> C1[Python: 10s]
     C --> C2[Rust: 30s]
     C --> C3[C++: 2min]
-    
+
     D --> D1[Python: 30s]
     D --> D2[Rust: 2min]
     D --> D3[C++: 10min]
@@ -901,15 +901,15 @@ graph TD
     A[Package Management] --> B[Python PyPI]
     A --> C[Rust crates.io]
     A --> D[C++ Ecosystems]
-    
+
     B --> B1[500,000+ packages]
     B --> B2[pip/conda]
     B --> B3[Semantic Versioning]
-    
+
     C --> C1[100,000+ crates]
     C --> C2[Cargo]
     C --> C3[Semantic Versioning]
-    
+
     D --> D1[Fragmented]
     D --> D2[vcpkg/Conan]
     D --> D3[Various Schemes]
@@ -983,15 +983,15 @@ graph TD
     A[Testing Approaches] --> B[Python]
     A --> C[Rust]
     A --> D[C++]
-    
+
     B --> B1[Batteries Included]
     B --> B2[pytest Ecosystem]
     B --> B3[Property Testing]
-    
+
     C --> C1[Built-in Testing]
     C --> C2[cargo test]
     C --> C3[QuickCheck]
-    
+
     D --> D1[Framework Choice]
     D --> D2[Google Test]
     D --> D3[Catch2/doctest]
@@ -1017,10 +1017,10 @@ class TestVdCorput:
     def test_basic_functionality(self, sample_sequence):
         vgen = VdCorput(2)
         vgen.reseed(0)
-        
+
         for expected in sample_sequence:
             assert abs(vgen.pop() - expected) < 1e-10
-    
+
     @pytest.mark.parametrize("base,expected", [
         (2, 0.5),
         (3, 1.0/3.0),
@@ -1030,7 +1030,7 @@ class TestVdCorput:
         vgen = VdCorput(base)
         vgen.reseed(0)
         assert abs(vgen.pop() - expected) < 1e-10
-    
+
     def test_error_handling(self):
         with pytest.raises(ValueError):
             VdCorput(1)  # Invalid base
@@ -1059,7 +1059,7 @@ mod tests {
     #[test]
     fn test_thread_safety() {
         use std::thread;
-        
+
         let mut handles = vec![];
         for i in 0..10 {
             let handle = thread::spawn(move || {
@@ -1069,7 +1069,7 @@ mod tests {
             });
             handles.push(handle);
         }
-        
+
         for handle in handles {
             assert!(handle.join().unwrap() > 0.0);
         }
@@ -1089,20 +1089,20 @@ TEST_CASE("Van der Corput sequence") {
         CHECK(lds_gen::vdc(0, 2) == 0.0);
         CHECK(lds_gen::vdc(1, 2) == 0.5);
     }
-    
+
     SUBCASE("Different bases") {
         CHECK(lds_gen::vdc(1, 3) == doctest::Approx(1.0/3.0));
         CHECK(lds_gen::vdc(1, 5) == doctest::Approx(1.0/5.0));
     }
-    
+
     SUBCASE("Edge cases") {
         CHECK(lds_gen::vdc(0, 2) == 0.0);
         CHECK_THROWS_AS(lds_gen::VdCorput(1), std::invalid_argument);
     }
 }
 
-TEST_CASE_TEMPLATE("Sequence generators", T, 
-    lds_gen::VdCorput, 
+TEST_CASE_TEMPLATE("Sequence generators", T,
+    lds_gen::VdCorput,
     lds_gen::Halton,
     lds_gen::Circle) {
     // Template tests for different generator types
@@ -1126,7 +1126,7 @@ pytest --cov=lds_gen --cov-report=html --cov-report=term-missing
 # Coverage configuration (.coveragerc)
 [run]
 source = src
-omit = 
+omit =
     tests/*
     setup.py
 
@@ -1153,7 +1153,7 @@ fn bench_vdcorput_creation(c: &mut Criterion) {
 fn bench_vdcorput_pop(c: &mut Criterion) {
     let mut vgen = VdCorput::new(2);
     vgen.reseed(0);
-    
+
     c.bench_function("vdcorput_pop", |b| {
         b.iter(|| {
             vgen.pop();
@@ -1181,7 +1181,7 @@ static void BM_VdCorputCreation(benchmark::State& state) {
 static void BM_VdCorputPop(benchmark::State& state) {
     lds_gen::VdCorput vgen(2);
     vgen.reseed(0);
-    
+
     for (auto _ : state) {
         benchmark::DoNotOptimize(vgen.pop());
         vgen.reseed(0);
@@ -1205,15 +1205,15 @@ graph TD
     A[CI/CD Pipeline] --> B[Python]
     A --> C[Rust]
     A --> D[C++]
-    
+
     B --> B1[GitHub Actions]
     B --> B2[tox]
     B --> B3[PyPI Deployment]
-    
+
     C --> C1[GitHub Actions]
     C --> C2[cargo test]
     C --> C3[crates.io Deployment]
-    
+
     D --> D1[GitHub Actions]
     D --> D2[CMake Testing]
     D --> D3[Package Deployment]
@@ -1242,33 +1242,33 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
-    
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -e .[testing,docs]
-    
+
     - name: Lint with flake8
       run: |
         flake8 src tests
-    
+
     - name: Check formatting with black
       run: |
         black --check src tests
-    
+
     - name: Type check with mypy
       run: |
         mypy src
-    
+
     - name: Test with pytest
       run: |
         pytest --cov=lds_gen --cov-report=xml
-    
+
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
       with:
@@ -1278,22 +1278,22 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    
+
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
-    
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install build twine
-    
+
     - name: Build package
       run: python -m build
-    
+
     - name: Publish to PyPI
       env:
         TWINE_USERNAME: __token__
@@ -1322,43 +1322,43 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    
+
     - name: Install Rust ${{ matrix.rust }}
       uses: actions-rs/toolchain@v1
       with:
         toolchain: ${{ matrix.rust }}
         override: true
-    
+
     - name: Cache cargo registry
       uses: actions/cache@v3
       with:
         path: ~/.cargo/registry
         key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
-    
+
     - name: Cache cargo index
       uses: actions/cache@v3
       with:
         path: ~/.cargo/git
         key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
-    
+
     - name: Cache cargo build
       uses: actions/cache@v3
       with:
         path: target
         key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
-    
+
     - name: Check formatting
       run: cargo fmt --all -- --check
-    
+
     - name: Clippy
       run: cargo clippy --all-targets --all-features -- -D warnings
-    
+
     - name: Build
       run: cargo build --verbose
-    
+
     - name: Run tests
       run: cargo test --verbose
-    
+
     - name: Run benchmarks
       if: matrix.rust == 'stable'
       run: cargo bench
@@ -1376,7 +1376,7 @@ jobs:
     needs: [test, security]
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    
+
     steps:
     - uses: actions/checkout@v3
     - name: Publish to crates.io
@@ -1415,23 +1415,23 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    
+
     - name: Install dependencies (Ubuntu)
       if: runner.os == 'Linux'
       run: |
         sudo apt update
         sudo apt install -y cmake ninja-build
-    
+
     - name: Install dependencies (macOS)
       if: runner.os == 'macOS'
       run: |
         brew install cmake ninja
-    
+
     - name: Setup vcpkg
       uses: lukka/run-vcpkg@v10
       with:
         vcpkgGitCommitId: 'latest'
-    
+
     - name: Configure CMake
       run: |
         cmake -B build -S . \
@@ -1439,15 +1439,15 @@ jobs:
           -DBUILD_TESTS=ON \
           -DBUILD_BENCHMARKS=ON \
           -G "Ninja"
-    
+
     - name: Build
       run: cmake --build build --config ${{ matrix.build_type }}
-    
+
     - name: Test
       run: |
         cd build
         ctest --output-on-failure -C ${{ matrix.build_type }}
-    
+
     - name: Run benchmarks
       if: matrix.build_type == 'Release'
       run: |
@@ -1458,12 +1458,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    
+
     - name: Install clang-tidy
       run: |
         sudo apt update
         sudo apt install -y clang-tidy
-    
+
     - name: Run clang-tidy
       run: |
         cmake -B build -S . -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
@@ -1479,20 +1479,20 @@ jobs:
 ```mermaid
 graph TD
     A[Select Toolchain] --> B{Project Type?}
-    
+
     B -->|Data Science/AI| C[Python Toolchain]
     B -->|Systems Programming| D[Rust Toolchain]
     B -->|High Performance| E[C++ Toolchain]
     B -->|Web Development| F[Python/Rust]
-    
+
     C --> C1[Rapid Prototyping]
     C --> C2[Extensive Libraries]
     C --> C3[Easy Learning Curve]
-    
+
     D --> D1[Memory Safety]
     D --> D2[Performance]
     D --> D3[Modern Tooling]
-    
+
     E --> E1[Maximum Control]
     E --> E2[Legacy Code]
     E --> E3[Industry Standards]
@@ -1520,7 +1520,7 @@ graph LR
     B --> C[Rust FFI Module]
     C --> D[Gradual Migration]
     D --> E[Full Rust Rewrite]
-    
+
     F[PyO3] --> C
     G[Maturin] --> C
 ```
@@ -1532,7 +1532,7 @@ graph LR
     B --> C[Create Rust Bindings]
     C --> D[Module-by-Module Migration]
     D --> E[Complete Migration]
-    
+
     F[cbindgen] --> C
     G[bindgen] --> C
 ```
@@ -1543,11 +1543,11 @@ graph TD
     A[Hybrid Architecture] --> B[Python Frontend]
     A --> C[Rust Core]
     A --> D[C++ Legacy]
-    
+
     B --> E[Fast Development]
     C --> F[Performance Critical]
     D --> G[Existing Code]
-    
+
     E --> H[FFI Integration]
     F --> H
     G --> H
@@ -1574,15 +1574,15 @@ graph TD
     A[2010] --> B[Python: pip/virtualenv]
     A --> C[Rust: Early Cargo]
     A --> D[C++: Traditional Makefiles]
-    
+
     E[2015] --> F[Python: pyproject.toml]
     E --> G[Rust: Stable Cargo]
     E --> H[C++: Modern CMake]
-    
+
     I[2020] --> J[Python: Poetry/PDM]
     I --> K[Rust: Workspace features]
     I --> L[C++: vcpkg/Conan]
-    
+
     M[2025] --> N[AI-Integrated Toolchains]
     M --> O[Universal Package Managers]
     M --> P[Cloud-Native Builds]
@@ -1657,12 +1657,12 @@ graph TD
 ```mermaid
 graph TD
     A[Toolchain Selection] --> B{Primary Goal?}
-    
+
     B -->|Development Speed| C[Python]
     B -->|Performance & Safety| D[Rust]
     B -->|Maximum Control| E[C++]
     B -->|Team Skills| F[Match Expertise]
-    
+
     C --> G[Consider Ecosystem]
     D --> H[Consider Learning Curve]
     E --> I[Consider Complexity]

@@ -154,13 +154,13 @@ void SphereWrapper::reseed(std::uint64_t seed) {
     sphere_.reseed(seed);
 }
 
-SphereN::SphereN(std::span<const std::uint64_t> base) 
+SphereN::SphereN(std::span<const std::uint64_t> base)
     : vdc_(base[0]), n_(static_cast<int>(base.size()) - 1) {
-    
+
     if (n_ < 2) {
         throw std::invalid_argument("SphereN requires at least 3 bases (n >= 2)");
     }
-    
+
     if (n_ == 2) {
         // Create a SphereWrapper object
         std::vector<std::uint64_t> sphere_base = {base[1], base[2]};
@@ -169,7 +169,7 @@ SphereN::SphereN(std::span<const std::uint64_t> base)
         std::vector<std::uint64_t> sub_base(base.begin() + 1, base.end());
         s_gen_ = std::make_unique<SphereN>(sub_base);
     }
-    
+
     auto tp = get_tp(n_);
     range_ = tp.back() - tp.front();
 }

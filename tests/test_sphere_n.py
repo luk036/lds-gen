@@ -1,12 +1,12 @@
 """Unit tests for sphere_n.py module (NumPy-free version)."""
 
 import math
-import sys
 import os
+import sys
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-from lds_gen.sphere_n import Sphere3, SphereN, linspace, simple_interp, get_tp
+from lds_gen.sphere_n import Sphere3, SphereN, get_tp, linspace, simple_interp
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 

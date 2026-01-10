@@ -48,10 +48,10 @@ private:
 class SphereWrapper : public SphereGen {
 public:
     explicit SphereWrapper(std::span<const std::uint64_t> base);
-    
+
     std::vector<double> pop() override;
     void reseed(std::uint64_t seed) override;
-    
+
 private:
     Sphere sphere_;
 };
@@ -60,10 +60,10 @@ private:
 class SphereN : public SphereGen {
 public:
     explicit SphereN(std::span<const std::uint64_t> base);
-    
+
     std::vector<double> pop() override;
     void reseed(std::uint64_t seed) override;
-    
+
 private:
     VdCorput vdc_;
     std::unique_ptr<SphereGen> s_gen_;
