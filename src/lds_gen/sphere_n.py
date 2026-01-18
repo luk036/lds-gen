@@ -32,9 +32,8 @@ Algorithm Overview:
 
 import math
 import threading
-from abc import ABC, abstractmethod
 from functools import cache
-from typing import List, Union
+from typing import List, Protocol, Union
 
 from lds_gen.lds import Sphere, VdCorput  # low-discrepancy sequence generators
 
@@ -65,7 +64,6 @@ def simple_interp(x: float, xp: List[float], yp: List[float]) -> float:
 
     for i in range(len(xp) - 1):
         if xp[i] <= x <= xp[i + 1]:
-            # Linear interpolation
             t_val = (x - xp[i]) / (xp[i + 1] - xp[i])
             return yp[i] + t_val * (yp[i + 1] - yp[i])
 
@@ -105,18 +103,10 @@ def get_tp(ndim: int) -> List[float]:
     return get_tp_recursive(ndim)
 
 
-class SphereGen(ABC):
-    """Base class for sphere generators."""
+class SphereGen(Protocol):
+    def pop(self) -> List[float]: ...
 
-    @abstractmethod
-    def pop(self) -> List[float]:
-        """Generates and returns a vector of values."""
-        raise NotImplementedError
-
-    @abstractmethod
-    def reseed(self, seed: int) -> None:
-        """Reseeds the generator with a new seed."""
-        raise NotImplementedError
+    def reseed(self, seed: int) -> None: ...
 
 
 class Sphere3(SphereGen):
@@ -153,6 +143,23 @@ class Sphere3(SphereGen):
         with self._lock:
             self.vdc.reseed(seed)
             self.sphere2.reseed(seed)
+
+    def __iter__(self) -> "Sphere3":
+        return self
+
+    def __next__(self) -> List[float]:
+        return self.pop()
+
+    def pop_batch(self, n: int) -> List[List[float]]:
+        if n <= 0:
+            raise ValueError(f"n must be positive, got {n}")
+        return [self.pop() for _ in range(n)]
+
+    def __enter__(self) -> "Sphere3":
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        return None
 
     def pop(self) -> List[float]:
         """_summary_
@@ -230,6 +237,23 @@ class SphereN(SphereGen):
         with self._lock:
             self.vdc.reseed(seed)
             self.s_gen.reseed(seed)
+
+    def __iter__(self) -> "SphereN":
+        return self
+
+    def __next__(self) -> List[float]:
+        return self.pop()
+
+    def pop_batch(self, n: int) -> List[List[float]]:
+        if n <= 0:
+            raise ValueError(f"n must be positive, got {n}")
+        return [self.pop() for _ in range(n)]
+
+    def __enter__(self) -> "SphereN":
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        return None
 
 
 if __name__ == "__main__":

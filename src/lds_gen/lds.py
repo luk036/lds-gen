@@ -183,6 +183,23 @@ class VdCorput:
         with self._count_lock:
             self._count = seed
 
+    def __iter__(self) -> "VdCorput":
+        return self
+
+    def __next__(self) -> float:
+        return self.pop()
+
+    def pop_batch(self, n: int) -> List[float]:
+        if n <= 0:
+            raise ValueError(f"n must be positive, got {n}")
+        return [self.pop() for _ in range(n)]
+
+    def __enter__(self) -> "VdCorput":
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        return None
+
 
 class Halton:
     """Halton sequence generator
@@ -278,6 +295,40 @@ class Halton:
         self.vdc0.reseed(seed)
         self.vdc1.reseed(seed)
 
+    def __iter__(self) -> "Disk":
+        return self
+
+    def __next__(self) -> List[float]:
+        return self.pop()
+
+    def pop_batch(self, n: int) -> List[List[float]]:
+        if n <= 0:
+            raise ValueError(f"n must be positive, got {n}")
+        return [self.pop() for _ in range(n)]
+
+    def __enter__(self) -> "Disk":
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        return None
+
+    def __iter__(self) -> "Halton":
+        return self
+
+    def __next__(self) -> List[float]:
+        return self.pop()
+
+    def pop_batch(self, n: int) -> List[List[float]]:
+        if n <= 0:
+            raise ValueError(f"n must be positive, got {n}")
+        return [self.pop() for _ in range(n)]
+
+    def __enter__(self) -> "Halton":
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        return None
+
 
 class Circle:
     """Unit Circle sequence generator
@@ -349,6 +400,23 @@ class Circle:
         :type seed: int
         """
         self.vdc.reseed(seed)
+
+    def __iter__(self) -> "Circle":
+        return self
+
+    def __next__(self) -> List[float]:
+        return self.pop()
+
+    def pop_batch(self, n: int) -> List[List[float]]:
+        if n <= 0:
+            raise ValueError(f"n must be positive, got {n}")
+        return [self.pop() for _ in range(n)]
+
+    def __enter__(self) -> "Circle":
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        return None
 
 
 class Disk:
@@ -500,6 +568,23 @@ class Sphere:
         self.cirgen.reseed(seed)
         self.vdc.reseed(seed)
 
+    def __iter__(self) -> "Sphere":
+        return self
+
+    def __next__(self) -> List[float]:
+        return self.pop()
+
+    def pop_batch(self, n: int) -> List[List[float]]:
+        if n <= 0:
+            raise ValueError(f"n must be positive, got {n}")
+        return [self.pop() for _ in range(n)]
+
+    def __enter__(self) -> "Sphere":
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        return None
+
 
 class Sphere3Hopf:
     """Sphere-3 sequence generator using Hopf coordinates
@@ -577,6 +662,23 @@ class Sphere3Hopf:
         self.vdc1.reseed(seed)
         self.vdc2.reseed(seed)
 
+    def __iter__(self) -> "Sphere3Hopf":
+        return self
+
+    def __next__(self) -> List[float]:
+        return self.pop()
+
+    def pop_batch(self, n: int) -> List[List[float]]:
+        if n <= 0:
+            raise ValueError(f"n must be positive, got {n}")
+        return [self.pop() for _ in range(n)]
+
+    def __enter__(self) -> "Sphere3Hopf":
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        return None
+
 
 class HaltonN:
     """HaltonN sequence generator
@@ -640,6 +742,23 @@ class HaltonN:
         """
         for vdc in self.vdcs:
             vdc.reseed(seed)
+
+    def __iter__(self) -> "HaltonN":
+        return self
+
+    def __next__(self) -> List[float]:
+        return self.pop()
+
+    def pop_batch(self, n: int) -> List[List[float]]:
+        if n <= 0:
+            raise ValueError(f"n must be positive, got {n}")
+        return [self.pop() for _ in range(n)]
+
+    def __enter__(self) -> "HaltonN":
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        return None
 
 
 # First 1000 prime numbers

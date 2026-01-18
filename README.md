@@ -53,6 +53,81 @@ The internal state in all these generators is protected by threading locks, ensu
 
 The objective of this library is to provide a toolkit for the generation of sequences of numbers that are distributed in a well-balanced manner. These can be used in place of random numbers in many applications to achieve a more uniform coverage of a given space or surface. This can result in more efficient and accurate outcomes in tasks such as sampling, integration, and optimization.
 
+## Quick Start
+
+### Installation
+
+```bash
+pip install lds-gen
+```
+
+### Basic Usage
+
+```python
+from lds_gen import VdCorput, Halton, Circle, Sphere
+
+# Van der Corput sequence (1D)
+vdc = VdCorput(base=2)
+for _ in range(5):
+    print(vdc.pop())
+# Output: 0.5, 0.25, 0.75, 0.125, 0.625
+
+# Using iterator protocol
+for value in VdCorput(base=2):
+    print(value)
+    # Use break to stop iteration
+
+# Generate multiple values at once
+batch = VdCorput(base=2).pop_batch(10)
+
+# Halton sequence (2D)
+halton = Halton(base=[2, 3])
+for _ in range(3):
+    print(halton.pop())
+# Output: [0.5, 0.333...], [0.25, 0.666...], [0.75, 0.111...]
+
+# Points on unit circle
+circle = Circle(base=2)
+for _ in range(4):
+    print(circle.pop())
+# Output: points evenly distributed on circle
+
+# Points on unit sphere
+sphere = Sphere(base=[2, 3])
+for _ in range(3):
+    print(sphere.pop())
+# Output: 3D points evenly distributed on sphere surface
+
+# Reset sequence to specific seed
+generator = VdCorput(base=2)
+generator.reseed(5)
+# Sequence now starts from position 5
+```
+
+### Key Features
+
+- **Thread-safe**: All generators are safe to use in multi-threaded applications
+- **Iterator protocol**: Use `for` loops directly with generator objects
+- **Batch generation**: Generate multiple points efficiently with `pop_batch(n)`
+- **Resettable**: Use `reseed(n)` to reset sequence to any position
+
+### Common Use Cases
+
+```python
+# Monte Carlo integration
+from lds_gen import HaltonN
+
+points = HaltonN(base=[2, 3, 5]).pop_batch(1000)
+# Use these points for 3D integration with better convergence
+
+# Sampling on surfaces
+from lds_gen import Circle, Disk, Sphere
+
+circle_points = Circle(base=2).pop_batch(100)  # On circumference
+disk_points = Disk(base=[2, 3]).pop_batch(100)  # Inside circle
+sphere_points = Sphere(base=[2, 3]).pop_batch(100)  # On sphere surface
+```
+
 ## Used In
 
 - [sphere-n](https://github.com/luk036/sphere-n)

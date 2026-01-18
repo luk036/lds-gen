@@ -111,6 +111,23 @@ class VdCorput:
         with self._count_lock:
             self._count = seed
 
+    def __iter__(self) -> "VdCorput":
+        return self
+
+    def __next__(self) -> int:
+        return self.pop()
+
+    def pop_batch(self, n: int) -> List[int]:
+        if n <= 0:
+            raise ValueError(f"n must be positive, got {n}")
+        return [self.pop() for _ in range(n)]
+
+    def __enter__(self) -> "VdCorput":
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        return None
+
 
 class Halton:
     """Halton sequence generator
@@ -175,6 +192,23 @@ class Halton:
         """
         self._vdc0.reseed(seed)
         self._vdc1.reseed(seed)
+
+    def __iter__(self) -> "Halton":
+        return self
+
+    def __next__(self) -> List[int]:
+        return self.pop()
+
+    def pop_batch(self, n: int) -> List[List[int]]:
+        if n <= 0:
+            raise ValueError(f"n must be positive, got {n}")
+        return [self.pop() for _ in range(n)]
+
+    def __enter__(self) -> "Halton":
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        return None
 
 
 if __name__ == "__main__":
