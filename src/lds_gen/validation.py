@@ -7,7 +7,6 @@ and issuing appropriate warnings.
 import warnings
 from typing import List
 
-
 PRIME_TABLE: List[int] = [
     2,
     3,

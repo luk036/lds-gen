@@ -186,6 +186,8 @@ class VdCorput:
     def __iter__(self) -> "VdCorput":
         return self
 
+    # noqa: F811
+
     def __next__(self) -> float:
         return self.pop()
 
@@ -298,6 +300,8 @@ class Halton:
     def __iter__(self) -> "Disk":
         return self
 
+    # noqa: F811
+
     def __next__(self) -> List[float]:
         return self.pop()
 
@@ -314,6 +318,8 @@ class Halton:
 
     def __iter__(self) -> "Halton":
         return self
+
+    # noqa: F811
 
     def __next__(self) -> List[float]:
         return self.pop()
@@ -404,6 +410,8 @@ class Circle:
     def __iter__(self) -> "Circle":
         return self
 
+    # noqa: F811
+
     def __next__(self) -> List[float]:
         return self.pop()
 
@@ -417,6 +425,9 @@ class Circle:
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
         return None
+
+
+# noqa: F811
 
 
 class Disk:
@@ -571,6 +582,8 @@ class Sphere:
     def __iter__(self) -> "Sphere":
         return self
 
+    # noqa: F811
+
     def __next__(self) -> List[float]:
         return self.pop()
 
@@ -665,6 +678,8 @@ class Sphere3Hopf:
     def __iter__(self) -> "Sphere3Hopf":
         return self
 
+    # noqa: F811
+
     def __next__(self) -> List[float]:
         return self.pop()
 
@@ -745,6 +760,8 @@ class HaltonN:
 
     def __iter__(self) -> "HaltonN":
         return self
+
+    # noqa: F811
 
     def __next__(self) -> List[float]:
         return self.pop()

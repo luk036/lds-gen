@@ -9,16 +9,9 @@ import time
 from statistics import mean, stdev
 from typing import Callable, List
 
-from lds_gen.ilds import Halton as HaltonI, VdCorput as VdCorputI
-from lds_gen.lds import (
-    Circle,
-    Disk,
-    Halton,
-    HaltonN,
-    Sphere,
-    Sphere3Hopf,
-    VdCorput,
-)
+from lds_gen.ilds import Halton as HaltonI
+from lds_gen.ilds import VdCorput as VdCorputI
+from lds_gen.lds import Circle, Disk, Halton, HaltonN, Sphere, Sphere3Hopf, VdCorput
 from lds_gen.sphere_n import Sphere3, SphereN
 
 

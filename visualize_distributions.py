@@ -15,15 +15,7 @@ except ImportError:
     print("This script requires matplotlib. Install with: pip install matplotlib")
     exit(1)
 
-from lds_gen.lds import (
-    Circle,
-    Disk,
-    Halton,
-    HaltonN,
-    Sphere,
-    Sphere3Hopf,
-    VdCorput,
-)
+from lds_gen.lds import Circle, Disk, Halton, HaltonN, Sphere, Sphere3Hopf, VdCorput
 from lds_gen.sphere_n import Sphere3
 
 

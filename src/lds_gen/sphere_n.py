@@ -104,9 +104,11 @@ def get_tp(ndim: int) -> List[float]:
 
 
 class SphereGen(Protocol):
-    def pop(self) -> List[float]: ...
+    def pop(self) -> List[float]:
+        ...
 
-    def reseed(self, seed: int) -> None: ...
+    def reseed(self, seed: int) -> None:
+        ...
 
 
 class Sphere3(SphereGen):
