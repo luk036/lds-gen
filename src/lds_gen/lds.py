@@ -297,25 +297,6 @@ class Halton:
         self.vdc0.reseed(seed)
         self.vdc1.reseed(seed)
 
-    def __iter__(self) -> "Disk":
-        return self
-
-    # noqa: F811
-
-    def __next__(self) -> List[float]:
-        return self.pop()
-
-    def pop_batch(self, n: int) -> List[List[float]]:
-        if n <= 0:
-            raise ValueError(f"n must be positive, got {n}")
-        return [self.pop() for _ in range(n)]
-
-    def __enter__(self) -> "Disk":
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
-        return None
-
     def __iter__(self) -> "Halton":
         return self
 

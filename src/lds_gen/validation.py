@@ -212,47 +212,6 @@ def validate_base(base: int, generator_name: str = "generator") -> None:
 
 
 def validate_bases(bases: List[int], generator_name: str = "generator") -> None:
-    if not isinstance(bases, (list, tuple)):
-        raise TypeError(
-            f"{generator_name} bases must be a list or tuple, got {type(bases)}"
-        )
-
-    if len(bases) == 0:
-        raise ValueError(f"{generator_name} bases cannot be empty")
-
-    for i, base in enumerate(bases):
-        if not isinstance(base, int):
-            raise TypeError(
-                f"{generator_name} base[{i}] must be an integer, got {type(base)}"
-            )
-
-        if base < 2:
-            raise ValueError(f"{generator_name} base[{i}] must be >= 2, got {base}")
-
-        if not is_prime(base):
-            warnings.warn(
-                f"{generator_name} non-prime base[{i}] ({base}) may reduce uniformity. "
-                f"Consider using prime bases",
-                stacklevel=2,
-            )
-
-
-def validate_scale(scale: int, generator_name: str = "generator") -> None:
-    if not isinstance(scale, int):
-        raise TypeError(f"{generator_name} scale must be an integer, got {type(scale)}")
-
-    if scale < 1:
-        raise ValueError(f"{generator_name} scale must be >= 1, got {scale}")
-
-    if scale > 64:
-        warnings.warn(
-            f"{generator_name} scale ({scale}) is large and may cause integer overflow. "
-            f"Consider using scale <= 64",
-            stacklevel=2,
-        )
-
-
-def validate_bases(bases: List[int], generator_name: str = "generator") -> None:
     """Validate multiple base values and issue warnings.
 
     Args:
