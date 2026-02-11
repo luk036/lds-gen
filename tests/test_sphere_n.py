@@ -99,9 +99,9 @@ def test_sphere3_basic() -> None:
 
     # Check if point is on unit 3-sphere (approximately)
     radius_sq = sum(x * x for x in point)
-    assert (
-        abs(radius_sq - 1.0) < 1e-10
-    ), f"Point {point} not on unit sphere: r²={radius_sq}"
+    assert abs(radius_sq - 1.0) < 1e-10, (
+        f"Point {point} not on unit sphere: r²={radius_sq}"
+    )
 
     # Test that values are reasonable
     for coord in point:
@@ -122,9 +122,9 @@ def test_sphere3_consistency() -> None:
         # Check all points are on unit 3-sphere
         for i, point in enumerate(points):
             radius_sq = sum(x * x for x in point)
-            assert (
-                abs(radius_sq - 1.0) < 1e-10
-            ), f"Base {base}, Point {i}: {point}, r²={radius_sq}"
+            assert abs(radius_sq - 1.0) < 1e-10, (
+                f"Base {base}, Point {i}: {point}, r²={radius_sq}"
+            )
 
 
 def test_sphere3_reseed() -> None:
@@ -172,9 +172,9 @@ def test_spheren_basic() -> None:
 
     # Check if point is on unit 4-sphere (approximately)
     radius_sq = sum(x * x for x in point)
-    assert (
-        abs(radius_sq - 1.0) < 1e-10
-    ), f"Point {point} not on unit sphere: r²={radius_sq}"
+    assert abs(radius_sq - 1.0) < 1e-10, (
+        f"Point {point} not on unit sphere: r²={radius_sq}"
+    )
 
 
 def test_spheren_higher_dimensions() -> None:
@@ -188,9 +188,9 @@ def test_spheren_higher_dimensions() -> None:
 
     # Check if point is on unit 5-sphere (approximately)
     radius_sq = sum(x * x for x in point)
-    assert (
-        abs(radius_sq - 1.0) < 1e-10
-    ), f"Point {point} not on unit sphere: r²={radius_sq}"
+    assert abs(radius_sq - 1.0) < 1e-10, (
+        f"Point {point} not on unit sphere: r²={radius_sq}"
+    )
 
 
 def test_spheren_reseed() -> None:
@@ -318,9 +318,9 @@ def test_sphere3_thread_safety() -> None:
 
     # Verify all results are unique (no duplicates from race conditions)
     result_tuples = [tuple(point) for point in results]
-    assert len(set(result_tuples)) == len(
-        result_tuples
-    ), "Duplicate values found - possible race condition"
+    assert len(set(result_tuples)) == len(result_tuples), (
+        "Duplicate values found - possible race condition"
+    )
 
 
 def test_sphere3_concurrent_reseed() -> None:
@@ -405,9 +405,9 @@ def test_spheren_thread_safety() -> None:
 
     # Verify all results are unique (no duplicates from race conditions)
     result_tuples = [tuple(point) for point in results]
-    assert len(set(result_tuples)) == len(
-        result_tuples
-    ), "Duplicate values found - possible race condition"
+    assert len(set(result_tuples)) == len(result_tuples), (
+        "Duplicate values found - possible race condition"
+    )
 
 
 def test_spheren_higher_dimension_thread_safety() -> None:
@@ -454,9 +454,9 @@ def test_spheren_higher_dimension_thread_safety() -> None:
 
     # Verify all results are unique (no duplicates from race conditions)
     result_tuples = [tuple(point) for point in results]
-    assert len(set(result_tuples)) == len(
-        result_tuples
-    ), "Duplicate values found - possible race condition"
+    assert len(set(result_tuples)) == len(result_tuples), (
+        "Duplicate values found - possible race condition"
+    )
 
 
 def test_spheren_concurrent_reseed() -> None:
@@ -525,6 +525,6 @@ def test_sphere_thread_pool_executor() -> None:
 
     # Verify all results are unique
     result_tuples = [tuple(point) for point in results]
-    assert len(set(result_tuples)) == len(
-        result_tuples
-    ), "Duplicate values found - possible race condition"
+    assert len(set(result_tuples)) == len(result_tuples), (
+        "Duplicate values found - possible race condition"
+    )

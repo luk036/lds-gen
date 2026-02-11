@@ -84,7 +84,7 @@ class TestValidateBase:
     def test_invalid_base_type(self) -> None:
         """Test that non-integer bases raise TypeError."""
         with pytest.raises(TypeError, match="base must be an integer"):
-            validate_base(2.5)  # type: ignore
+            validate_base(2.5)  # type: ignore[arg-type]
 
         with pytest.raises(TypeError, match="base must be an integer"):
             validate_base("2")  # type: ignore
@@ -106,7 +106,7 @@ class TestValidateBase:
     def test_custom_generator_name(self) -> None:
         """Test that custom generator names appear in error messages."""
         with pytest.raises(TypeError, match="Halton base must be an integer"):
-            validate_base(2.5, generator_name="Halton")
+            validate_base(2.5, generator_name="Halton")  # type: ignore[arg-type]
 
         with pytest.raises(ValueError, match="VdCorput base must be >= 2"):
             validate_base(1, generator_name="VdCorput")
@@ -135,8 +135,8 @@ class TestValidateBases:
 
     def test_valid_tuple(self) -> None:
         """Test that tuples are accepted as input."""
-        validate_bases((2, 3))
-        validate_bases((2, 3, 5))
+        validate_bases((2, 3))  # type: ignore[arg-type]
+        validate_bases((2, 3, 5))  # type: ignore[arg-type]
 
     def test_invalid_type(self) -> None:
         """Test that non-list/tuple inputs raise TypeError."""
