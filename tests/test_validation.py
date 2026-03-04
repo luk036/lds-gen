@@ -1,6 +1,5 @@
 """Unit tests for validation utilities."""
 
-import warnings
 
 import pytest
 
