@@ -40,20 +40,6 @@ The purpose of this code is to provide a toolkit for generating well-distributed
 numbers, which can be used in place of random numbers in many applications to achieve more uniform
 coverage of a given space or surface. This can lead to more efficient and accurate results in
 tasks like sampling, integration, and optimization.
-
-.. svgbob::
-   :align: center
-
-          Random vs LDS Distribution
-         +----------------+----------------+
-         |  O     O       |  O  O  O  O    |
-         |     O     O    |  O  O  O  O    |
-         |  O        O    |  O  O  O  O    |
-         |    O      O    |  O  O  O  O    |
-         |              O |                |
-         | O              |                |
-         +----------------+----------------+
-            Random           Low Discrepancy
 """
 
 import threading
@@ -230,24 +216,6 @@ class Halton:
         [0.0625, 0.8888888888888888]
         [0.5625, 0.037037037037037035]
         [0.3125, 0.37037037037037035]
-
-    .. svgbob::
-       :align: center
-
-            Halton Sequence (base [2, 3])
-          2D Distribution Visualization
-
-                Y
-                ^
-                |
-         (1/3)  o |  o  o  o  o
-                |
-         (2/9)  o |  o  o  o  o
-                |
-         (1/9)  o |  o  o  o  o
-                |
-        ----o-o-+-o--o--o--o--o-----> X
-           1/8 1/4 3/8 1/2 5/8    1
     """
 
     def __init__(self, base: Sequence[int]) -> None:
@@ -328,22 +296,6 @@ class Circle:
         ...
         [-1.0, 1.2246467991473532e-16]
         [6.123233995736766e-17, 1.0]
-
-    .. svgbob::
-       :align: center
-
-             Circle Sequence Distribution
-
-                o  (0,1)
-               /|\
-              / | \
-             /  |  \
-            /   |   \
-       o (-1,0) -+- (1,0) o
-            o (0,-1)
-
-         Using low-discrepancy sequence for
-         uniform distribution on unit circle
     """
 
     def __init__(self, base: int) -> None:
@@ -492,28 +444,6 @@ class Sphere:
         >>> res = sgen.pop()
         >>> res
         [-0.4999999999999998, 0.8660254037844387, 0.0]
-
-    .. svgbob::
-       :align: center
-
-              Sphere Sequence Distribution
-
-                    (0,0,1)
-                       |
-                       |
-                o      o      o
-               /       |       \
-              /        |        \
-             o---------+---------o
-            \\          |          /
-           \\           |           /
-          o            o            o
-                       |
-                       |
-                    (0,0,-1)
-
-         Using low-discrepancy sequence for
-         uniform distribution on unit sphere
     """
 
     def __init__(self, base: Sequence[int]) -> None:
@@ -599,8 +529,8 @@ class Sphere3Hopf:
     Examples:
         >>> sp3hgen = Sphere3Hopf([2, 3, 5])
         >>> sp3hgen.reseed(0)
-        >>> res = sp3hgen.pop()
-        >>> res
+        >>> result = sp3hgen.pop()
+        >>> result
         [-0.22360679774997885, 0.3872983346207417, 0.4472135954999573, -0.7745966692414837]
     """
 

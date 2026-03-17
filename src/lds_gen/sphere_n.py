@@ -1,43 +1,13 @@
-r"""Generates points on n-dimensional spheres.
-
-.. svgbob::
-   :align: center
-
-   +-----------------------+
-   |        Sphere         |
-   |      O---------> x    |
-   |     /|                |
-   |    / |                |
-   |   /  |                |
-   |  /   |                |
-   | O----+-----> y        |
-   |  \\  |                 |
-   |   \\ |                 |
-   |    \\|                 |
-   |     * z               |
-   +-----------------------+
-
-Algorithm Overview:
-
-.. svgbob::
-   :align: center
-
-          VdCorput Sequence
-                 |
-                 v
-   [0,1] ------------------> [0,\u03c0] -----> Sphere(n)
-                    Mapping      Interpolation
-
-"""
+"""Generates points on n-dimensional spheres."""
 
 import math
 import threading
 from functools import cache
-from typing import List, Protocol, Union
+from typing import Final, List, Protocol, Union
 
 from lds_gen.lds import Sphere, VdCorput  # low-discrepancy sequence generators
 
-PI: float = math.pi
+PI: Final[float] = math.pi
 
 
 def linspace(start: float, stop: float, num: int) -> List[float]:
@@ -52,7 +22,7 @@ X: List[float] = linspace(0.0, PI, 300)
 NEG_COSINE: List[float] = [-math.cos(x) for x in X]
 SINE: List[float] = [math.sin(x) for x in X]
 F2: List[float] = [(x + nc * s) / 2.0 for x, nc, s in zip(X, NEG_COSINE, SINE)]
-HALF_PI = PI / 2.0
+HALF_PI: float = PI / 2.0
 
 
 def simple_interp(x: float, xp: List[float], yp: List[float]) -> float:
@@ -71,8 +41,27 @@ def simple_interp(x: float, xp: List[float], yp: List[float]) -> float:
 
 
 @cache
-def get_tp_recursive(ndim: int) -> List[float]:
-    """Recursively calculates the table-lookup of the mapping function for n.
+def get_tp_odd(ndim: int) -> List[float]:
+    """Recursively calculates the table-lookup of the mapping function for n (odd).
+
+    Args:
+        ndim (int): The dimension.
+
+    Returns:
+        List[float]: The table-lookup of the mapping function.
+    """
+    if ndim == 1:
+        return NEG_COSINE
+    tp_minus2 = get_tp_odd(ndim - 2)
+    return [
+        ((ndim - 1) * tp_minus2[i] + NEG_COSINE[i] * (SINE[i] ** (ndim - 1))) / ndim
+        for i in range(len(tp_minus2))
+    ]
+
+
+@cache
+def get_tp_even(ndim: int) -> List[float]:
+    """Recursively calculates the table-lookup of the mapping function for n (even).
 
     Args:
         ndim (int): The dimension.
@@ -82,9 +71,7 @@ def get_tp_recursive(ndim: int) -> List[float]:
     """
     if ndim == 0:
         return X
-    if ndim == 1:
-        return NEG_COSINE
-    tp_minus2 = get_tp_recursive(ndim - 2)
+    tp_minus2 = get_tp_even(ndim - 2)
     return [
         ((ndim - 1) * tp_minus2[i] + NEG_COSINE[i] * (SINE[i] ** (ndim - 1))) / ndim
         for i in range(len(tp_minus2))
@@ -100,7 +87,7 @@ def get_tp(ndim: int) -> List[float]:
     Returns:
         List[float]: The table-lookup of the mapping function.
     """
-    return get_tp_recursive(ndim)
+    return get_tp_odd(ndim) if ndim & 1 else get_tp_even(ndim)
 
 
 class SphereGen(Protocol):

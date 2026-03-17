@@ -1,6 +1,5 @@
 """Unit tests for validation utilities."""
 
-
 import pytest
 
 from lds_gen.validation import (
