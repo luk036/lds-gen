@@ -169,6 +169,13 @@ class Halton:
                      second component
 
         :type base: Sequence[int]
+
+        :param scale: The `scale` parameter is a list of two integers. These integers are used as the scales
+                      for generating the Halton sequence. The first integer in the list is used as the scale for generating
+                      the first component of the sequence, and the second integer is used as the scale for generating the
+                      second component
+
+        :type scale: Sequence[int]
         """
         self._vdc0 = VdCorput(base[0], scale[0])
         self._vdc1 = VdCorput(base[1], scale[1])

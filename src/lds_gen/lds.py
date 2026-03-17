@@ -625,10 +625,6 @@ class HaltonN:
         """
         The function initializes a list of VdCorput objects using the given base sequence.
 
-        :param n: The parameter `n` is an integer that represents the number of elements in the `base` sequence
-
-        :type n: int
-
         :param base: The `base` parameter is a list of integers. Each integer represents the base of a Van
                      der Corput sequence. The Van der Corput sequence is a low-discrepancy sequence used in numerical
                      analysis and Monte Carlo methods. In this code, `base` is used to initialize a list
