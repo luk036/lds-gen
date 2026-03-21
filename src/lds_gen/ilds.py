@@ -112,20 +112,46 @@ class VdCorput:
             self._count = seed
 
     def __iter__(self) -> "VdCorput":
+        """Return iterator for the integer Van der Corput sequence generator.
+
+        :return: Self as the iterator.
+        """
         return self
 
     def __next__(self) -> int:
+        """Return the next value in the integer Van der Corput sequence.
+
+        :return: Next integer value in the sequence.
+        """
         return self.pop()
 
     def pop_batch(self, n: int) -> List[int]:
+        """Generate a batch of n values from the integer Van der Corput sequence.
+
+        :param n: Number of values to generate.
+        :type n: int
+        :return: List of n integer values.
+        :raises ValueError: If n is not positive.
+        """
         if n <= 0:
             raise ValueError(f"n must be positive, got {n}")
         return [self.pop() for _ in range(n)]
 
     def __enter__(self) -> "VdCorput":
+        """Enter context manager protocol.
+
+        :return: Self for use in with statement.
+        """
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        """Exit context manager protocol.
+
+        :param exc_type: Exception type if an exception was raised.
+        :param exc_val: Exception value if an exception was raised.
+        :param exc_tb: Exception traceback if an exception was raised.
+        :return: None.
+        """
         return None
 
 
@@ -201,20 +227,46 @@ class Halton:
         self._vdc1.reseed(seed)
 
     def __iter__(self) -> "Halton":
+        """Return iterator for the integer Halton sequence generator.
+
+        :return: Self as the iterator.
+        """
         return self
 
     def __next__(self) -> List[int]:
+        """Return the next point in the integer Halton sequence.
+
+        :return: Next 2D point as a list of two integers.
+        """
         return self.pop()
 
     def pop_batch(self, n: int) -> List[List[int]]:
+        """Generate a batch of n points from the integer Halton sequence.
+
+        :param n: Number of points to generate.
+        :type n: int
+        :return: List of n 2D integer points.
+        :raises ValueError: If n is not positive.
+        """
         if n <= 0:
             raise ValueError(f"n must be positive, got {n}")
         return [self.pop() for _ in range(n)]
 
     def __enter__(self) -> "Halton":
+        """Enter context manager protocol.
+
+        :return: Self for use in with statement.
+        """
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        """Exit context manager protocol.
+
+        :param exc_type: Exception type if an exception was raised.
+        :param exc_val: Exception value if an exception was raised.
+        :param exc_tb: Exception traceback if an exception was raised.
+        :return: None.
+        """
         return None
 
 

@@ -91,9 +91,24 @@ def get_tp(ndim: int) -> List[float]:
 
 
 class SphereGen(Protocol):
-    def pop(self) -> List[float]: ...
+    """Protocol defining the interface for sphere sequence generators.
 
-    def reseed(self, seed: int) -> None: ...
+    This protocol specifies the required methods that any sphere generator
+    implementation must provide: pop() to get the next point and reseed()
+    to reset the sequence to a specific starting position.
+    """
+
+    def pop(self) -> List[float]:
+        """Generate the next point on the sphere.
+
+        :return: List of floats representing a point on the sphere.
+        """
+
+    def reseed(self, seed: int) -> None:
+        """Reset the sequence to a specific starting position.
+
+        :param seed: The starting position for the sequence.
+        """
 
 
 class Sphere3(SphereGen):
@@ -112,47 +127,73 @@ class Sphere3(SphereGen):
     sphere2: Sphere  # 2-Sphere generator
 
     def __init__(self, base: List[int]) -> None:
-        """_summary_
+        """Initialize the 3-sphere sequence generator.
 
-        Args:
-            base (List[int]): _description_
+        :param base: List of 3 integers specifying bases for the van der Corput
+                     sequence and the 2-sphere generator.
+        :type base: List[int]
         """
         self.vdc = VdCorput(base[0])
         self.sphere2 = Sphere(base[1:3])
         self._lock = threading.Lock()
 
     def reseed(self, seed: int) -> None:
-        """_summary_
+        """Reset the sequence to a specific starting position.
 
-        Args:
-            seed (int): _description_
+        :param seed: The starting position for the sequence.
+        :type seed: int
         """
         with self._lock:
             self.vdc.reseed(seed)
             self.sphere2.reseed(seed)
 
     def __iter__(self) -> "Sphere3":
+        """Return iterator for the 3-sphere sequence generator.
+
+        :return: Self as the iterator.
+        """
         return self
 
     def __next__(self) -> List[float]:
+        """Return the next point on the 3-sphere.
+
+        :return: Next 4D point on the 3-sphere.
+        """
         return self.pop()
 
     def pop_batch(self, n: int) -> List[List[float]]:
+        """Generate a batch of n points on the 3-sphere.
+
+        :param n: Number of points to generate.
+        :type n: int
+        :return: List of n 4D points on the 3-sphere.
+        :raises ValueError: If n is not positive.
+        """
         if n <= 0:
             raise ValueError(f"n must be positive, got {n}")
         return [self.pop() for _ in range(n)]
 
     def __enter__(self) -> "Sphere3":
+        """Enter context manager protocol.
+
+        :return: Self for use in with statement.
+        """
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        """Exit context manager protocol.
+
+        :param exc_type: Exception type if an exception was raised.
+        :param exc_val: Exception value if an exception was raised.
+        :param exc_tb: Exception traceback if an exception was raised.
+        :return: None.
+        """
         return None
 
     def pop(self) -> List[float]:
-        """_summary_
+        """Generate the next point on the 3-sphere.
 
-        Returns:
-            List[float]: _description_
+        :return: Next 4D point on the 3-sphere surface.
         """
         with self._lock:
             theta = HALF_PI * self.vdc.pop()  # map to [t0, tm-1]
@@ -216,30 +257,56 @@ class SphereN(SphereGen):
             return [x_val * sinphi for x_val in self.s_gen.pop()] + [math.cos(x_val)]
 
     def reseed(self, seed: int) -> None:
-        """Reseeds the generator.
+        """Reset the sequence to a specific starting position.
 
-        Args:
-            seed (int): The new seed.
+        :param seed: The starting position for the sequence.
+        :type seed: int
         """
         with self._lock:
             self.vdc.reseed(seed)
             self.s_gen.reseed(seed)
 
     def __iter__(self) -> "SphereN":
+        """Return iterator for the N-sphere sequence generator.
+
+        :return: Self as the iterator.
+        """
         return self
 
     def __next__(self) -> List[float]:
+        """Return the next point on the N-sphere.
+
+        :return: Next N-dimensional point on the N-sphere surface.
+        """
         return self.pop()
 
     def pop_batch(self, n: int) -> List[List[float]]:
+        """Generate a batch of n points on the N-sphere.
+
+        :param n: Number of points to generate.
+        :type n: int
+        :return: List of n N-dimensional points on the N-sphere.
+        :raises ValueError: If n is not positive.
+        """
         if n <= 0:
             raise ValueError(f"n must be positive, got {n}")
         return [self.pop() for _ in range(n)]
 
     def __enter__(self) -> "SphereN":
+        """Enter context manager protocol.
+
+        :return: Self for use in with statement.
+        """
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        """Exit context manager protocol.
+
+        :param exc_type: Exception type if an exception was raised.
+        :param exc_val: Exception value if an exception was raised.
+        :param exc_tb: Exception traceback if an exception was raised.
+        :return: None.
+        """
         return None
 
 

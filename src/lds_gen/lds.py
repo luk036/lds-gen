@@ -47,6 +47,7 @@ from math import cos, pi, sin, sqrt
 from typing import Final, List, Sequence
 
 TWO_PI: Final[float] = 2.0 * pi
+"""Constant representing two times pi (2π), used for mapping to full circle angles."""
 
 
 def vdc(count: int, base: int = 2) -> float:
@@ -170,22 +171,48 @@ class VdCorput:
             self._count = seed
 
     def __iter__(self) -> "VdCorput":
+        """Return iterator for the Van der Corput sequence generator.
+
+        :return: Self as the iterator.
+        """
         return self
 
     # noqa: F811
 
     def __next__(self) -> float:
+        """Return the next value in the Van der Corput sequence.
+
+        :return: Next floating-point value in the sequence.
+        """
         return self.pop()
 
     def pop_batch(self, n: int) -> List[float]:
+        """Generate a batch of n values from the Van der Corput sequence.
+
+        :param n: Number of values to generate.
+        :type n: int
+        :return: List of n floating-point values.
+        :raises ValueError: If n is not positive.
+        """
         if n <= 0:
             raise ValueError(f"n must be positive, got {n}")
         return [self.pop() for _ in range(n)]
 
     def __enter__(self) -> "VdCorput":
+        """Enter context manager protocol.
+
+        :return: Self for use in with statement.
+        """
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        """Exit context manager protocol.
+
+        :param exc_type: Exception type if an exception was raised.
+        :param exc_val: Exception value if an exception was raised.
+        :param exc_tb: Exception traceback if an exception was raised.
+        :return: None.
+        """
         return None
 
 
@@ -266,22 +293,48 @@ class Halton:
         self.vdc1.reseed(seed)
 
     def __iter__(self) -> "Halton":
+        """Return iterator for the Halton sequence generator.
+
+        :return: Self as the iterator.
+        """
         return self
 
     # noqa: F811
 
     def __next__(self) -> List[float]:
+        """Return the next point in the Halton sequence.
+
+        :return: Next 2D point as a list of two floats.
+        """
         return self.pop()
 
     def pop_batch(self, n: int) -> List[List[float]]:
+        """Generate a batch of n points from the Halton sequence.
+
+        :param n: Number of points to generate.
+        :type n: int
+        :return: List of n 2D points.
+        :raises ValueError: If n is not positive.
+        """
         if n <= 0:
             raise ValueError(f"n must be positive, got {n}")
         return [self.pop() for _ in range(n)]
 
     def __enter__(self) -> "Halton":
+        """Enter context manager protocol.
+
+        :return: Self for use in with statement.
+        """
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        """Exit context manager protocol.
+
+        :param exc_type: Exception type if an exception was raised.
+        :param exc_val: Exception value if an exception was raised.
+        :param exc_tb: Exception traceback if an exception was raised.
+        :return: None.
+        """
         return None
 
 
@@ -341,22 +394,48 @@ class Circle:
         self.vdc.reseed(seed)
 
     def __iter__(self) -> "Circle":
+        """Return iterator for the Circle sequence generator.
+
+        :return: Self as the iterator.
+        """
         return self
 
     # noqa: F811
 
     def __next__(self) -> List[float]:
+        """Return the next point on the unit circle.
+
+        :return: Next point as [cos(theta), sin(theta)].
+        """
         return self.pop()
 
     def pop_batch(self, n: int) -> List[List[float]]:
+        """Generate a batch of n points on the unit circle.
+
+        :param n: Number of points to generate.
+        :type n: int
+        :return: List of n points on the circle.
+        :raises ValueError: If n is not positive.
+        """
         if n <= 0:
             raise ValueError(f"n must be positive, got {n}")
         return [self.pop() for _ in range(n)]
 
     def __enter__(self) -> "Circle":
+        """Enter context manager protocol.
+
+        :return: Self for use in with statement.
+        """
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        """Exit context manager protocol.
+
+        :param exc_type: Exception type if an exception was raised.
+        :param exc_val: Exception value if an exception was raised.
+        :param exc_tb: Exception traceback if an exception was raised.
+        :return: None.
+        """
         return None
 
 
@@ -434,6 +513,49 @@ class Disk:
         self.vdc0.reseed(seed)
         self.vdc1.reseed(seed)
 
+    def __iter__(self) -> "Disk":
+        """Return iterator for the Disk sequence generator.
+
+        :return: Self as the iterator.
+        """
+        return self
+
+    def __next__(self) -> List[float]:
+        """Return the next point in the unit disk.
+
+        :return: Next point as [radius * cos(theta), radius * sin(theta)].
+        """
+        return self.pop()
+
+    def pop_batch(self, n: int) -> List[List[float]]:
+        """Generate a batch of n points in the unit disk.
+
+        :param n: Number of points to generate.
+        :type n: int
+        :return: List of n points in the disk.
+        :raises ValueError: If n is not positive.
+        """
+        if n <= 0:
+            raise ValueError(f"n must be positive, got {n}")
+        return [self.pop() for _ in range(n)]
+
+    def __enter__(self) -> "Disk":
+        """Enter context manager protocol.
+
+        :return: Self for use in with statement.
+        """
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        """Exit context manager protocol.
+
+        :param exc_type: Exception type if an exception was raised.
+        :param exc_val: Exception value if an exception was raised.
+        :param exc_tb: Exception traceback if an exception was raised.
+        :return: None.
+        """
+        return None
+
 
 class Sphere:
     """Unit Sphere sequence generator
@@ -491,22 +613,48 @@ class Sphere:
         self.vdc.reseed(seed)
 
     def __iter__(self) -> "Sphere":
+        """Return iterator for the Sphere sequence generator.
+
+        :return: Self as the iterator.
+        """
         return self
 
     # noqa: F811
 
     def __next__(self) -> List[float]:
+        """Return the next point on the unit sphere.
+
+        :return: Next 3D point on the sphere surface.
+        """
         return self.pop()
 
     def pop_batch(self, n: int) -> List[List[float]]:
+        """Generate a batch of n points on the unit sphere.
+
+        :param n: Number of points to generate.
+        :type n: int
+        :return: List of n 3D points on the sphere.
+        :raises ValueError: If n is not positive.
+        """
         if n <= 0:
             raise ValueError(f"n must be positive, got {n}")
         return [self.pop() for _ in range(n)]
 
     def __enter__(self) -> "Sphere":
+        """Enter context manager protocol.
+
+        :return: Self for use in with statement.
+        """
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        """Exit context manager protocol.
+
+        :param exc_type: Exception type if an exception was raised.
+        :param exc_val: Exception value if an exception was raised.
+        :param exc_tb: Exception traceback if an exception was raised.
+        :return: None.
+        """
         return None
 
 
@@ -587,22 +735,48 @@ class Sphere3Hopf:
         self.vdc2.reseed(seed)
 
     def __iter__(self) -> "Sphere3Hopf":
+        """Return iterator for the Sphere3Hopf sequence generator.
+
+        :return: Self as the iterator.
+        """
         return self
 
     # noqa: F811
 
     def __next__(self) -> List[float]:
+        """Return the next point on the 3-sphere using Hopf fibration.
+
+        :return: Next 4D point on the 3-sphere.
+        """
         return self.pop()
 
     def pop_batch(self, n: int) -> List[List[float]]:
+        """Generate a batch of n points on the 3-sphere.
+
+        :param n: Number of points to generate.
+        :type n: int
+        :return: List of n 4D points on the 3-sphere.
+        :raises ValueError: If n is not positive.
+        """
         if n <= 0:
             raise ValueError(f"n must be positive, got {n}")
         return [self.pop() for _ in range(n)]
 
     def __enter__(self) -> "Sphere3Hopf":
+        """Enter context manager protocol.
+
+        :return: Self for use in with statement.
+        """
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        """Exit context manager protocol.
+
+        :param exc_type: Exception type if an exception was raised.
+        :param exc_val: Exception value if an exception was raised.
+        :param exc_tb: Exception traceback if an exception was raised.
+        :return: None.
+        """
         return None
 
 
@@ -666,22 +840,48 @@ class HaltonN:
             vdc.reseed(seed)
 
     def __iter__(self) -> "HaltonN":
+        """Return iterator for the HaltonN sequence generator.
+
+        :return: Self as the iterator.
+        """
         return self
 
     # noqa: F811
 
     def __next__(self) -> List[float]:
+        """Return the next point in the N-dimensional Halton sequence.
+
+        :return: Next N-dimensional point as a list of floats.
+        """
         return self.pop()
 
     def pop_batch(self, n: int) -> List[List[float]]:
+        """Generate a batch of n points from the N-dimensional Halton sequence.
+
+        :param n: Number of points to generate.
+        :type n: int
+        :return: List of n N-dimensional points.
+        :raises ValueError: If n is not positive.
+        """
         if n <= 0:
             raise ValueError(f"n must be positive, got {n}")
         return [self.pop() for _ in range(n)]
 
     def __enter__(self) -> "HaltonN":
+        """Enter context manager protocol.
+
+        :return: Self for use in with statement.
+        """
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        """Exit context manager protocol.
+
+        :param exc_type: Exception type if an exception was raised.
+        :param exc_val: Exception value if an exception was raised.
+        :param exc_tb: Exception traceback if an exception was raised.
+        :return: None.
+        """
         return None
 
 

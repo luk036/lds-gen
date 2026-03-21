@@ -180,6 +180,12 @@ PRIME_TABLE: List[int] = [
 
 
 def is_prime(n: int) -> bool:
+    """Check if a number is prime.
+
+    :param n: The number to check.
+    :type n: int
+    :return: True if n is prime, False otherwise.
+    """
     if n < 2:
         return False
     if n == 2:
@@ -197,6 +203,15 @@ def is_prime(n: int) -> bool:
 
 
 def validate_base(base: int, generator_name: str = "generator") -> None:
+    """Validate a base value for a sequence generator.
+
+    :param base: The base value to validate.
+    :type base: int
+    :param generator_name: Name of the generator for error messages.
+    :type generator_name: str
+    :raises TypeError: If base is not an integer.
+    :raises ValueError: If base is less than 2.
+    """
     if not isinstance(base, int):
         raise TypeError(f"{generator_name} base must be an integer, got {type(base)}")
 

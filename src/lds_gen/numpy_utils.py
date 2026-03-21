@@ -20,10 +20,18 @@ except ImportError:
 
 
 def numpy_available() -> bool:
+    """Check if NumPy is available in the environment.
+
+    :return: True if NumPy is installed and importable, False otherwise.
+    """
     return HAS_NUMPY
 
 
 def ensure_numpy() -> None:
+    """Ensure NumPy is available, raising ImportError if not.
+
+    :raises ImportError: If NumPy is not installed.
+    """
     if not HAS_NUMPY:
         raise ImportError(
             "NumPy is required for this function. Install with: pip install numpy"
@@ -31,6 +39,15 @@ def ensure_numpy() -> None:
 
 
 def generate_vdcorput_vectorized(count: int, base: int) -> List[float]:
+    """Generate Van der Corput sequence values using NumPy for vectorized computation.
+
+    :param count: Number of values to generate.
+    :type count: int
+    :param base: The base for the Van der Corput sequence.
+    :type base: int
+    :return: List of count floating-point values in the sequence.
+    :raises ImportError: If NumPy is not available.
+    """
     if HAS_NUMPY:
         ensure_numpy()
         indices = np.arange(1, count + 1, dtype=np.float64)
@@ -53,6 +70,15 @@ def generate_vdcorput_vectorized(count: int, base: int) -> List[float]:
 
 
 def generate_halton_vectorized(count: int, bases: List[int]) -> List[List[float]]:
+    """Generate multi-dimensional Halton sequence using NumPy for vectorized computation.
+
+    :param count: Number of points to generate.
+    :type count: int
+    :param bases: List of bases, one for each dimension.
+    :type bases: List[int]
+    :return: List of count N-dimensional points in the Halton sequence.
+    :raises ImportError: If NumPy is not available.
+    """
     if HAS_NUMPY:
         ensure_numpy()
         ndim = len(bases)
@@ -77,6 +103,17 @@ def generate_halton_vectorized(count: int, bases: List[int]) -> List[List[float]
 
 
 def compute_discrepancy(points: List[List[float]]) -> float:
+    """Compute the star-discrepancy of a set of points.
+
+    The star-discrepancy is a measure of how uniformly a set of points
+    is distributed in a unit hypercube. Lower values indicate more uniform
+    distribution.
+
+    :param points: List of N-dimensional points to evaluate.
+    :type points: List[List[float]]
+    :return: The star-discrepancy value.
+    :raises ImportError: If NumPy is not available.
+    """
     if not HAS_NUMPY:
         raise ImportError("NumPy is required for discrepancy computation")
 
@@ -100,6 +137,13 @@ def compute_discrepancy(points: List[List[float]]) -> float:
 
 
 def batch_to_numpy(points: List[List[float]]) -> "np.ndarray":
+    """Convert a list of points to a NumPy array.
+
+    :param points: List of N-dimensional points.
+    :type points: List[List[float]]
+    :return: NumPy array of shape (n_points, n_dimensions).
+    :raises ImportError: If NumPy is not available.
+    """
     if not HAS_NUMPY:
         raise ImportError("NumPy is required for this function")
 
