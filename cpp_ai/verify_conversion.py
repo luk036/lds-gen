@@ -40,9 +40,9 @@ def test_vdcorput():
     expected_values = [0.5, 0.25, 0.75, 0.125, 0.625]
     for i, expected in enumerate(expected_values):
         result = vgen.pop()
-        assert abs(result - expected) < 1e-10, (
-            f"VdCorput[{i}] = {result}, expected {expected}"
-        )
+        assert (
+            abs(result - expected) < 1e-10
+        ), f"VdCorput[{i}] = {result}, expected {expected}"
         print(f"  ✓ VdCorput[{i}] = {result}")
 
 
@@ -55,9 +55,9 @@ def test_halton():
     result = hgen.pop()
     expected = [0.5, 1 / 3]
     for i in range(2):
-        assert abs(result[i] - expected[i]) < 1e-10, (
-            f"Halton[0][{i}] = {result[i]}, expected {expected[i]}"
-        )
+        assert (
+            abs(result[i] - expected[i]) < 1e-10
+        ), f"Halton[0][{i}] = {result[i]}, expected {expected[i]}"
     print(f"  ✓ Halton[0] = {result}")
 
 
@@ -70,9 +70,9 @@ def test_circle():
     result = cgen.pop()
     expected = [-1.0, 0.0]
     for i in range(2):
-        assert abs(result[i] - expected[i]) < 1e-10, (
-            f"Circle[0][{i}] = {result[i]}, expected {expected[i]}"
-        )
+        assert (
+            abs(result[i] - expected[i]) < 1e-10
+        ), f"Circle[0][{i}] = {result[i]}, expected {expected[i]}"
     print(f"  ✓ Circle[0] = {result}")
 
 
@@ -85,9 +85,9 @@ def test_disk():
     result = dgen.pop()
     expected = [-0.5773502691896257, 0.0]
     for i in range(2):
-        assert abs(result[i] - expected[i]) < 1e-10, (
-            f"Disk[0][{i}] = {result[i]}, expected {expected[i]}"
-        )
+        assert (
+            abs(result[i] - expected[i]) < 1e-10
+        ), f"Disk[0][{i}] = {result[i]}, expected {expected[i]}"
     print(f"  ✓ Disk[0] = {result}")
 
 
@@ -100,9 +100,9 @@ def test_sphere():
     result = sgen.pop()
     expected = [-0.5, 0.8660254037844387, 0.0]
     for i in range(3):
-        assert abs(result[i] - expected[i]) < 1e-10, (
-            f"Sphere[0][{i}] = {result[i]}, expected {expected[i]}"
-        )
+        assert (
+            abs(result[i] - expected[i]) < 1e-10
+        ), f"Sphere[0][{i}] = {result[i]}, expected {expected[i]}"
     print(f"  ✓ Sphere[0] = {result}")
 
 
@@ -120,9 +120,9 @@ def test_sphere3hopf():
         -0.7745966692414837,
     ]
     for i in range(4):
-        assert abs(result[i] - expected[i]) < 1e-10, (
-            f"Sphere3Hopf[0][{i}] = {result[i]}, expected {expected[i]}"
-        )
+        assert (
+            abs(result[i] - expected[i]) < 1e-10
+        ), f"Sphere3Hopf[0][{i}] = {result[i]}, expected {expected[i]}"
     print(f"  ✓ Sphere3Hopf[0] = {result}")
 
 
@@ -135,9 +135,9 @@ def test_haltonn():
     result = hgen.pop()
     expected = [0.5, 1 / 3, 0.2]
     for i in range(3):
-        assert abs(result[i] - expected[i]) < 1e-10, (
-            f"HaltonN[0][{i}] = {result[i]}, expected {expected[i]}"
-        )
+        assert (
+            abs(result[i] - expected[i]) < 1e-10
+        ), f"HaltonN[0][{i}] = {result[i]}, expected {expected[i]}"
     print(f"  ✓ HaltonN[0] = {result}")
 
 

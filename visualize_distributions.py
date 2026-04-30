@@ -10,7 +10,6 @@ from typing import List
 
 try:
     import matplotlib.pyplot as plt
-    from mpl_toolkits.mplot3d import Axes3D
 except ImportError:
     print("This script requires matplotlib. Install with: pip install matplotlib")
     exit(1)
