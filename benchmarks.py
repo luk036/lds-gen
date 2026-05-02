@@ -110,7 +110,7 @@ def main():
     benchmark_batch(lambda: Sphere(base=[2, 3]), 1000, 10, "Sphere (batch)")
     benchmark_batch(lambda: HaltonN(base=[2, 3, 5]), 1000, 10, "HaltonN (batch)")
 
-    print("\n5. Base Comparison (Van der Corput, 10,000 iterations)")
+    print("\n5. Base Comparison (van der Corput, 10,000 iterations)")
     print("-" * 70)
 
     base_times = {}

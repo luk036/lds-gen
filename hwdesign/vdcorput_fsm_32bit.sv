@@ -2,7 +2,7 @@
 VdCorput FSM-Based Sequential Implementation (32-bit)
 Supports bases 2, 3, and 7
 
-This module implements the Van der Corput sequence generator using a Finite State Machine (FSM) approach.
+This module implements the van der Corput sequence generator using a Finite State Machine (FSM) approach.
 The algorithm converts an integer count to a floating point value by repeatedly dividing by base and
 accumulating remainders divided by decreasing powers of the base.
 

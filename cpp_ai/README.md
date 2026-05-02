@@ -4,7 +4,7 @@ C++20 implementation of the lds-gen Python library for generating low-discrepanc
 
 ## Features
 
-- **Van der Corput sequence**: Base-b low-discrepancy sequence
+- **van der Corput sequence**: Base-b low-discrepancy sequence
 - **Halton sequence**: Multi-dimensional low-discrepancy sequence
 - **Circle sequence**: Points on a unit circle
 - **Disk sequence**: Points in a unit disk
@@ -51,7 +51,7 @@ xmake run test_lds # Run tests
 #include <iostream>
 
 int main() {
-    // Van der Corput sequence
+    // van der Corput sequence
     lds_gen::VdCorput vgen(2);
     vgen.reseed(0);
     for (int i = 0; i < 10; ++i) {
@@ -72,8 +72,8 @@ int main() {
 
 ### Floating-point sequences
 
-- `double vdc(uint64_t count, uint64_t base = 2)`: Van der Corput function
-- `class VdCorput`: Van der Corput sequence generator
+- `double vdc(uint64_t count, uint64_t base = 2)`: van der Corput function
+- `class VdCorput`: van der Corput sequence generator
 - `class Halton`: 2D Halton sequence generator
 - `class Circle`: Unit circle sequence generator
 - `class Disk`: Unit disk sequence generator
@@ -93,7 +93,7 @@ int main() {
 
 ### Integer sequences
 
-- `class VdCorputInt`: Integer Van der Corput sequence generator
+- `class VdCorputInt`: Integer van der Corput sequence generator
 - `class HaltonInt`: Integer 2D Halton sequence generator
 
 ## Testing

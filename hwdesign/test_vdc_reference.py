@@ -6,7 +6,7 @@ to verify hardware implementation results.
 
 
 def vdc(count: int, base: int = 2) -> float:
-    """Van der Corput sequence"""
+    """van der Corput sequence"""
     res = 0.0
     denom = 1.0
     while count != 0:

@@ -5,8 +5,8 @@ use lds_gen::ilds::{Halton, VdCorput};
 fn main() {
     println!("=== Integer Low-Discrepancy Sequence Examples ===\n");
 
-    // Example 1: Integer Van der Corput sequence
-    println!("1. Integer Van der Corput sequence (base 2, scale 10):");
+    // Example 1: Integer van der Corput sequence
+    println!("1. Integer van der Corput sequence (base 2, scale 10):");
     println!("   (Values represent 0.x * 2^10)");
     let mut ivdc = VdCorput::new(2, 10);
     ivdc.reseed(0);
@@ -41,7 +41,7 @@ fn main() {
     println!();
 
     // Example 3: Different scales
-    println!("3. Integer Van der Corput with different scales:");
+    println!("3. Integer van der Corput with different scales:");
     for &scale in &[8, 10, 12, 16] {
         let mut vdc = VdCorput::new(2, scale);
         vdc.reseed(0);

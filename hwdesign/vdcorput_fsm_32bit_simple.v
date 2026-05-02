@@ -2,7 +2,7 @@
 VdCorput FSM-Based Sequential Implementation (32-bit) - Simple Verilog Version
 Supports bases 2, 3, and 7
 
-This module implements the Van der Corput sequence generator using a Finite State Machine (FSM) approach.
+This module implements the van der Corput sequence generator using a Finite State Machine (FSM) approach.
 Simplified for iverilog compatibility.
 */
 

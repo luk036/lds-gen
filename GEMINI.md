@@ -6,7 +6,7 @@ This project, `lds-gen`, is a Python library for generating low-discrepancy sequ
 
 The library provides several types of low-discrepancy sequence generators, including:
 
-*   Van der Corput sequence
+*   van der Corput sequence
 *   Halton sequence
 *   Circle sequence
 *   Disk sequence

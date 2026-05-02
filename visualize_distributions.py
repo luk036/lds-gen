@@ -35,14 +35,14 @@ def plot_1d_comparison():
     vdc2 = VdCorput(base=2)
     points2 = [vdc2.pop() for _ in range(n)]
     axes[0, 0].scatter(range(n), points2, alpha=0.6, s=30)
-    axes[0, 0].set_title("Van der Corput (base=2)")
+    axes[0, 0].set_title("van der Corput (base=2)")
     axes[0, 0].set_xlabel("Sequence Index")
     axes[0, 0].set_ylabel("Value")
 
     vdc3 = VdCorput(base=3)
     points3 = [vdc3.pop() for _ in range(n)]
     axes[0, 1].scatter(range(n), points3, alpha=0.6, s=30, color="orange")
-    axes[0, 1].set_title("Van der Corput (base=3)")
+    axes[0, 1].set_title("van der Corput (base=3)")
     axes[0, 1].set_xlabel("Sequence Index")
     axes[0, 1].set_ylabel("Value")
 

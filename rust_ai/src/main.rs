@@ -14,7 +14,7 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// Generate Van der Corput sequence
+    /// Generate van der Corput sequence
     Vdc {
         /// Base of the sequence (default: 2)
         #[arg(short, long, default_value_t = 2)]
@@ -76,7 +76,7 @@ fn main() {
 
     match cli.command {
         Commands::Vdc { base, count, seed } => {
-            println!("Van der Corput sequence (base: {}, seed: {}):", base, seed);
+            println!("van der Corput sequence (base: {}, seed: {}):", base, seed);
             let mut vgen = VdCorput::new(base);
             vgen.reseed(seed);
             for i in 0..count {

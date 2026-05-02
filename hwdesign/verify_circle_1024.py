@@ -7,7 +7,7 @@ import math
 
 
 def vdc(count, base=2):
-    """Van der Corput sequence"""
+    """van der Corput sequence"""
     res = 0.0
     denom = 1.0
     while count != 0:

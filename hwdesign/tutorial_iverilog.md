@@ -60,7 +60,7 @@ hwdesign/
 
 ### 1. 理解 VdCorput 模块
 
-VdCorput (Van der Corput) 序列是最基本的低差异序列。我们的实现特点：
+VdCorput (van der Corput) 序列是最基本的低差异序列。我们的实现特点：
 - 32位定点数 (16.16 格式)
 - FSM (有限状态机) 顺序实现
 - 支持基数 2、3、7

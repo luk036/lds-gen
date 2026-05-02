@@ -39,11 +39,11 @@ def ensure_numpy() -> None:
 
 
 def generate_vdcorput_vectorized(count: int, base: int) -> List[float]:
-    """Generate Van der Corput sequence values using NumPy for vectorized computation.
+    """Generate van der Corput sequence values using NumPy for vectorized computation.
 
     :param count: Number of values to generate.
     :type count: int
-    :param base: The base for the Van der Corput sequence.
+    :param base: The base for the van der Corput sequence.
     :type base: int
     :return: List of count floating-point values in the sequence.
     :raises ImportError: If NumPy is not available.
@@ -163,7 +163,7 @@ if __name__ == "__main__":
 
     n = 100000
 
-    print(f"\nGenerating {n} Van der Corput points...")
+    print(f"\nGenerating {n} van der Corput points...")
     start = time.time()
     vdc_points = generate_vdcorput_vectorized(n, 2)
     elapsed = time.time() - start

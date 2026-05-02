@@ -695,7 +695,7 @@ build_type=Release
 
 using namespace lds_gen;
 
-TEST_CASE("Van der Corput sequence function") {
+TEST_CASE("van der Corput sequence function") {
     CHECK(vdc(11, 2) == 0.8125);
     CHECK(vdc(0, 2) == 0.0);
     CHECK(vdc(1, 2) == 0.5);
@@ -1083,7 +1083,7 @@ mod tests {
 #include "doctest.h"
 #include "lds_gen/lds.hpp"
 
-TEST_CASE("Van der Corput sequence") {
+TEST_CASE("van der Corput sequence") {
     SUBCASE("Basic functionality") {
         CHECK(lds_gen::vdc(11, 2) == 0.8125);
         CHECK(lds_gen::vdc(0, 2) == 0.0);

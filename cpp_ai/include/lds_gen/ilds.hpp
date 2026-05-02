@@ -7,7 +7,7 @@
 
 namespace lds_gen {
 
-// Integer Van der Corput sequence generator class
+// Integer van der Corput sequence generator class
 class VdCorputInt {
 public:
     explicit VdCorputInt(std::uint64_t base = 2, std::uint64_t scale = 10);

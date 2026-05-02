@@ -5,8 +5,8 @@ use lds_gen::{Circle, Disk, Halton, HaltonN, PRIME_TABLE, Sphere, VdCorput};
 fn main() {
     println!("=== Basic Low-Discrepancy Sequence Examples ===\n");
 
-    // Example 1: Van der Corput sequence
-    println!("1. Van der Corput sequence (base 2):");
+    // Example 1: van der Corput sequence
+    println!("1. van der Corput sequence (base 2):");
     let mut vgen = VdCorput::new(2);
     vgen.reseed(0);
     for i in 0..5 {

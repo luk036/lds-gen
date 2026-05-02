@@ -28,7 +28,7 @@
 
 ### 1.3 国内外研究现状
 
-低差异序列的研究起源于20世纪中期，Van der Corput在1935年提出了基础的一维序列，Halton在1960年将其扩展到多维情况。近年来，随着GPU和FPGA技术的发展，硬件加速的准随机数生成器研究逐渐增多。
+低差异序列的研究起源于20世纪中期，van der Corput在1935年提出了基础的一维序列，Halton在1960年将其扩展到多维情况。近年来，随着GPU和FPGA技术的发展，硬件加速的准随机数生成器研究逐渐增多。
 
 国外在该领域的研究主要集中在算法优化和并行实现上，如NVIDIA的CUDA库中包含了多种准随机数生成器。国内的研究相对较少，主要集中在对现有算法的改进和应用上。在硬件实现方面，特别是基于SystemVerilog的完整IP核设计仍有较大的发展空间。
 
@@ -48,7 +48,7 @@
 #### 2.2.1 低差异序列算法研究
 
 深入研究以下低差异序列的数学原理和实现方法：
-- Van der Corput序列及其变种
+- van der Corput序列及其变种
 - Halton序列的多维扩展
 - 几何映射序列（Circle、Disk、Sphere、Sphere3）
 - 序列的统计特性和均匀性分析
@@ -120,7 +120,7 @@
 
 ### 4.3 技术指标
 
-- **支持序列类型**：Van der Corput、Halton、Circle、Disk、Sphere、Sphere3
+- **支持序列类型**：van der Corput、Halton、Circle、Disk、Sphere、Sphere3
 - **数据精度**：32位定点数
 - **时钟频率**：≥100MHz
 - **资源消耗**：<2000 LUT（FPGA实现）
@@ -148,7 +148,7 @@
 - 第7-8周：硬件架构设计
 
 #### 第二阶段：设计与实现（第3-4月）
-- 第9-10周：Van der Corput序列生成器实现
+- 第9-10周：van der Corput序列生成器实现
 - 第11-12周：Halton序列生成器实现
 - 第13-14周：几何序列生成器实现
 - 第15-16周：系统集成与调试
@@ -216,7 +216,7 @@
 
 ## 9. 参考文献
 
-[1] Van der Corput, J. G. (1935). "Verteilungsfunktionen". Proc. Koninklijke Akad. Wetensch. Amsterdam. 38: 813-821.
+[1] van der Corput, J. G. (1935). "Verteilungsfunktionen". Proc. Koninklijke Akad. Wetensch. Amsterdam. 38: 813-821.
 
 [2] Halton, J. H. (1960). "On the efficiency of certain quasi-random sequences of points in evaluating multi-dimensional integrals". Numerische Mathematik. 2 (1): 84-90.
 

@@ -49,7 +49,7 @@
 
 #### 1.3.2 低差异序列的硬件实现研究
 
-低差异序列的研究可以追溯到20世纪中期，Van der Corput在1935年提出了基础的一维序列，Halton在1960年将其扩展到多维情况。在硬件实现方面，近年来的研究主要集中在：
+低差异序列的研究可以追溯到20世纪中期，van der Corput在1935年提出了基础的一维序列，Halton在1960年将其扩展到多维情况。在硬件实现方面，近年来的研究主要集中在：
 1. **FPGA实现**：利用FPGA的并行性加速序列生成
 2. **ASIC设计**：专用集成电路实现高性能序列生成
 3. **GPU加速**：利用GPU的并行计算能力
@@ -82,7 +82,7 @@
 #### 2.2.2 低差异序列算法研究
 
 深入研究以下低差异序列的数学原理和实现方法：
-- **Van der Corput序列**：基础的一维低差异序列
+- **van der Corput序列**：基础的一维低差异序列
 - **Halton序列**：多维Van der Corput序列的扩展
 - **几何映射序列**：Circle、Disk、Sphere、Sphere3等几何序列
 - **序列的统计特性和均匀性分析**：序列质量评估方法
@@ -177,7 +177,7 @@
 
 ### 4.3 技术指标
 
-- **支持序列类型**：Van der Corput、Halton、Circle、Disk、Sphere、Sphere3
+- **支持序列类型**：van der Corput、Halton、Circle、Disk、Sphere、Sphere3
 - **数据精度**：32位定点数
 - **时钟频率**：≥100MHz
 - **资源消耗**：<2000 LUT（FPGA实现）
@@ -293,7 +293,7 @@
 
 [5] Feng Y, Gu J, Li L, et al. VerilogEval: An Open Benchmark for Evaluating Large Language Models on Verilog Code Generation[J]. arXiv preprint arXiv:2310.08470, 2023.
 
-[6] Van der Corput J G. Verteilungsfunktionen[J]. Proc. Koninklijke Akad. Wetensch. Amsterdam, 1935, 38: 813-821.
+[6] van der Corput J G. Verteilungsfunktionen[J]. Proc. Koninklijke Akad. Wetensch. Amsterdam, 1935, 38: 813-821.
 
 [7] Halton J H. On the efficiency of certain quasi-random sequences of points in evaluating multi-dimensional integrals[J]. Numerische Mathematik, 1960, 2(1): 84-90.
 

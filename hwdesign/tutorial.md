@@ -14,7 +14,7 @@
 本教程将详细介绍如何使用 Icarus Verilog (iverilog) 进行 Verilog 仿真，以及如何使用 Yosys 进行逻辑综合。我们将以 VdCorput 低差异序列生成器为例，展示完整的数字电路设计流程。
 
 ### 什么是 VdCorput 序列？
-VdCorput (Van der Corput) 序列是一种低差异序列，常用于蒙特卡洛模拟、数值积分和计算机图形学。它通过将整数在指定基数下反转数字并放在小数点后来生成均匀分布的序列。
+VdCorput (van der Corput) 序列是一种低差异序列，常用于蒙特卡洛模拟、数值积分和计算机图形学。它通过将整数在指定基数下反转数字并放在小数点后来生成均匀分布的序列。
 
 ### 工具链概述
 - **Icarus Verilog (iverilog)**: 开源的 Verilog 仿真器，用于编译和仿真 Verilog 代码

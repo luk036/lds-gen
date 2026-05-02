@@ -395,7 +395,7 @@ graph TD
     D --> D3[Python: Fastest]
 ```
 
-### Benchmark: Van der Corput Sequence Generation
+### Benchmark: van der Corput Sequence Generation
 
 | Language | Time (ms) | Memory (MB) | Code Simplicity |
 |----------|-----------|-------------|-----------------|
@@ -411,7 +411,7 @@ graph TD
 import numpy as np
 
 def vdc_vectorized(n: int, base: int = 2) -> np.ndarray:
-    """Vectorized Van der Corput sequence generation"""
+    """Vectorized van der Corput sequence generation"""
     count = np.arange(1, n + 1)
     result = np.zeros(n)
 
@@ -578,7 +578,7 @@ cpack
 
 ## 💻 Code Examples: LDS Generator
 
-### Van der Corput Sequence Implementation
+### van der Corput Sequence Implementation
 
 #### Python Implementation
 ```python
@@ -586,7 +586,7 @@ cpack
 from typing import List, Sequence
 
 def vdc(count: int, base: int = 2) -> float:
-    """Van der Corput sequence
+    """van der Corput sequence
 
     >>> vdc(11, 2)
     0.8125
@@ -600,7 +600,7 @@ def vdc(count: int, base: int = 2) -> float:
     return res
 
 class VdCorput:
-    """Van der Corput sequence generator"""
+    """van der Corput sequence generator"""
 
     def __init__(self, base: int = 2) -> None:
         self._count: int = 0

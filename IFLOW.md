@@ -5,7 +5,7 @@
 `lds-gen` 是一个用于生成低差异序列（Low Discrepancy Sequence）的 Python 库。该库实现了多种低差异序列生成器，用于创建比随机数更均匀分布的数字序列。这些序列在计算机图形学、数值积分和蒙特卡洛模拟等领域非常有用。
 
 主要实现的序列类型包括：
-1. Van der Corput 序列
+1. van der Corput 序列
 2. Halton 序列
 3. Circle 序列
 4. Disk 序列
@@ -70,9 +70,9 @@
 
 ## 主要功能
 
-### Van der Corput 序列
-- `vdc(count, base)` 函数：将整数 count 转换为指定基数的 Van der Corput 序列值
-- `VdCorput` 类：Van der Corput 序列生成器，包含 `pop()` 和 `reseed()` 方法
+### van der Corput 序列
+- `vdc(count, base)` 函数：将整数 count 转换为指定基数的 van der Corput 序列值
+- `VdCorput` 类：van der Corput 序列生成器，包含 `pop()` 和 `reseed()` 方法
 
 ### Halton 序列
 - `Halton` 类：使用不同基数的二维低差异序列生成器

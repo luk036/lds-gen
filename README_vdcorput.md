@@ -1,11 +1,11 @@
-# Van der Corput SystemVerilog Implementation
+# van der Corput SystemVerilog Implementation
 
-This directory contains SystemVerilog implementations of the Van der Corput low-discrepancy sequence generator for bases 2, 3, and 7, converted from the Python implementation in `../src/lds_gen/ilds.py`.
+This directory contains SystemVerilog implementations of the van der Corput low-discrepancy sequence generator for bases 2, 3, and 7, converted from the Python implementation in `../src/lds_gen/ilds.py`.
 
 ## Files
 
 ### Core Modules
-- **`vdcorput_32bit.sv`** - Single-base Van der Corput generator (configurable base)
+- **`vdcorput_32bit.sv`** - Single-base van der Corput generator (configurable base)
 - **`vdcorput_multi_base.sv`** - Multi-base generator (simultaneous bases 2, 3, 7)
 
 ### Testbenches
@@ -19,10 +19,10 @@ This directory contains SystemVerilog implementations of the Van der Corput low-
 ## Implementation Details
 
 ### Algorithm
-The Van der Corput sequence converts integer `count` to a reversed base representation:
+The van der Corput sequence converts integer `count` to a reversed base representation:
 1. Repeatedly divide `count` by the base, collecting remainders
 2. Multiply each remainder by decreasing powers of the base
-3. Sum the results to get the Van der Corput value
+3. Sum the results to get the van der Corput value
 
 ### Features
 - **32-bit integer arithmetic**
@@ -43,7 +43,7 @@ module vdcorput_32bit #(
     input  wire        pop_enable,    // Enable pop operation
     input  wire [31:0] seed,          // Seed value for reseed
     input  wire        reseed_enable, // Enable reseed operation
-    output reg  [31:0] vdc_out,       // Van der Corput output
+    output reg  [31:0] vdc_out,       // van der Corput output
     output reg         valid          // Output valid flag
 );
 ```

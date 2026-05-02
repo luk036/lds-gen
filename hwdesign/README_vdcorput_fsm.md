@@ -2,7 +2,7 @@
 
 ## Overview
 
-This directory contains a hardware implementation of the Van der Corput sequence generator using a Finite State Machine (FSM) approach. The design supports bases 2, 3, and 7, and uses 32-bit fixed-point arithmetic (16.16 format).
+This directory contains a hardware implementation of the van der Corput sequence generator using a Finite State Machine (FSM) approach. The design supports bases 2, 3, and 7, and uses 32-bit fixed-point arithmetic (16.16 format).
 
 ## Files
 
@@ -17,7 +17,7 @@ This directory contains a hardware implementation of the Van der Corput sequence
 
 ## Algorithm
 
-The Van der Corput sequence converts an integer `count` to a floating-point value by:
+The van der Corput sequence converts an integer `count` to a floating-point value by:
 1. Repeatedly dividing `count` by the base
 2. Accumulating remainders divided by decreasing powers of the base
 
@@ -148,6 +148,6 @@ Possible enhancements:
 ## References
 
 1. Python `lds_gen` library: `src/lds_gen/lds.py`
-2. Van der Corput sequence algorithm
+2. van der Corput sequence algorithm
 3. Fixed-point arithmetic techniques
 4. FSM design patterns for digital circuits

@@ -51,7 +51,7 @@ LLM在硬件设计中的应用主要体现在以下几个方面：
 
 #### 1.3.2 低差异序列的硬件实现研究
 
-低差异序列的研究可以追溯到20世纪中期，Van der Corput在1935年提出了基础的一维序列，Halton在1960年将其扩展到多维情况。在硬件实现方面，近年来的研究主要集中在：
+低差异序列的研究可以追溯到20世纪中期，van der Corput在1935年提出了基础的一维序列，Halton在1960年将其扩展到多维情况。在硬件实现方面，近年来的研究主要集中在：
 1. **FPGA实现**：利用FPGA的并行性加速序列生成
 2. **ASIC设计**：专用集成电路实现高性能序列生成
 3. **GPU加速**：利用GPU的并行计算能力
@@ -152,9 +152,9 @@ LLM在硬件设计中的应用主要体现在以下几个方面：
 3. **确定性**：序列是确定性的，可重复生成
 4. **快速收敛**：在数值积分中收敛速度更快
 
-#### 3.1.1 Van der Corput序列
+#### 3.1.1 van der Corput序列
 
-Van der Corput序列是最基本的一维低差异序列，生成算法为：
+van der Corput序列是最基本的一维低差异序列，生成算法为：
 1. 将整数k表示为指定基数b的进制形式
 2. 反转数字顺序
 3. 在反转后的数字前添加小数点
@@ -186,7 +186,7 @@ Halton序列是Van der Corput序列的多维扩展，使用不同的质数作为
 │                    低差异序列生成系统                        │
 ├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
-│  │ Van der     │  │   Halton    │  │   Circle    │         │
+│  │ van der     │  │   Halton    │  │   Circle    │         │
 │  │ Corput      │  │   序列      │  │   序列      │         │
 │  │ 序列生成器   │  │   生成器    │  │   生成器    │         │
 │  └─────────────┘  └─────────────┘  └─────────────┘         │
@@ -213,9 +213,9 @@ Halton序列是Van der Corput序列的多维扩展，使用不同的质数作为
 
 ### 3.3 关键模块实现
 
-#### 3.3.1 Van der Corput序列生成器
+#### 3.3.1 van der Corput序列生成器
 
-Van der Corput序列生成器是所有其他序列生成器的基础，在LLM辅助下实现了以下特性：
+van der Corput序列生成器是所有其他序列生成器的基础，在LLM辅助下实现了以下特性：
 
 ```systemverilog
 module vdcorput_32bit #(
@@ -227,7 +227,7 @@ module vdcorput_32bit #(
     input  wire        pop_enable,    // Enable pop operation
     input  wire [31:0] seed,          // Seed value for reseed
     input  wire        reseed_enable, // Enable reseed operation
-    output reg  [31:0] vdc_out,       // Van der Corput output
+    output reg  [31:0] vdc_out,       // van der Corput output
     output reg         valid          // Output valid flag
 );
 ```
@@ -363,13 +363,13 @@ LLM生成了Python验证脚本用于对比验证：
 ```python
 #!/usr/bin/env python3
 """
-Python script to verify Van der Corput SystemVerilog implementation
+Python script to verify van der Corput SystemVerilog implementation
 This script generates reference values and compares them with the expected values
 used in the testbenches.
 """
 
 def vdc_i(count: int, base: int, scale: int) -> int:
-    """Python implementation of Van der Corput sequence (integer version)"""
+    """Python implementation of van der Corput sequence (integer version)"""
     vdc = 0
     factor = base ** scale
 
@@ -385,7 +385,7 @@ def generate_reference_values():
     """Generate reference values for bases 2, 3, and 7"""
     scale = 10  # Using scale 10 for easy verification
 
-    print(f"Van der Corput Reference Values (scale={scale})")
+    print(f"van der Corput Reference Values (scale={scale})")
     print("=" * 50)
 
     # Generate reference values for verification
@@ -469,10 +469,10 @@ LLM为所有代码生成了详细的注释：
 
 ```systemverilog
 /*
-Van der Corput Sequence Generator (32-bit)
+van der Corput Sequence Generator (32-bit)
 
-This SystemVerilog module implements a Van der Corput sequence generator for bases 2, 3, and 7.
-The Van der Corput sequence is a low-discrepancy sequence that provides well-distributed
+This SystemVerilog module implements a van der Corput sequence generator for bases 2, 3, and 7.
+The van der Corput sequence is a low-discrepancy sequence that provides well-distributed
 points in the interval [0, 1]. This implementation generates 32-bit integer outputs
 scaled by base^scale.
 
@@ -482,9 +482,9 @@ The algorithm works by:
 3. Scaling the result by base^scale
 
 This implementation supports:
-- Base 2: Binary Van der Corput sequence
-- Base 3: Ternary Van der Corput sequence
-- Base 7: Septenary Van der Corput sequence
+- Base 2: Binary van der Corput sequence
+- Base 3: Ternary van der Corput sequence
+- Base 7: Septenary van der Corput sequence
 - 32-bit integer arithmetic
 - Configurable scale parameter (default 16)
 */
@@ -622,7 +622,7 @@ LLM协助生成了完整的项目报告，包括：
 
 [5] Feng Y, Gu J, Li L, et al. VerilogEval: An Open Benchmark for Evaluating Large Language Models on Verilog Code Generation[J]. arXiv preprint arXiv:2310.08470, 2023.
 
-[6] Van der Corput J G. Verteilungsfunktionen[J]. Proc. Koninklijke Akad. Wetensch. Amsterdam, 1935, 38: 813-821.
+[6] van der Corput J G. Verteilungsfunktionen[J]. Proc. Koninklijke Akad. Wetensch. Amsterdam, 1935, 38: 813-821.
 
 [7] Halton J H. On the efficiency of certain quasi-random sequences of points in evaluating multi-dimensional integrals[J]. Numerische Mathematik, 1960, 2(1): 84-90.
 
@@ -638,7 +638,7 @@ LLM协助生成了完整的项目报告，包括：
 
 ```
 experiment/
-├── vdcorput_32bit.sv        # Van der Corput序列生成器
+├── vdcorput_32bit.sv        # van der Corput序列生成器
 ├── halton_32bit.sv          # Halton序列生成器
 ├── circle_32bit.sv          # Circle序列生成器
 ├── disk_32bit.sv            # Disk序列生成器
@@ -705,7 +705,7 @@ LLM响应：
 
 | 序列类型 | 资源使用(LUT) | 时钟频率(MHz) | 延迟(cycles) | 功耗(mW) |
 |---------|---------------|---------------|--------------|----------|
-| Van der Corput | 500 | 200 | 3 | 70 |
+| van der Corput | 500 | 200 | 3 | 70 |
 | Halton | 800 | 180 | 5 | 85 |
 | Circle | 600 | 190 | 4 | 75 |
 | Disk | 700 | 170 | 5 | 80 |

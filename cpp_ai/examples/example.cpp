@@ -8,8 +8,8 @@ int main() {
     std::cout << "Low-Discrepancy Sequence Generator Examples\n";
     std::cout << "===========================================\n\n";
 
-    // Example 1: Van der Corput sequence
-    std::cout << "1. Van der Corput sequence (base 2):\n";
+    // Example 1: van der Corput sequence
+    std::cout << "1. van der Corput sequence (base 2):\n";
     lds_gen::VdCorput vgen(2);
     vgen.reseed(0);
     for (int i = 0; i < 10; ++i) {
@@ -93,7 +93,7 @@ int main() {
     std::cout << "\n";
 
     // Example 8: Integer version
-    std::cout << "8. Integer Van der Corput sequence (base 2, scale 10):\n";
+    std::cout << "8. Integer van der Corput sequence (base 2, scale 10):\n";
     lds_gen::VdCorputInt vdc_int(2, 10);
     vdc_int.reseed(0);
     for (int i = 0; i < 5; ++i) {
