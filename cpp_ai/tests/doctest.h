@@ -557,7 +557,7 @@ DOCTEST_MSVC_SUPPRESS_WARNING_POP
 
 namespace doctest {
 
-using std::size_t;
+using unsigned long;
 
 DOCTEST_INTERFACE extern bool is_running_in_test;
 
@@ -4799,7 +4799,7 @@ namespace {
 
         static void handleSignal(int sig) {
             const char* name = "<unknown signal>";
-            for(std::size_t i = 0; i < DOCTEST_COUNTOF(signalDefs); ++i) {
+            for(unsigned long i = 0; i < DOCTEST_COUNTOF(signalDefs); ++i) {
                 SignalDefs& def = signalDefs[i];
                 if(sig == def.id) {
                     name = def.name;
@@ -4829,7 +4829,7 @@ namespace {
             struct sigaction sa = {};
             sa.sa_handler       = handleSignal;
             sa.sa_flags         = SA_ONSTACK;
-            for(std::size_t i = 0; i < DOCTEST_COUNTOF(signalDefs); ++i) {
+            for(unsigned long i = 0; i < DOCTEST_COUNTOF(signalDefs); ++i) {
                 sigaction(signalDefs[i].id, &sa, &oldSigActions[i]);
             }
         }
@@ -4838,7 +4838,7 @@ namespace {
         static void reset() {
             if(isSet) {
                 // Set signals back to previous values -- hopefully nobody overwrote them in the meantime
-                for(std::size_t i = 0; i < DOCTEST_COUNTOF(signalDefs); ++i) {
+                for(unsigned long i = 0; i < DOCTEST_COUNTOF(signalDefs); ++i) {
                     sigaction(signalDefs[i].id, &oldSigActions[i], nullptr);
                 }
                 // Return the old stack
@@ -5178,7 +5178,7 @@ namespace {
         // Apostrophe escaping not necessary if we always use " to write attributes
         // (see: https://www.w3.org/TR/xml/#syntax)
 
-        for( std::size_t idx = 0; idx < m_str.size(); ++ idx ) {
+        for( unsigned long idx = 0; idx < m_str.size(); ++ idx ) {
             uchar c = m_str[idx];
             switch (c) {
             case '<':   os << "&lt;"; break;
@@ -5238,7 +5238,7 @@ namespace {
                 // This means: bitpattern 10XX XXXX and the extracted value is sane (ish)
                 bool valid = true;
                 uint32_t value = headerValue(c);
-                for (std::size_t n = 1; n < encBytes; ++n) {
+                for (unsigned long n = 1; n < encBytes; ++n) {
                     uchar nc = m_str[idx + n];
                     valid &= ((nc & 0xC0) == 0x80);
                     value = (value << 6) | (nc & 0x3F);
@@ -5259,7 +5259,7 @@ namespace {
                 }
 
                 // If we got here, this is in fact a valid(ish) utf-8 sequence
-                for (std::size_t n = 0; n < encBytes; ++n) {
+                for (unsigned long n = 0; n < encBytes; ++n) {
                     os << m_str[idx + n];
                 }
                 idx += encBytes - 1;

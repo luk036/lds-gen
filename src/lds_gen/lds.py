@@ -71,13 +71,13 @@ def vdc(count: int, base: int = 2) -> float:
         >>> vdc(11, 2)
         0.8125
     """
-    res = 0.0
+    reslt = 0.0
     denom = 1.0
     while count != 0:
         denom *= base
         count, remainder = divmod(count, base)
-        res += remainder / denom
-    return res
+        reslt += remainder / denom
+    return reslt
 
 
 class VdCorput:
@@ -122,11 +122,6 @@ class VdCorput:
         self._count: int = 0
         self._count_lock = threading.Lock()
         self.base: int = base
-        self.rev_lst: List[float] = []
-        reverse: float = 1.0
-        for i in range(64):
-            reverse /= base
-            self.rev_lst.append(reverse)
 
     def pop(self) -> float:
         """
@@ -149,14 +144,13 @@ class VdCorput:
         with self._count_lock:
             self._count += 1  # ignore 0
             count = self._count
-        res = 0.0
-        idx = 0
+        reslt = 0.0
+        denom = 1.0
         while count != 0:
+            denom *= self.base
             count, remainder = divmod(count, self.base)
-            if remainder != 0:
-                res += remainder * self.rev_lst[idx]
-            idx += 1
-        return res
+            reslt += remainder / denom
+        return reslt
 
     def reseed(self, seed: int) -> None:
         """

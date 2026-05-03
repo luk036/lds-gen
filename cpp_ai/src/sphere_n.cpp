@@ -8,7 +8,7 @@
 
 namespace lds_gen {
 
-std::vector<double> linspace(double start, double stop, std::size_t num) {
+std::vector<double> linspace(double start, double stop, unsigned long num) {
     if (num == 1) {
         return {start};
     }
@@ -17,7 +17,7 @@ std::vector<double> linspace(double start, double stop, std::size_t num) {
     result.reserve(num);
 
     double step = (stop - start) / static_cast<double>(num - 1);
-    for (std::size_t i = 0; i < num; ++i) {
+    for (unsigned long i = 0; i < num; ++i) {
         result.push_back(start + static_cast<double>(i) * step);
     }
 
@@ -36,7 +36,7 @@ double simple_interp(double x, std::span<const double> xp, std::span<const doubl
         return yp.back();
     }
 
-    for (std::size_t i = 0; i < xp.size() - 1; ++i) {
+    for (unsigned long i = 0; i < xp.size() - 1; ++i) {
         if (xp[i] <= x && x <= xp[i + 1]) {
             // Linear interpolation
             double t = (x - xp[i]) / (xp[i + 1] - xp[i]);
@@ -72,7 +72,7 @@ namespace {
     std::vector<double> compute_f2(const std::vector<double>& neg_cosine, const std::vector<double>& sine) {
         std::vector<double> result;
         result.reserve(X.size());
-        for (std::size_t i = 0; i < X.size(); ++i) {
+        for (unsigned long i = 0; i < X.size(); ++i) {
             result.push_back((X[i] + neg_cosine[i] * sine[i]) / 2.0);
         }
         return result;
@@ -96,7 +96,7 @@ static std::vector<double> get_tp_recursive(int n) {
     std::vector<double> result;
     result.reserve(tp_minus2.size());
 
-    for (std::size_t i = 0; i < tp_minus2.size(); ++i) {
+    for (unsigned long i = 0; i < tp_minus2.size(); ++i) {
         double value = ((n - 1) * tp_minus2[i] + NEG_COSINE[i] * std::pow(SINE[i], n - 1)) / n;
         result.push_back(value);
     }

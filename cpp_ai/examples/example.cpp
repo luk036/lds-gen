@@ -68,7 +68,7 @@ int main() {
     for (int i = 0; i < 3; ++i) {
         auto point = s3gen.pop();
         std::cout << "   [";
-        for (std::size_t j = 0; j < point.size(); ++j) {
+        for (unsigned long j = 0; j < point.size(); ++j) {
             std::cout << point[j];
             if (j < point.size() - 1) std::cout << ", ";
         }
@@ -84,7 +84,7 @@ int main() {
     for (int i = 0; i < 2; ++i) {
         auto point = sngen.pop();
         std::cout << "   [";
-        for (std::size_t j = 0; j < point.size(); ++j) {
+        for (unsigned long j = 0; j < point.size(); ++j) {
             std::cout << point[j];
             if (j < point.size() - 1) std::cout << ", ";
         }

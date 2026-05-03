@@ -31,7 +31,7 @@ double VdCorput::pop() {
     ++count_; // ignore 0
     std::uint64_t count = count_;
     double res = 0.0;
-    std::size_t i = 0;
+    unsigned long i = 0;
     while (count != 0) {
         std::uint64_t remainder = count % base_;
         count /= base_;

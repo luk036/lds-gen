@@ -15,7 +15,7 @@ constexpr double PI = std::numbers::pi;
 constexpr double HALF_PI = PI / 2.0;
 
 // Simple implementation of numpy.linspace
-std::vector<double> linspace(double start, double stop, std::size_t num);
+std::vector<double> linspace(double start, double stop, unsigned long num);
 
 // Simple implementation of numpy.interp for 1D interpolation
 double simple_interp(double x, std::span<const double> xp, std::span<const double> yp);
