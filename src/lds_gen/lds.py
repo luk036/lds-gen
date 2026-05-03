@@ -76,7 +76,8 @@ def vdc(count: int, base: int = 2) -> float:
     while count != 0:
         denom *= base
         count, remainder = divmod(count, base)
-        reslt += remainder / denom
+        if remainder != 0:
+            reslt += remainder / denom
     return reslt
 
 
@@ -149,7 +150,8 @@ class VdCorput:
         while count != 0:
             denom *= self.base
             count, remainder = divmod(count, self.base)
-            reslt += remainder / denom
+            if remainder != 0:
+                reslt += remainder / denom
         return reslt
 
     def reseed(self, seed: int) -> None:
