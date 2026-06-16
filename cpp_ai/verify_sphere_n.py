@@ -12,7 +12,7 @@ from lds_gen.sphere_n import Sphere3, SphereN, get_tp, linspace, simple_interp
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 
-def test_linspace():
+def test_linspace() -> None:
     """Test linspace function"""
     print("Testing linspace function...")
     result = linspace(0.0, 1.0, 5)
@@ -25,7 +25,7 @@ def test_linspace():
     print(f"  ✓ linspace(0.0, 1.0, 5) = {result}")
 
 
-def test_simple_interp():
+def test_simple_interp() -> None:
     """Test simple_interp function"""
     print("Testing simple_interp function...")
     xp = [0.0, 1.0, 2.0, 3.0]
@@ -46,7 +46,7 @@ def test_simple_interp():
     print(f"  ✓ simple_interp(1.5) = {result}")
 
 
-def test_get_tp():
+def test_get_tp() -> None:
     """Test get_tp function"""
     print("Testing get_tp function...")
     tp0 = get_tp(0)
@@ -62,7 +62,7 @@ def test_get_tp():
     print(f"  ✓ get_tp(1): size={len(tp1)}, first={tp1[0]}, last={tp1[-1]}")
 
 
-def test_sphere3():
+def test_sphere3() -> None:
     """Test Sphere3 class"""
     print("Testing Sphere3 class...")
     sgen = Sphere3([2, 3, 5])
@@ -89,7 +89,7 @@ def test_sphere3():
     print(f"  ✓ Sphere3 first point: {result}")
 
 
-def test_sphereN():
+def test_sphereN() -> None:
     """Test SphereN class"""
     print("Testing SphereN class...")
     sgen = SphereN([2, 3, 5, 7])

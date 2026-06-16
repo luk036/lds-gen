@@ -22,7 +22,7 @@ from lds_gen.lds import (
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 
-def test_vdc():
+def test_vdc() -> None:
     """Test vdc function"""
     print("Testing vdc function...")
     result = vdc(11, 2)
@@ -31,7 +31,7 @@ def test_vdc():
     print(f"  ✓ vdc(11, 2) = {result}")
 
 
-def test_vdcorput():
+def test_vdcorput() -> None:
     """Test VdCorput class"""
     print("Testing VdCorput class...")
     vgen = VdCorput(2)
@@ -46,7 +46,7 @@ def test_vdcorput():
         print(f"  ✓ VdCorput[{i}] = {result}")
 
 
-def test_halton():
+def test_halton() -> None:
     """Test Halton class"""
     print("Testing Halton class...")
     hgen = Halton([2, 3])
@@ -61,7 +61,7 @@ def test_halton():
     print(f"  ✓ Halton[0] = {result}")
 
 
-def test_circle():
+def test_circle() -> None:
     """Test Circle class"""
     print("Testing Circle class...")
     cgen = Circle(2)
@@ -76,7 +76,7 @@ def test_circle():
     print(f"  ✓ Circle[0] = {result}")
 
 
-def test_disk():
+def test_disk() -> None:
     """Test Disk class"""
     print("Testing Disk class...")
     dgen = Disk([2, 3])
@@ -91,7 +91,7 @@ def test_disk():
     print(f"  ✓ Disk[0] = {result}")
 
 
-def test_sphere():
+def test_sphere() -> None:
     """Test Sphere class"""
     print("Testing Sphere class...")
     sgen = Sphere([2, 3])
@@ -106,7 +106,7 @@ def test_sphere():
     print(f"  ✓ Sphere[0] = {result}")
 
 
-def test_sphere3hopf():
+def test_sphere3hopf() -> None:
     """Test Sphere3Hopf class"""
     print("Testing Sphere3Hopf class...")
     sp3hgen = Sphere3Hopf([2, 3, 5])
@@ -126,7 +126,7 @@ def test_sphere3hopf():
     print(f"  ✓ Sphere3Hopf[0] = {result}")
 
 
-def test_haltonn():
+def test_haltonn() -> None:
     """Test HaltonN class"""
     print("Testing HaltonN class...")
     hgen = HaltonN([2, 3, 5])

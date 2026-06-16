@@ -1014,7 +1014,7 @@ import pytest
 from lds_gen import VdCorput
 
 class TestVdCorput:
-    def test_basic_functionality(self, sample_sequence):
+    def test_basic_functionality(self, sample_sequence) -> None:
         vgen = VdCorput(2)
         vgen.reseed(0)
 
@@ -1026,12 +1026,12 @@ class TestVdCorput:
         (3, 1.0/3.0),
         (5, 0.2),
     ])
-    def test_different_bases(self, base, expected):
+    def test_different_bases(self, base, expected) -> None:
         vgen = VdCorput(base)
         vgen.reseed(0)
         assert abs(vgen.pop() - expected) < 1e-10
 
-    def test_error_handling(self):
+    def test_error_handling(self) -> None:
         with pytest.raises(ValueError):
             VdCorput(1)  # Invalid base
 ```
