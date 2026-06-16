@@ -41,6 +41,7 @@ block that can be used in more complex algorithms and simulations.
 """
 
 import threading
+from types import TracebackType
 from typing import List, Sequence
 
 
@@ -144,7 +145,12 @@ class VdCorput:
         """
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
         """Exit context manager protocol.
 
         :param exc_type: Exception type if an exception was raised.
@@ -259,7 +265,12 @@ class Halton:
         """
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
         """Exit context manager protocol.
 
         :param exc_type: Exception type if an exception was raised.

@@ -44,6 +44,7 @@ tasks like sampling, integration, and optimization.
 
 import threading
 from math import cos, pi, sin, sqrt
+from types import TracebackType
 from typing import Final, List, Sequence
 
 TWO_PI: Final[float] = 2.0 * pi
@@ -201,7 +202,12 @@ class VdCorput:
         """
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
         """Exit context manager protocol.
 
         :param exc_type: Exception type if an exception was raised.
@@ -323,7 +329,12 @@ class Halton:
         """
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
         """Exit context manager protocol.
 
         :param exc_type: Exception type if an exception was raised.
@@ -424,7 +435,12 @@ class Circle:
         """
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
         """Exit context manager protocol.
 
         :param exc_type: Exception type if an exception was raised.
@@ -542,7 +558,12 @@ class Disk:
         """
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
         """Exit context manager protocol.
 
         :param exc_type: Exception type if an exception was raised.
@@ -643,7 +664,12 @@ class Sphere:
         """
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
         """Exit context manager protocol.
 
         :param exc_type: Exception type if an exception was raised.
@@ -765,7 +791,12 @@ class Sphere3Hopf:
         """
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
         """Exit context manager protocol.
 
         :param exc_type: Exception type if an exception was raised.
@@ -870,7 +901,12 @@ class HaltonN:
         """
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
         """Exit context manager protocol.
 
         :param exc_type: Exception type if an exception was raised.

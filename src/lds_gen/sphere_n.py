@@ -3,6 +3,7 @@
 import math
 import threading
 from functools import cache
+from types import TracebackType
 from typing import Final, List, Protocol, Union
 
 from lds_gen.lds import Sphere, VdCorput  # low-discrepancy sequence generators
@@ -180,7 +181,12 @@ class Sphere3(SphereGen):
         """
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
         """Exit context manager protocol.
 
         :param exc_type: Exception type if an exception was raised.
@@ -299,7 +305,12 @@ class SphereN(SphereGen):
         """
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
         """Exit context manager protocol.
 
         :param exc_type: Exception type if an exception was raised.
