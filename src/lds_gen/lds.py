@@ -52,21 +52,23 @@ TWO_PI: Final[float] = 2.0 * pi
 
 
 def vdc(count: int, base: int = 2) -> float:
-    """van der Corput sequence
+    r"""van der Corput sequence in base :math:`b`.
 
-    The function `vdc` converts a given number `count` from base `base` to a floating point number.
+    Converts an integer to its radical inverse by reversing its base-:math:`b`
+    expansion:
 
-    :param count: The parameter `count` represents the number for which we want to calculate the van der
-              Corput sequence value
+    .. math::
 
-    :type count: int
+       n = \sum_{k=0}^{m} d_k b^k \quad\longrightarrow\quad
+       \phi_b(n) = \sum_{k=0}^{m} \frac{d_k}{b^{k+1}}
 
-    :param base: The `base` parameter represents the base of the number system being used. In this
-                 case, it is set to 2, which means the number system is binary (base 2), defaults to 2
+    where :math:`d_k \in \{0, 1, \dots, b-1\}` are the base-:math:`b` digits
+    of :math:`n`. For :math:`b=2` the sequence is
+    :math:`\frac12, \frac14, \frac34, \frac18, \frac58, \dots`
 
-    :type base: int (optional)
-
-    :return: The function `vdc` returns a floating point value.
+    :param count: The integer :math:`n` to convert
+    :param base: The base :math:`b` (default 2)
+    :return: The radical inverse :math:`\phi_b(n)`
 
     Examples:
         >>> vdc(11, 2)
@@ -368,17 +370,15 @@ class Circle:
         self.vdc = VdCorput(base)
 
     def pop(self) -> List[float]:
-        """
-            The `pop()` function is used to generate the next value in the sequence.
-            For example, in the `VdCorput` class, `pop()` increments the count and
-            calculates the van der Corput sequence value for that count and base. In
-            the `Halton` class, `pop()` returns the next point in the Halton sequence
-            as a `List[float; 2]`. Similarly, in the `Circle` class, `pop()`
-            returns the next point on the unit circle as a `List[float; 2]`. In
-            the `Sphere` class, `pop()` returns the next point on the unit sphere as a
-            `List[float; 3]`. And in the `Sphere3Hopf` class, `pop()` returns
-            the next point on the 3-sphere using the Hopf fibration as a
-            `List[float; 4]`.
+        r"""Next point on the unit circle.
+
+        Maps a van der Corput value :math:`v \in [0,1]` to the unit circle via
+        uniform angular sampling:
+
+        .. math::
+
+           \theta = 2\pi v,\qquad
+           \mathbf{x} = (\cos\theta,\; \sin\theta)
 
         Examples:
             >>> cgen = Circle(2)
@@ -492,17 +492,19 @@ class Disk:
         self.vdc1 = VdCorput(base[1])
 
     def pop(self) -> List[float]:
-        """
-        The `pop()` function is used to generate the next value in the sequence.
-        For example, in the `VdCorput` class, `pop()` increments the count and
-        calculates the van der Corput sequence value for that count and base. In
-        the `Halton` class, `pop()` returns the next point in the Halton sequence
-        as a `List[float; 2]`. Similarly, in the `Circle` class, `pop()`
-        returns the next point on the unit circle as a `List[float; 2]`. In
-        the `Sphere` class, `pop()` returns the next point on the unit sphere as a
-        `List[float; 3]`. And in the `Sphere3Hopf` class, `pop()` returns
-        the next point on the 3-sphere using the Hopf fibration as a
-        `List[float; 4]`.
+        r"""Next point uniformly distributed in the unit disk.
+
+        Uses a van der Corput value :math:`v_\theta` for the angle and a second
+        value :math:`v_r` for the radius, with :math:`r = \sqrt{v_r}` to
+        achieve uniform area distribution:
+
+        .. math::
+
+           \begin{aligned}
+           \theta &= 2\pi v_\theta \\[4pt]
+           r &= \sqrt{v_r} \\[4pt]
+           \mathbf{x} &= (r\cos\theta,\; r\sin\theta)
+           \end{aligned}
 
         Examples:
             >>> dgen = Disk([2, 3])
@@ -600,17 +602,20 @@ class Sphere:
         self.cirgen = Circle(base[1])
 
     def pop(self) -> List[float]:
-        """
-        The `pop()` function is used to generate the next value in the sequence.
-        For example, in the `VdCorput` class, `pop()` increments the count and
-        calculates the van der Corput sequence value for that count and base. In
-        the `Halton` class, `pop()` returns the next point in the Halton sequence
-        as a `List[float; 2]`. Similarly, in the `Circle` class, `pop()`
-        returns the next point on the unit circle as a `List[float; 2]`. In
-        the `Sphere` class, `pop()` returns the next point on the unit sphere as a
-        `List[float; 3]`. And in the `Sphere3Hopf` class, `pop()` returns
-        the next point on the 3-sphere using the Hopf fibration as a
-        `List[float; 4]`.
+        r"""Next point uniformly distributed on the unit sphere :math:`S^2`.
+
+        Uses the cylindrical equal-area projection:
+
+        .. math::
+
+           \begin{aligned}
+           \phi &= 2v - 1, \qquad v \in [0,1] \\[4pt]
+           \mathbf{x} &= \bigl(\sqrt{1-\phi^2}\cos\theta,\;
+                                 \sqrt{1-\phi^2}\sin\theta,\; \phi\bigr)
+           \end{aligned}
+
+        where :math:`\theta = 2\pi v_\theta` comes from a :class:`Circle`
+        generator and :math:`\phi` is mapped uniformly to :math:`[-1,1]`.
         """
         cosphi = 2.0 * self.vdc.pop() - 1.0  # map to [-1, 1]
         sinphi = sqrt(1.0 - cosphi * cosphi)  # cylindrical mapping
@@ -719,17 +724,25 @@ class Sphere3Hopf:
         self.vdc2 = VdCorput(base[2])
 
     def pop(self) -> List[float]:
-        """
-        The `pop()` function is used to generate the next value in the sequence.
-        For example, in the `VdCorput` class, `pop()` increments the count and
-        calculates the van der Corput sequence value for that count and base. In
-        the `Halton` class, `pop()` returns the next point in the Halton sequence
-        as a `List[float; 2]`. Similarly, in the `Circle` class, `pop()`
-        returns the next point on the unit circle as a `List[float; 2]`. In
-        the `Sphere` class, `pop()` returns the next point on the unit sphere as a
-        `List[float; 3]`. And in the `Sphere3Hopf` class, `pop()` returns
-        the next point on the 3-sphere using the Hopf fibration as a
-        `List[float; 4]`.
+        r"""Next point on :math:`S^3` using Hopf fibration coordinates.
+
+        The 3-sphere :math:`S^3` is parameterised by the Hopf fibration:
+
+        .. math::
+
+           \begin{aligned}
+           \mathbf{x} = \bigl(&\cos\eta \cos\psi,\;
+                               \cos\eta \sin\psi,\;
+                               \sin\eta \cos(\phi+\psi),\;
+                               \sin\eta \sin(\phi+\psi)\bigr)
+           \end{aligned}
+
+        where :math:`\phi,\psi \in [0, 2\pi)` and
+        :math:`\eta = \sqrt{v}` with :math:`v \in [0,1]` (stratified
+        sampling for uniform measure on :math:`S^3`).
+
+        Reference:
+            Yershova et al., *Int. J. Robotics Research*, 29(7), 2010.
         """
         phi = self.vdc0.pop() * TWO_PI  # map to [0, 2π]
         psy = self.vdc1.pop() * TWO_PI  # map to [0, 2π]

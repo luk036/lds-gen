@@ -43,13 +43,22 @@ def simple_interp(x: float, xp: List[float], yp: List[float]) -> float:
 
 @cache
 def get_tp_odd(ndim: int) -> List[float]:
-    """Recursively calculates the table-lookup of the mapping function for n (odd).
+    r"""Recursively compute the marginal CDF table for odd-dimensional spheres.
+
+    The mapping function :math:`T_n(\theta)` satisfies the recurrence:
+
+    .. math::
+
+       T_n(\theta) = \frac{n-1}{n}\,T_{n-2}(\theta) +
+                     \frac{\cos\theta\,\sin^{n-1}\theta}{n}
+
+    with base case :math:`T_1(\theta) = -\cos\theta`.
 
     Args:
-        ndim (int): The dimension.
+        ndim (int): The dimension :math:`n` (odd).
 
     Returns:
-        List[float]: The table-lookup of the mapping function.
+        List[float]: The lookup table of :math:`T_n`.
     """
     if ndim == 1:
         return NEG_COSINE
@@ -62,13 +71,21 @@ def get_tp_odd(ndim: int) -> List[float]:
 
 @cache
 def get_tp_even(ndim: int) -> List[float]:
-    """Recursively calculates the table-lookup of the mapping function for n (even).
+    r"""Recursively compute the marginal CDF table for even-dimensional spheres.
+
+    Same recurrence as :func:`get_tp_odd` with base case
+    :math:`T_0(\theta) = \theta`.
+
+    .. math::
+
+       T_n(\theta) = \frac{n-1}{n}\,T_{n-2}(\theta) +
+                     \frac{\cos\theta\,\sin^{n-1}\theta}{n}
 
     Args:
-        ndim (int): The dimension.
+        ndim (int): The dimension :math:`n` (even).
 
     Returns:
-        List[float]: The table-lookup of the mapping function.
+        List[float]: The lookup table of :math:`T_n`.
     """
     if ndim == 0:
         return X
@@ -197,7 +214,21 @@ class Sphere3(SphereGen):
         return None
 
     def pop(self) -> List[float]:
-        """Generate the next point on the 3-sphere.
+        r"""Next point on :math:`S^3` using the covariance-mapping technique.
+
+        The polar angle :math:`\chi` is obtained by interpolating the inverse
+        cumulative distribution function (precomputed in :data:`F2`):
+
+        .. math::
+
+           \begin{aligned}
+           \theta &= \frac{\pi}{2}\,v \\[4pt]
+           \chi &= F_2^{-1}(\theta) \\[4pt]
+           \mathbf{x} &= (\sin\chi \cdot \mathbf{s},\; \cos\chi)
+           \end{aligned}
+
+        where :math:`\mathbf{s} \in S^2` is a uniform point on the 2-sphere
+        and :math:`F_2(\chi)` is the marginal CDF for dimension 2.
 
         :return: Next 4D point on the 3-sphere surface.
         """
@@ -242,10 +273,31 @@ class SphereN(SphereGen):
         self._lock = threading.Lock()
 
     def pop(self) -> List[float]:
-        """Generates a new point on the n-sphere.
+        r"""Next point uniformly distributed on :math:`S^{n-1}`.
+
+        Uses the recursive covariance-mapping technique. The polar angle
+        :math:`\chi` is obtained by inverting the precomputed marginal CDF
+        :math:`T_n`:
+
+        .. math::
+
+           \begin{aligned}
+           \theta &= T_n(0) + \bigl(T_n(\pi) - T_n(0)\bigr) v,\qquad
+           v \in [0,1] \\[4pt]
+           \chi &= T_n^{-1}(\theta) \\[4pt]
+           \mathbf{x} &= (\sin\chi \cdot \mathbf{s}_{n-2},\; \cos\chi)
+           \end{aligned}
+
+        where :math:`\mathbf{s}_{n-2} \in S^{n-2}` is generated recursively
+        and the CDF recurrence is:
+
+        .. math::
+
+           T_n(\chi) = \frac{n-1}{n}\,T_{n-2}(\chi) +
+                       \frac{\cos\chi\,\sin^{\,n-1}\chi}{n}
 
         Returns:
-            List[float]: A new point on the n-sphere.
+            List[float]: A new point on the :math:`n`-sphere.
         """
         with self._lock:
             if self.n == 2:
