@@ -41,7 +41,7 @@ Furthermore, the library incorporates a set of utility functions and classes tha
 
 Each generator class has methods for producing the next value in the sequence (pop()) and for resetting the sequence to a specific starting point (reseed()). This enables the generators to be employed in a variety of contexts in a flexible manner.
 
-### Thread Safety
+## Thread Safety
 
 The following generator classes are now **thread-safe**:
 
