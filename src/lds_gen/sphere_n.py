@@ -3,7 +3,6 @@
 import math
 import threading
 from functools import cache
-from types import TracebackType
 from typing import Final, List, Protocol, Union
 
 from lds_gen.lds import Sphere, VdCorput  # low-discrepancy sequence generators
@@ -191,28 +190,6 @@ class Sphere3(SphereGen):
             raise ValueError(f"n must be positive, got {n}")
         return [self.pop() for _ in range(n)]
 
-    def __enter__(self) -> "Sphere3":
-        """Enter context manager protocol.
-
-        :return: Self for use in with statement.
-        """
-        return self
-
-    def __exit__(
-        self,
-        exc_type: type[BaseException] | None,
-        exc_val: BaseException | None,
-        exc_tb: TracebackType | None,
-    ) -> None:
-        """Exit context manager protocol.
-
-        :param exc_type: Exception type if an exception was raised.
-        :param exc_val: Exception value if an exception was raised.
-        :param exc_tb: Exception traceback if an exception was raised.
-        :return: None.
-        """
-        return None
-
     def pop(self) -> List[float]:
         r"""Next point on :math:`S^3` using the covariance-mapping technique.
 
@@ -349,28 +326,6 @@ class SphereN(SphereGen):
         if n <= 0:
             raise ValueError(f"n must be positive, got {n}")
         return [self.pop() for _ in range(n)]
-
-    def __enter__(self) -> "SphereN":
-        """Enter context manager protocol.
-
-        :return: Self for use in with statement.
-        """
-        return self
-
-    def __exit__(
-        self,
-        exc_type: type[BaseException] | None,
-        exc_val: BaseException | None,
-        exc_tb: TracebackType | None,
-    ) -> None:
-        """Exit context manager protocol.
-
-        :param exc_type: Exception type if an exception was raised.
-        :param exc_val: Exception value if an exception was raised.
-        :param exc_tb: Exception traceback if an exception was raised.
-        :return: None.
-        """
-        return None
 
 
 if __name__ == "__main__":

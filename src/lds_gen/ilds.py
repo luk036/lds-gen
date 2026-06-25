@@ -41,7 +41,6 @@ block that can be used in more complex algorithms and simulations.
 """
 
 import threading
-from types import TracebackType
 from typing import List, Sequence
 
 
@@ -137,28 +136,6 @@ class VdCorput:
         if n <= 0:
             raise ValueError(f"n must be positive, got {n}")
         return [self.pop() for _ in range(n)]
-
-    def __enter__(self) -> "VdCorput":
-        """Enter context manager protocol.
-
-        :return: Self for use in with statement.
-        """
-        return self
-
-    def __exit__(
-        self,
-        exc_type: type[BaseException] | None,
-        exc_val: BaseException | None,
-        exc_tb: TracebackType | None,
-    ) -> None:
-        """Exit context manager protocol.
-
-        :param exc_type: Exception type if an exception was raised.
-        :param exc_val: Exception value if an exception was raised.
-        :param exc_tb: Exception traceback if an exception was raised.
-        :return: None.
-        """
-        return None
 
 
 class Halton:
@@ -257,28 +234,6 @@ class Halton:
         if n <= 0:
             raise ValueError(f"n must be positive, got {n}")
         return [self.pop() for _ in range(n)]
-
-    def __enter__(self) -> "Halton":
-        """Enter context manager protocol.
-
-        :return: Self for use in with statement.
-        """
-        return self
-
-    def __exit__(
-        self,
-        exc_type: type[BaseException] | None,
-        exc_val: BaseException | None,
-        exc_tb: TracebackType | None,
-    ) -> None:
-        """Exit context manager protocol.
-
-        :param exc_type: Exception type if an exception was raised.
-        :param exc_val: Exception value if an exception was raised.
-        :param exc_tb: Exception traceback if an exception was raised.
-        :return: None.
-        """
-        return None
 
 
 if __name__ == "__main__":

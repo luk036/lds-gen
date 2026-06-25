@@ -177,3 +177,5 @@ MANIFEST
 
 # my stuffs
 .hypothesis
+.ruff_cache/
+.benchmarks/

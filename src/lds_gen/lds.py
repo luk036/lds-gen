@@ -44,7 +44,6 @@ tasks like sampling, integration, and optimization.
 
 import threading
 from math import cos, pi, sin, sqrt
-from types import TracebackType
 from typing import Final, List, Sequence
 
 TWO_PI: Final[float] = 2.0 * pi
@@ -176,8 +175,6 @@ class VdCorput:
         """
         return self
 
-    # noqa: F811
-
     def __next__(self) -> float:
         """Return the next value in the van der Corput sequence.
 
@@ -196,28 +193,6 @@ class VdCorput:
         if n <= 0:
             raise ValueError(f"n must be positive, got {n}")
         return [self.pop() for _ in range(n)]
-
-    def __enter__(self) -> "VdCorput":
-        """Enter context manager protocol.
-
-        :return: Self for use in with statement.
-        """
-        return self
-
-    def __exit__(
-        self,
-        exc_type: type[BaseException] | None,
-        exc_val: BaseException | None,
-        exc_tb: TracebackType | None,
-    ) -> None:
-        """Exit context manager protocol.
-
-        :param exc_type: Exception type if an exception was raised.
-        :param exc_val: Exception value if an exception was raised.
-        :param exc_tb: Exception traceback if an exception was raised.
-        :return: None.
-        """
-        return None
 
 
 class Halton:
@@ -303,8 +278,6 @@ class Halton:
         """
         return self
 
-    # noqa: F811
-
     def __next__(self) -> List[float]:
         """Return the next point in the Halton sequence.
 
@@ -323,28 +296,6 @@ class Halton:
         if n <= 0:
             raise ValueError(f"n must be positive, got {n}")
         return [self.pop() for _ in range(n)]
-
-    def __enter__(self) -> "Halton":
-        """Enter context manager protocol.
-
-        :return: Self for use in with statement.
-        """
-        return self
-
-    def __exit__(
-        self,
-        exc_type: type[BaseException] | None,
-        exc_val: BaseException | None,
-        exc_tb: TracebackType | None,
-    ) -> None:
-        """Exit context manager protocol.
-
-        :param exc_type: Exception type if an exception was raised.
-        :param exc_val: Exception value if an exception was raised.
-        :param exc_tb: Exception traceback if an exception was raised.
-        :return: None.
-        """
-        return None
 
 
 class Circle:
@@ -407,8 +358,6 @@ class Circle:
         """
         return self
 
-    # noqa: F811
-
     def __next__(self) -> List[float]:
         """Return the next point on the unit circle.
 
@@ -427,31 +376,6 @@ class Circle:
         if n <= 0:
             raise ValueError(f"n must be positive, got {n}")
         return [self.pop() for _ in range(n)]
-
-    def __enter__(self) -> "Circle":
-        """Enter context manager protocol.
-
-        :return: Self for use in with statement.
-        """
-        return self
-
-    def __exit__(
-        self,
-        exc_type: type[BaseException] | None,
-        exc_val: BaseException | None,
-        exc_tb: TracebackType | None,
-    ) -> None:
-        """Exit context manager protocol.
-
-        :param exc_type: Exception type if an exception was raised.
-        :param exc_val: Exception value if an exception was raised.
-        :param exc_tb: Exception traceback if an exception was raised.
-        :return: None.
-        """
-        return None
-
-
-# noqa: F811
 
 
 class Disk:
@@ -553,28 +477,6 @@ class Disk:
             raise ValueError(f"n must be positive, got {n}")
         return [self.pop() for _ in range(n)]
 
-    def __enter__(self) -> "Disk":
-        """Enter context manager protocol.
-
-        :return: Self for use in with statement.
-        """
-        return self
-
-    def __exit__(
-        self,
-        exc_type: type[BaseException] | None,
-        exc_val: BaseException | None,
-        exc_tb: TracebackType | None,
-    ) -> None:
-        """Exit context manager protocol.
-
-        :param exc_type: Exception type if an exception was raised.
-        :param exc_val: Exception value if an exception was raised.
-        :param exc_tb: Exception traceback if an exception was raised.
-        :return: None.
-        """
-        return None
-
 
 class Sphere:
     """Unit Sphere sequence generator
@@ -641,8 +543,6 @@ class Sphere:
         """
         return self
 
-    # noqa: F811
-
     def __next__(self) -> List[float]:
         """Return the next point on the unit sphere.
 
@@ -661,28 +561,6 @@ class Sphere:
         if n <= 0:
             raise ValueError(f"n must be positive, got {n}")
         return [self.pop() for _ in range(n)]
-
-    def __enter__(self) -> "Sphere":
-        """Enter context manager protocol.
-
-        :return: Self for use in with statement.
-        """
-        return self
-
-    def __exit__(
-        self,
-        exc_type: type[BaseException] | None,
-        exc_val: BaseException | None,
-        exc_tb: TracebackType | None,
-    ) -> None:
-        """Exit context manager protocol.
-
-        :param exc_type: Exception type if an exception was raised.
-        :param exc_val: Exception value if an exception was raised.
-        :param exc_tb: Exception traceback if an exception was raised.
-        :return: None.
-        """
-        return None
 
 
 class Sphere3Hopf:
@@ -776,8 +654,6 @@ class Sphere3Hopf:
         """
         return self
 
-    # noqa: F811
-
     def __next__(self) -> List[float]:
         """Return the next point on the 3-sphere using Hopf fibration.
 
@@ -796,28 +672,6 @@ class Sphere3Hopf:
         if n <= 0:
             raise ValueError(f"n must be positive, got {n}")
         return [self.pop() for _ in range(n)]
-
-    def __enter__(self) -> "Sphere3Hopf":
-        """Enter context manager protocol.
-
-        :return: Self for use in with statement.
-        """
-        return self
-
-    def __exit__(
-        self,
-        exc_type: type[BaseException] | None,
-        exc_val: BaseException | None,
-        exc_tb: TracebackType | None,
-    ) -> None:
-        """Exit context manager protocol.
-
-        :param exc_type: Exception type if an exception was raised.
-        :param exc_val: Exception value if an exception was raised.
-        :param exc_tb: Exception traceback if an exception was raised.
-        :return: None.
-        """
-        return None
 
 
 class HaltonN:
@@ -886,8 +740,6 @@ class HaltonN:
         """
         return self
 
-    # noqa: F811
-
     def __next__(self) -> List[float]:
         """Return the next point in the N-dimensional Halton sequence.
 
@@ -907,31 +759,8 @@ class HaltonN:
             raise ValueError(f"n must be positive, got {n}")
         return [self.pop() for _ in range(n)]
 
-    def __enter__(self) -> "HaltonN":
-        """Enter context manager protocol.
-
-        :return: Self for use in with statement.
-        """
-        return self
-
-    def __exit__(
-        self,
-        exc_type: type[BaseException] | None,
-        exc_val: BaseException | None,
-        exc_tb: TracebackType | None,
-    ) -> None:
-        """Exit context manager protocol.
-
-        :param exc_type: Exception type if an exception was raised.
-        :param exc_val: Exception value if an exception was raised.
-        :param exc_tb: Exception traceback if an exception was raised.
-        :return: None.
-        """
-        return None
-
 
 # First 1000 prime numbers
-# [allow(dead_code)]
 PRIME_TABLE: Final[List[int]] = [
     2,
     3,
@@ -1934,7 +1763,6 @@ PRIME_TABLE: Final[List[int]] = [
     7907,
     7919,
 ]
-
 
 if __name__ == "__main__":
     import doctest
