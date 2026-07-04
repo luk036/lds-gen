@@ -6,9 +6,62 @@ import sys
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
+import pytest
+
 from lds_gen.sphere_n import Sphere3, SphereN, get_tp, linspace, simple_interp
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
+
+
+def test_sphere_lazy_tables() -> None:
+    """Lazy sphere table accessors return correct values."""
+    from lds_gen.sphere_n import _get_x, _get_neg_cosine, _get_sine, _get_f2
+
+    x = _get_x()
+    assert len(x) == 300
+    assert x[0] == 0.0
+    assert abs(x[-1] - math.pi) < 1e-10
+
+    nc = _get_neg_cosine()
+    assert len(nc) == 300
+    assert abs(nc[0] - (-1.0)) < 1e-10
+
+    sine = _get_sine()
+    assert len(sine) == 300
+    assert sine[0] == 0.0
+
+    f2 = _get_f2()
+    assert len(f2) == 300
+    # Idempotent — cached
+    assert _get_x() is x
+    assert _get_neg_cosine() is nc
+
+
+def test_sphere3_iter_batch() -> None:
+    """iter_batch on Sphere3 yields same as pop_batch."""
+    sgen = Sphere3([2, 3, 5])
+    sgen.reseed(0)
+    batch = [sgen.pop() for _ in range(10)]
+    sgen.reseed(0)
+    lazy = list(sgen.iter_batch(10))
+    for a, b in zip(batch, lazy):
+        for ca, cb in zip(a, b):
+            assert abs(ca - cb) < 1e-10
+
+
+def test_spheren_iter_batch() -> None:
+    """iter_batch on SphereN yields same as pop_batch."""
+    sgen = SphereN([2, 3, 5, 7])
+    sgen.reseed(0)
+    batch = [sgen.pop() for _ in range(5)]
+    sgen.reseed(0)
+    lazy = list(sgen.iter_batch(5))
+    for a, b in zip(batch, lazy):
+        for ca, cb in zip(a, b):
+            assert abs(ca - cb) < 1e-10
+    # Validation
+    with pytest.raises(ValueError):
+        list(sgen.iter_batch(0))
 
 
 def test_linspace() -> None:

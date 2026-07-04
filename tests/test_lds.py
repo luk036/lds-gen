@@ -1,6 +1,7 @@
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
+import pytest
 from pytest import approx
 
 from lds_gen.lds import (
@@ -18,6 +19,49 @@ from lds_gen.lds import (
 def test_vdc() -> None:
     """assert that the vdcorput generator produces the correct values""" ""
     assert vdc(11, 2) == 0.8125
+
+
+def test_prime_table() -> None:
+    """Verify PRIME_TABLE contains correct primes."""
+    from lds_gen.lds import PRIME_TABLE, _prime_table
+
+    assert len(PRIME_TABLE) == 1000
+    assert PRIME_TABLE[0] == 2
+    assert PRIME_TABLE[1] == 3
+    assert PRIME_TABLE[2] == 5
+    assert PRIME_TABLE[3] == 7
+    # Spot-check known primes
+    assert PRIME_TABLE[99] == 541  # 100th prime
+    assert PRIME_TABLE[999] == 7919  # 1000th prime
+    # Verify it generates on-demand too
+    assert _prime_table(5) == [2, 3, 5, 7, 11]
+    assert _prime_table(1) == [2]
+    assert _prime_table(0) == []
+
+
+def test_vdcorput_iter_batch() -> None:
+    """iter_batch yields same values as pop_batch."""
+    vgen = VdCorput(2)
+    vgen.reseed(0)
+    batch = vgen.pop_batch(10)
+    vgen.reseed(0)
+    lazy = list(vgen.iter_batch(10))
+    assert batch == lazy
+    # Empty/negative
+    with pytest.raises(ValueError):
+        list(vgen.iter_batch(0))
+    with pytest.raises(ValueError):
+        list(vgen.iter_batch(-1))
+
+
+def test_halton_iter_batch() -> None:
+    """iter_batch on Halton yields same as pop_batch."""
+    hgen = Halton([2, 3])
+    hgen.reseed(0)
+    batch = hgen.pop_batch(10)
+    hgen.reseed(0)
+    lazy = list(hgen.iter_batch(10))
+    assert batch == lazy
 
 
 def test_vdcorput_pop() -> None:
