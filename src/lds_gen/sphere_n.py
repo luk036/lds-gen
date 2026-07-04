@@ -2,12 +2,13 @@
 
 import math
 import threading
-from functools import cache
+from functools import cache, lru_cache
 from typing import Final, List, Protocol, Union
 
 from lds_gen.lds import Sphere, VdCorput  # low-discrepancy sequence generators
 
 PI: Final[float] = math.pi
+HALF_PI: float = PI / 2.0
 
 
 def linspace(start: float, stop: float, num: int) -> List[float]:
@@ -18,11 +19,27 @@ def linspace(start: float, stop: float, num: int) -> List[float]:
     return [start + i * step for i in range(num)]
 
 
-X: List[float] = linspace(0.0, PI, 300)
-NEG_COSINE: List[float] = [-math.cos(x) for x in X]
-SINE: List[float] = [math.sin(x) for x in X]
-F2: List[float] = [(x + nc * s) / 2.0 for x, nc, s in zip(X, NEG_COSINE, SINE)]
-HALF_PI: float = PI / 2.0
+@cache
+def _get_x() -> List[float]:
+    return linspace(0.0, PI, 300)
+
+
+@cache
+def _get_neg_cosine() -> List[float]:
+    return [-math.cos(x) for x in _get_x()]
+
+
+@cache
+def _get_sine() -> List[float]:
+    return [math.sin(x) for x in _get_x()]
+
+
+@cache
+def _get_f2() -> List[float]:
+    xv = _get_x()
+    nc = _get_neg_cosine()
+    s = _get_sine()
+    return [(x + nc[i] * s[i]) / 2.0 for i, x in enumerate(xv)]
 
 
 def simple_interp(x: float, xp: List[float], yp: List[float]) -> float:
@@ -40,57 +57,28 @@ def simple_interp(x: float, xp: List[float], yp: List[float]) -> float:
     return yp[-1]  # fallback
 
 
-@cache
+@lru_cache(maxsize=32)
 def get_tp_odd(ndim: int) -> List[float]:
-    r"""Recursively compute the marginal CDF table for odd-dimensional spheres.
-
-    The mapping function :math:`T_n(\theta)` satisfies the recurrence:
-
-    .. math::
-
-       T_n(\theta) = \frac{n-1}{n}\,T_{n-2}(\theta) +
-                     \frac{\cos\theta\,\sin^{n-1}\theta}{n}
-
-    with base case :math:`T_1(\theta) = -\cos\theta`.
-
-    Args:
-        ndim (int): The dimension :math:`n` (odd).
-
-    Returns:
-        List[float]: The lookup table of :math:`T_n`.
-    """
     if ndim == 1:
-        return NEG_COSINE
+        return _get_neg_cosine()
     tp_minus2 = get_tp_odd(ndim - 2)
+    nc = _get_neg_cosine()
+    sine = _get_sine()
     return [
-        ((ndim - 1) * tp_minus2[i] + NEG_COSINE[i] * (SINE[i] ** (ndim - 1))) / ndim
+        ((ndim - 1) * tp_minus2[i] + nc[i] * (sine[i] ** (ndim - 1))) / ndim
         for i in range(len(tp_minus2))
     ]
 
 
-@cache
+@lru_cache(maxsize=32)
 def get_tp_even(ndim: int) -> List[float]:
-    r"""Recursively compute the marginal CDF table for even-dimensional spheres.
-
-    Same recurrence as :func:`get_tp_odd` with base case
-    :math:`T_0(\theta) = \theta`.
-
-    .. math::
-
-       T_n(\theta) = \frac{n-1}{n}\,T_{n-2}(\theta) +
-                     \frac{\cos\theta\,\sin^{n-1}\theta}{n}
-
-    Args:
-        ndim (int): The dimension :math:`n` (even).
-
-    Returns:
-        List[float]: The lookup table of :math:`T_n`.
-    """
     if ndim == 0:
-        return X
+        return _get_x()
     tp_minus2 = get_tp_even(ndim - 2)
+    nc = _get_neg_cosine()
+    sine = _get_sine()
     return [
-        ((ndim - 1) * tp_minus2[i] + NEG_COSINE[i] * (SINE[i] ** (ndim - 1))) / ndim
+        ((ndim - 1) * tp_minus2[i] + nc[i] * (sine[i] ** (ndim - 1))) / ndim
         for i in range(len(tp_minus2))
     ]
 
@@ -190,6 +178,12 @@ class Sphere3(SphereGen):
             raise ValueError(f"n must be positive, got {n}")
         return [self.pop() for _ in range(n)]
 
+    def iter_batch(self, n: int):
+        if n <= 0:
+            raise ValueError(f"n must be positive, got {n}")
+        for _ in range(n):
+            yield self.pop()
+
     def pop(self) -> List[float]:
         r"""Next point on :math:`S^3` using the covariance-mapping technique.
 
@@ -211,7 +205,7 @@ class Sphere3(SphereGen):
         """
         with self._lock:
             theta = HALF_PI * self.vdc.pop()  # map to [t0, tm-1]
-            x_val = simple_interp(theta, F2, X)
+            x_val = simple_interp(theta, _get_f2(), _get_x())
             cosxi = math.cos(x_val)
             sinxi = math.sin(x_val)
             return [sinxi * s for s in self.sphere2.pop()] + [cosxi]
@@ -279,7 +273,7 @@ class SphereN(SphereGen):
         with self._lock:
             if self.n == 2:
                 theta = HALF_PI * self.vdc.pop()  # map to [t0, tm-1]
-                x_val = simple_interp(theta, F2, X)
+                x_val = simple_interp(theta, _get_f2(), _get_x())
                 cosxi = math.cos(x_val)
                 sinxi = math.sin(x_val)
                 return [sinxi * s for s in self.s_gen.pop()] + [cosxi]
@@ -287,7 +281,7 @@ class SphereN(SphereGen):
             vdc_val = self.vdc.pop()
             tp_val = get_tp(self.n)
             theta = tp_val[0] + self.range * vdc_val  # map to [t0, tm-1]
-            x_val = simple_interp(theta, tp_val, X)
+            x_val = simple_interp(theta, tp_val, _get_x())
             sinphi = math.sin(x_val)
             return [x_val * sinphi for x_val in self.s_gen.pop()] + [math.cos(x_val)]
 
@@ -326,6 +320,12 @@ class SphereN(SphereGen):
         if n <= 0:
             raise ValueError(f"n must be positive, got {n}")
         return [self.pop() for _ in range(n)]
+
+    def iter_batch(self, n: int):
+        if n <= 0:
+            raise ValueError(f"n must be positive, got {n}")
+        for _ in range(n):
+            yield self.pop()
 
 
 if __name__ == "__main__":
