@@ -1,8 +1,9 @@
 """Generates points on n-dimensional spheres."""
 
+import bisect
 import math
 import threading
-from functools import cache, lru_cache
+from functools import cache
 from typing import Final, List, Protocol, Union
 
 from lds_gen.lds import Sphere, VdCorput  # low-discrepancy sequence generators
@@ -43,56 +44,76 @@ def _get_f2() -> List[float]:
 
 
 def simple_interp(x: float, xp: List[float], yp: List[float]) -> float:
-    """Simple implementation of numpy.interp for 1D interpolation"""
+    """1D linear interpolation using binary search (C++-style).
+
+    Assumes *xp* is monotonically increasing.  Uses ``bisect_left``
+    (equivalent to ``std::ranges::upper_bound``) for O(log n) lookup.
+
+    :param x: Value to interpolate at.
+    :param xp: 1-D sequence of x-coordinates (must be sorted).
+    :param yp: 1-D sequence of y-coordinates, same length as *xp*.
+    :returns: Interpolated value (clamped to endpoints).
+    :raises ValueError: If *xp* and *yp* differ in length or are empty.
+    """
+    if len(xp) != len(yp):
+        raise ValueError(
+            f"xp and yp must have the same length, got {len(xp)} and {len(yp)}"
+        )
+    if not xp:
+        raise ValueError("xp and yp must be non-empty")
     if x <= xp[0]:
         return yp[0]
     if x >= xp[-1]:
         return yp[-1]
-
-    for i in range(len(xp) - 1):
-        if xp[i] <= x <= xp[i + 1]:
-            t_val = (x - xp[i]) / (xp[i + 1] - xp[i])
-            return yp[i] + t_val * (yp[i + 1] - yp[i])
-
-    return yp[-1]  # fallback
+    i = bisect.bisect_left(xp, x) - 1
+    t = (x - xp[i]) / (xp[i + 1] - xp[i])
+    return yp[i] + t * (yp[i + 1] - yp[i])
 
 
-@lru_cache(maxsize=32)
-def get_tp_odd(ndim: int) -> List[float]:
-    if ndim == 1:
-        return _get_neg_cosine()
-    tp_minus2 = get_tp_odd(ndim - 2)
-    nc = _get_neg_cosine()
-    sine = _get_sine()
-    return [
-        ((ndim - 1) * tp_minus2[i] + nc[i] * (sine[i] ** (ndim - 1))) / ndim
-        for i in range(len(tp_minus2))
-    ]
+@cache
+def get_tp(ndim: int) -> List[float]:
+    r"""Table of the marginal CDF mapping function :math:`T_n`.
 
+    Uses the iterative shift-register recurrence (same algorithm as the
+    C++ implementation):
 
-@lru_cache(maxsize=32)
-def get_tp_even(ndim: int) -> List[float]:
+    .. math::
+
+       T_n(\chi) = \frac{n-1}{n}\,T_{n-2}(\chi) +
+                   \frac{\cos\chi\,\sin^{\,n-1}\chi}{n}
+
+    with base cases :math:`T_0(\chi) = \chi` and
+    :math:`T_1(\chi) = -\cos\chi`.
+
+    :param ndim: The dimension :math:`n`.
+    :returns: ``TABLE_SIZE`` interpolated values of :math:`T_n`.
+    """
     if ndim == 0:
         return _get_x()
-    tp_minus2 = get_tp_even(ndim - 2)
+    if ndim == 1:
+        return _get_neg_cosine()
+
     nc = _get_neg_cosine()
     sine = _get_sine()
-    return [
-        ((ndim - 1) * tp_minus2[i] + nc[i] * (sine[i] ** (ndim - 1))) / ndim
-        for i in range(len(tp_minus2))
-    ]
+    n_pts = len(nc)
 
+    # Tp(n) depends only on Tp(n-2), so we iterate by step 2
+    # from the appropriate parity base case.
+    if ndim % 2 == 0:
+        prev = _get_x()  # Tp(0)
+        start = 2
+    else:
+        prev = _get_neg_cosine()  # Tp(1)
+        start = 3
 
-def get_tp(ndim: int) -> List[float]:
-    """Calculates the table-lookup of the mapping function for n.
+    for i in range(start, ndim + 1, 2):
+        current = [
+            ((i - 1) * prev[j] + nc[j] * (sine[j] ** (i - 1))) / i
+            for j in range(n_pts)
+        ]
+        prev = current
 
-    Args:
-        ndim (int): The dimension.
-
-    Returns:
-        List[float]: The table-lookup of the mapping function.
-    """
-    return get_tp_odd(ndim) if ndim & 1 else get_tp_even(ndim)
+    return current
 
 
 class SphereGen(Protocol):
