@@ -531,7 +531,7 @@ class Sphere:
 
         :type base: Sequence[int]
         """
-        self.vdc = VdCorput(base[0])
+        self.vdcgen = VdCorput(base[0])
         self.cirgen = Circle(base[1])
 
     def pop(self) -> List[float]:
@@ -550,7 +550,7 @@ class Sphere:
         where :math:`\theta = 2\pi v_\theta` comes from a :class:`Circle`
         generator and :math:`\phi` is mapped uniformly to :math:`[-1,1]`.
         """
-        cosphi = 2.0 * self.vdc.pop() - 1.0  # map to [-1, 1]
+        cosphi = 2.0 * self.vdcgen.pop() - 1.0  # map to [-1, 1]
         sinphi = sqrt(1.0 - cosphi * cosphi)  # cylindrical mapping
         [cos, sin] = self.cirgen.pop()
         return [sinphi * cos, sinphi * sin, cosphi]
@@ -565,7 +565,7 @@ class Sphere:
         :type seed: int
         """
         self.cirgen.reseed(seed)
-        self.vdc.reseed(seed)
+        self.vdcgen.reseed(seed)
 
     def __iter__(self) -> "Sphere":
         """Return iterator for the Sphere sequence generator.
