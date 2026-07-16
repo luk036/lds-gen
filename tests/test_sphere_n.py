@@ -15,7 +15,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 def test_sphere_lazy_tables() -> None:
     """Lazy sphere table accessors return correct values."""
-    from lds_gen.sphere_n import _get_x, _get_neg_cosine, _get_sine, _get_f2
+    from lds_gen.sphere_n import _get_f2, _get_neg_cosine, _get_sine, _get_x
 
     x = _get_x()
     assert len(x) == 300

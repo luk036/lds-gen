@@ -108,8 +108,7 @@ def get_tp(ndim: int) -> List[float]:
 
     for i in range(start, ndim + 1, 2):
         current = [
-            ((i - 1) * prev[j] + nc[j] * (sine[j] ** (i - 1))) / i
-            for j in range(n_pts)
+            ((i - 1) * prev[j] + nc[j] * (sine[j] ** (i - 1))) / i for j in range(n_pts)
         ]
         prev = current
 

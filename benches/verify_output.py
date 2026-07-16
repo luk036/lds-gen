@@ -1,5 +1,5 @@
 """Verify LDS output matches across languages."""
-from lds_gen.lds import VdCorput, Halton, Circle, Sphere, Sphere3Hopf
+from lds_gen.lds import Circle, Halton, Sphere, Sphere3Hopf, VdCorput
 
 print("=== VdCorput base=2, first 10 values ===")
 v = VdCorput(2)

@@ -823,7 +823,7 @@ def _prime_table(n: int = 1000) -> List[int]:
         limit = int(n * (log_n + log(log_n))) + 10
     sieve = bytearray(b"\x01") * (limit + 1)
     sieve[0:2] = b"\x00\x00"
-    for p in range(2, int(limit ** 0.5) + 1):
+    for p in range(2, int(limit**0.5) + 1):
         if sieve[p]:
             step = p
             start = p * p
