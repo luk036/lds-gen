@@ -47,22 +47,10 @@ from typing import List, Sequence
 # The `VdCorput` class initializes an object with a base and scale value, and sets the count to 0.
 class VdCorput:
     def __init__(self, base: int = 2, scale: int = 10) -> None:
-        """
-        The function initializes an object with a base and scale value, and sets the count to 0.
 
-        :param base: The `base` parameter is an optional integer argument that specifies the base of the
-             number system. By default, it is set to 2, which means the number system is binary (base 2).
-             However, you can change the value of `base` to any other prime number to use a different,
-             defaults to 2
 
-        :type base: int (optional)
 
-        :param scale: The `scale` parameter determines the number of digits that can be represented in the
-                      number system. For example, if `scale` is set to 10, the number system can represent
-                      digits from 0 to 9, defaults to 10
 
-        :type scale: int (optional)
-        """
         self._base: int = base
         self._scale: int = scale
         self._count: int = 0
@@ -174,44 +162,20 @@ class Halton:
     """
 
     def __init__(self, base: Sequence[int], scale: Sequence[int]) -> None:
-        """
-        The `__init__()` function is a constructor for the `Halton` class that initializes two `VdCorput`
-        objects with the given bases.
 
-        :param base: The `base` parameter is a list of two integers. These integers are used as the bases
-                     for generating the Halton sequence. The first integer in the list is used as the base for generating
-                     the first component of the sequence, and the second integer is used as the base for generating the
-                     second component
 
-        :type base: Sequence[int]
 
-        :param scale: The `scale` parameter is a list of two integers. These integers are used as the scales
-                      for generating the Halton sequence. The first integer in the list is used as the scale for generating
-                      the first component of the sequence, and the second integer is used as the scale for generating the
-                      second component
 
-        :type scale: Sequence[int]
-        """
         self._vdc0 = VdCorput(base[0], scale[0])
         self._vdc1 = VdCorput(base[1], scale[1])
 
     def pop(self) -> List[int]:
-        """
-        The `pop` function returns a list of two integers by popping elements from `vdc0` and `vdc1`.
 
-        :return: The `pop` method is returning a list of two integers.
-        """
         return [self._vdc0.pop(), self._vdc1.pop()]
 
     def reseed(self, seed: int) -> None:
-        """
-        The `reseed` function resets the state of a sequence generator to a specific seed value.
 
-        :param seed: The `seed` parameter is an integer value that is used to reset the state of the
-                     sequence generator. It determines the starting point of the sequence generation
 
-        :type seed: int
-        """
         self._vdc0.reseed(seed)
         self._vdc1.reseed(seed)
 

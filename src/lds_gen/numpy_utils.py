@@ -49,7 +49,6 @@ def generate_vdcorput_vectorized(count: int, base: int) -> List[float]:
     :raises ImportError: If NumPy is not available.
     """
     if HAS_NUMPY:
-        ensure_numpy()
         indices = np.arange(1, count + 1, dtype=np.float64)
         result = np.zeros(count, dtype=np.float64)
 
@@ -80,7 +79,6 @@ def generate_halton_vectorized(count: int, bases: List[int]) -> List[List[float]
     :raises ImportError: If NumPy is not available.
     """
     if HAS_NUMPY:
-        ensure_numpy()
         ndim = len(bases)
         result = np.zeros((count, ndim), dtype=np.float64)
 
@@ -117,7 +115,6 @@ def compute_discrepancy(points: List[List[float]]) -> float:
     if not HAS_NUMPY:
         raise ImportError("NumPy is required for discrepancy computation")
 
-    ensure_numpy()
     n = len(points)
     if n == 0:
         return 0.0
@@ -147,7 +144,6 @@ def batch_to_numpy(points: List[List[float]]) -> "np.ndarray":
     if not HAS_NUMPY:
         raise ImportError("NumPy is required for this function")
 
-    ensure_numpy()
     return np.array(points)
 
 

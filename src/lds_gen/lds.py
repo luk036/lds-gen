@@ -113,16 +113,8 @@ class VdCorput:
     """
 
     def __init__(self, base: int = 2) -> None:
-        """
-        The function initializes an object with a base and scale value, and sets the count to 0.
 
-        :param base: The `base` parameter is an optional integer argument that specifies the base of the
-                     number system. By default, it is set to 2, which means the number system is binary (base 2).
-                     However, you can change the value of `base` to any other prime number to use a different,
-                     defaults to 2
 
-        :type base: int (optional)
-        """
         self._count: int = 0
         self._count_lock = threading.Lock()
         self.base: int = base
@@ -158,14 +150,8 @@ class VdCorput:
         return reslt
 
     def reseed(self, seed: int) -> None:
-        """
-        The `reseed` function resets the state of a sequence generator to a specific seed value.
 
-        :param seed: The `seed` parameter is an integer value that is used to reset the state of the
-                     sequence generator. It determines the starting point of the sequence generation
 
-        :type seed: int
-        """
         with self._count_lock:
             self._count = seed
 
@@ -238,17 +224,8 @@ class Halton:
     """
 
     def __init__(self, base: Sequence[int]) -> None:
-        """
-        The `__init__()` function is a constructor for the `Halton` class that initializes two `VdCorput`
-        objects with the given bases.
 
-        :param base: The `base` parameter is a list of two integers. These integers are used as the bases
-                     for generating the Halton sequence. The first integer in the list is used as the base for generating
-                     the first component of the sequence, and the second integer is used as the base for generating the
-                     second component
 
-        :type base: Sequence[int]
-        """
         self.vdc0 = VdCorput(base[0])
         self.vdc1 = VdCorput(base[1])
 
@@ -273,14 +250,8 @@ class Halton:
         return [self.vdc0.pop(), self.vdc1.pop()]
 
     def reseed(self, seed: int) -> None:
-        """
-        The `reseed` function resets the state of a sequence generator to a specific seed value.
 
-        :param seed: The `seed` parameter is an integer value that is used to reset the state of the
-                     sequence generator. It determines the starting point of the sequence generation
 
-        :type seed: int
-        """
         self.vdc0.reseed(seed)
         self.vdc1.reseed(seed)
 
@@ -331,12 +302,7 @@ class Circle:
     """
 
     def __init__(self, base: int) -> None:
-        """
-        The function initializes an instance of the class with a given base.
 
-        :param base: The `base` parameter is an integer that represents the base of the van der Corput sequence
-        :type base: int
-        """
         self.vdc = VdCorput(base)
 
     def pop(self) -> List[float]:
@@ -360,14 +326,8 @@ class Circle:
 
     # [allow(dead_code)]
     def reseed(self, seed: int) -> None:
-        """
-        The `reseed` function resets the state of a sequence generator to a specific seed value.
 
-        :param seed: The `seed` parameter is an integer value that is used to reset the state of the
-                     sequence generator. It determines the starting point of the sequence generation
 
-        :type seed: int
-        """
         self.vdc.reseed(seed)
 
     def __iter__(self) -> "Circle":
@@ -426,17 +386,8 @@ class Disk:
     """
 
     def __init__(self, base: Sequence[int]) -> None:
-        """
-        The `__init__()` function is a constructor for the `Disk` class that initializes two `VdCorput`
-        objects with the given bases.
 
-        :param base: The `base` parameter is a list of two integers. These integers are used as the bases
-                     for generating the Disk sequence. The first integer in the list is used as the base for generating
-                     the first component of the sequence, and the second integer is used as the base for generating the
-                     second component
 
-        :type base: Sequence[int]
-        """
         self.vdc0 = VdCorput(base[0])
         self.vdc1 = VdCorput(base[1])
 
@@ -465,14 +416,8 @@ class Disk:
         return [radius * cos(theta), radius * sin(theta)]
 
     def reseed(self, seed: int) -> None:
-        """
-        The `reseed` function resets the state of a sequence generator to a specific seed value.
 
-        :param seed: The `seed` parameter is an integer value that is used to reset the state of the
-                     sequence generator. It determines the starting point of the sequence generation
 
-        :type seed: int
-        """
         self.vdc0.reseed(seed)
         self.vdc1.reseed(seed)
 
@@ -521,16 +466,8 @@ class Sphere:
     """
 
     def __init__(self, base: Sequence[int]) -> None:
-        """
-        The function initializes the `vdc` and `cirgen` attributes with the first and second elements of the
-        `base` list, respectively.
 
-        :param base: The `base` parameter is a sequence of integers. It is expected to have two elements.
-                     The first element is used to initialize a `VdCorput` object, and the second element is used to
-                     initialize a `Circle` object
 
-        :type base: Sequence[int]
-        """
         self.vdcgen = VdCorput(base[0])
         self.cirgen = Circle(base[1])
 
@@ -556,14 +493,8 @@ class Sphere:
         return [sinphi * cos, sinphi * sin, cosphi]
 
     def reseed(self, seed: int) -> None:
-        """
-        The `reseed` function resets the state of a sequence generator to a specific seed value.
 
-        :param seed: The `seed` parameter is an integer value that is used to reset the state of the
-                     sequence generator. It determines the starting point of the sequence generation
 
-        :type seed: int
-        """
         self.cirgen.reseed(seed)
         self.vdcgen.reseed(seed)
 
@@ -625,15 +556,8 @@ class Sphere3Hopf:
     """
 
     def __init__(self, base: Sequence[int]) -> None:
-        """
-        The function initializes three VdCorput objects with the values from the base list.
 
-        :param base: The `base` parameter is a list of three integers. It is used to initialize three
-                     instances of the `VdCorput` class. The first integer in the `base` list is used to initialize
-                     `self.vdc0`, the second integer is used to initialize `self.vdc1
 
-        :type base: Sequence[int]
-        """
         self.vdc0 = VdCorput(base[0])
         self.vdc1 = VdCorput(base[1])
         self.vdc2 = VdCorput(base[2])
@@ -672,14 +596,8 @@ class Sphere3Hopf:
         ]
 
     def reseed(self, seed: int) -> None:
-        """
-        The `reseed` function resets the state of a sequence generator to a specific seed value.
 
-        :param seed: The `seed` parameter is an integer value that is used to reset the state of the
-                     sequence generator. It determines the starting point of the sequence generation
 
-        :type seed: int
-        """
         self.vdc0.reseed(seed)
         self.vdc1.reseed(seed)
         self.vdc2.reseed(seed)
@@ -733,15 +651,8 @@ class HaltonN:
     vdcs: List[VdCorput]
 
     def __init__(self, base: Sequence[int]) -> None:
-        """
-        The function initializes a list of VdCorput objects using the given base sequence.
 
-        :param base: The `base` parameter is a list of integers. Each integer represents the base of a Van
-                     der Corput sequence. The van der Corput sequence is a low-discrepancy sequence used in numerical
-                     analysis and Monte Carlo methods. In this code, `base` is used to initialize a list
 
-        :type base: Sequence[int]
-        """
         self.vdcs = [VdCorput(b) for b in base]
 
     def pop(self) -> List[float]:
@@ -765,14 +676,8 @@ class HaltonN:
         return [vdc.pop() for vdc in self.vdcs]
 
     def reseed(self, seed: int) -> None:
-        """
-        The `reseed` function resets the state of a sequence generator to a specific seed value.
 
-        :param seed: The `seed` parameter is an integer value that is used to reset the state of the
-                     sequence generator. It determines the starting point of the sequence generation
 
-        :type seed: int
-        """
         for vdc in self.vdcs:
             vdc.reseed(seed)
 
