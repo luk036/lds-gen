@@ -45,10 +45,12 @@ tasks like sampling, integration, and optimization.
 import threading
 from functools import cache
 from math import cos, pi, sin, sqrt
-from typing import Final, List, Sequence
+from typing import Final, Generic, List, Sequence, TypeVar
 
 TWO_PI: Final[float] = 2.0 * pi
 """Constant representing two times pi (2π), used for mapping to full circle angles."""
+
+T = TypeVar("T")
 
 
 def vdc(count: int, base: int = 2) -> float:
@@ -84,7 +86,84 @@ def vdc(count: int, base: int = 2) -> float:
     return reslt
 
 
-class VdCorput:
+class GeneratorBase(Generic[T]):
+    """Shared generator protocol.
+
+    Provides the stateful protocol (``pop``/``reseed``), iterator support and
+    batch helpers in terms of two hooks supplied by each concrete generator:
+    the pure index-to-value computation :meth:`value_at` and the atomic counter
+    ``_count`` (guarded by ``_count_lock``).
+    """
+
+    _count: int
+    _count_lock: threading.Lock
+
+    def pop(self) -> T:
+        """Generate the next value in the sequence (advances state).
+
+        Atomically claims the next index under ``_count_lock`` and evaluates
+        the pure ``value_at`` computation, so concurrent calls never produce
+        duplicate values.
+
+        :return: The next value in the sequence.
+        """
+        with self._count_lock:
+            self._count += 1  # ignore 0
+            return self.value_at(self._count)
+
+    def reseed(self, seed: int) -> None:
+        """Reset the sequence to a specific starting position.
+
+        :param seed: The starting position for the sequence.
+        :type seed: int
+        """
+        with self._count_lock:
+            self._count = seed
+
+    def value_at(self, n: int) -> T:
+        """Evaluate the sequence value at index ``n`` (pure, no state change).
+
+        :param n: The sequence index.
+        :return: The value at index ``n``.
+        :raises NotImplementedError: If the concrete generator does not provide it.
+        """
+        raise NotImplementedError
+
+    def __iter__(self) -> "GeneratorBase[T]":
+        """Return the iterator (self)."""
+        return self
+
+    def __next__(self) -> T:
+        """Return the next value in the sequence."""
+        return self.pop()
+
+    def pop_batch(self, n: int) -> List[T]:
+        """Generate a batch of n values.
+
+        :param n: Number of values to generate.
+        :type n: int
+        :return: List of n values.
+        :raises ValueError: If n is not positive.
+        """
+        if n <= 0:
+            raise ValueError(f"n must be positive, got {n}")
+        return [self.pop() for _ in range(n)]
+
+    def iter_batch(self, n: int):
+        """Generate a batch of n values lazily.
+
+        :param n: Number of values to generate.
+        :type n: int
+        :raises ValueError: If n is not positive.
+        :yields: Values one at a time.
+        """
+        if n <= 0:
+            raise ValueError(f"n must be positive, got {n}")
+        for _ in range(n):
+            yield self.pop()
+
+
+class VdCorput(GeneratorBase[float]):
     """van der Corput sequence generator
 
     `VdCorput` is a class that generates the van der Corput sequence. The van der
@@ -113,88 +192,31 @@ class VdCorput:
     """
 
     def __init__(self, base: int = 2) -> None:
-
-
         self._count: int = 0
         self._count_lock = threading.Lock()
         self.base: int = base
 
-    def pop(self) -> float:
-        """
-        The `pop()` function is used to generate the next value in the sequence.
-        For example, in the `VdCorput` class, `pop()` increments the count and
-        calculates the van der Corput sequence value for that count and base. In the
-        `Halton` class, `pop()` returns the next point in the Halton sequence
-        as a `List[float; 2]`. Similarly, in the `Circle` class, `pop()`
-        returns the next point on the unit circle as a `List[float; 2]`. In
-        the `Sphere` class, `pop()` returns the next point on the unit sphere as a
-        `List[float; 3]`. And in the `Sphere3Hopf` class, `pop()` returns
-        the next point on the 3-sphere using the Hopf fibration as a
-        `List[float; 4]`.
+    def value_at(self, n: int) -> float:
+        r"""Evaluate the van der Corput value at index :math:`n` (pure).
+
+        .. math::
+
+           \phi_b(n) = \sum_{k=0}^{m} \frac{d_k}{b^{k+1}}
+
+        where :math:`d_k` are the base-:math:`b` digits of :math:`n`.
+
+        :param n: The sequence index.
+        :return: The van der Corput value for index ``n``.
 
         Examples:
             >>> vgen = VdCorput(2)
-            >>> vgen.pop()
+            >>> vgen.value_at(1)
             0.5
         """
-        with self._count_lock:
-            self._count += 1  # ignore 0
-            count = self._count
-        reslt = 0.0
-        denom = 1.0
-        while count != 0:
-            denom *= self.base
-            count, remainder = divmod(count, self.base)
-            if remainder != 0:
-                reslt += remainder / denom
-        return reslt
-
-    def reseed(self, seed: int) -> None:
+        return vdc(n, self.base)
 
 
-        with self._count_lock:
-            self._count = seed
-
-    def __iter__(self) -> "VdCorput":
-        """Return iterator for the van der Corput sequence generator.
-
-        :return: Self as the iterator.
-        """
-        return self
-
-    def __next__(self) -> float:
-        """Return the next value in the van der Corput sequence.
-
-        :return: Next floating-point value in the sequence.
-        """
-        return self.pop()
-
-    def pop_batch(self, n: int) -> List[float]:
-        """Generate a batch of n values from the van der Corput sequence.
-
-        :param n: Number of values to generate.
-        :type n: int
-        :return: List of n floating-point values.
-        :raises ValueError: If n is not positive.
-        """
-        if n <= 0:
-            raise ValueError(f"n must be positive, got {n}")
-        return [self.pop() for _ in range(n)]
-
-    def iter_batch(self, n: int):
-        """Generate a batch of n values lazily.
-
-        :param n: Number of values to generate.
-        :yields: Values one at a time.
-        :raises ValueError: If n is not positive.
-        """
-        if n <= 0:
-            raise ValueError(f"n must be positive, got {n}")
-        for _ in range(n):
-            yield self.pop()
-
-
-class Halton:
+class Halton(GeneratorBase[List[float]]):
     """Halton sequence generator
 
     The `Halton` class is a sequence generator that generates points in a
@@ -224,71 +246,30 @@ class Halton:
     """
 
     def __init__(self, base: Sequence[int]) -> None:
-
-
+        self._count: int = 0
+        self._count_lock = threading.Lock()
         self.vdc0 = VdCorput(base[0])
         self.vdc1 = VdCorput(base[1])
 
-    def pop(self) -> List[float]:
-        """
-        The `pop()` function is used to generate the next value in the sequence.
-        For example, in the `VdCorput` class, `pop()` increments the count and
-        calculates the van der Corput sequence value for that count and base. In
-        the `Halton` class, `pop()` returns the next point in the Halton sequence
-        as a `List[float; 2]`. Similarly, in the `Circle` class, `pop()`
-        returns the next point on the unit circle as a `List[float; 2]`. In
-        the `Sphere` class, `pop()` returns the next point on the unit sphere as a
-        `List[float; 3]`. And in the `Sphere3Hopf` class, `pop()` returns
-        the next point on the 3-sphere using the Hopf fibration as a
-        `List[float; 4]`.
+    def value_at(self, n: int) -> List[float]:
+        r"""Evaluate the 2D Halton point at index :math:`n` (pure).
+
+        .. math::
+
+           H(n) = \bigl(\phi_{b_0}(n),\; \phi_{b_1}(n)\bigr)
+
+        :param n: The sequence index.
+        :return: The 2D Halton point for index ``n``.
 
         Examples:
             >>> hgen = Halton([2, 3])
-            >>> hgen.pop()
+            >>> hgen.value_at(1)
             [0.5, 0.3333333333333333]
         """
-        return [self.vdc0.pop(), self.vdc1.pop()]
-
-    def reseed(self, seed: int) -> None:
+        return [self.vdc0.value_at(n), self.vdc1.value_at(n)]
 
 
-        self.vdc0.reseed(seed)
-        self.vdc1.reseed(seed)
-
-    def __iter__(self) -> "Halton":
-        """Return iterator for the Halton sequence generator.
-
-        :return: Self as the iterator.
-        """
-        return self
-
-    def __next__(self) -> List[float]:
-        """Return the next point in the Halton sequence.
-
-        :return: Next 2D point as a list of two floats.
-        """
-        return self.pop()
-
-    def pop_batch(self, n: int) -> List[List[float]]:
-        """Generate a batch of n points from the Halton sequence.
-
-        :param n: Number of points to generate.
-        :type n: int
-        :return: List of n 2D points.
-        :raises ValueError: If n is not positive.
-        """
-        if n <= 0:
-            raise ValueError(f"n must be positive, got {n}")
-        return [self.pop() for _ in range(n)]
-
-    def iter_batch(self, n: int):
-        if n <= 0:
-            raise ValueError(f"n must be positive, got {n}")
-        for _ in range(n):
-            yield self.pop()
-
-
-class Circle:
+class Circle(GeneratorBase[List[float]]):
     """Unit Circle sequence generator
 
     Examples:
@@ -302,11 +283,12 @@ class Circle:
     """
 
     def __init__(self, base: int) -> None:
-
+        self._count: int = 0
+        self._count_lock = threading.Lock()
         self.vdc = VdCorput(base)
 
-    def pop(self) -> List[float]:
-        r"""Next point on the unit circle.
+    def value_at(self, n: int) -> List[float]:
+        r"""Evaluate the point on the unit circle at index :math:`n` (pure).
 
         Maps a van der Corput value :math:`v \in [0,1]` to the unit circle via
         uniform angular sampling:
@@ -316,54 +298,19 @@ class Circle:
            \theta = 2\pi v,\qquad
            \mathbf{x} = (\cos\theta,\; \sin\theta)
 
+        :param n: The sequence index.
+        :return: The point on the unit circle for index ``n``.
+
         Examples:
             >>> cgen = Circle(2)
-            >>> cgen.pop()
+            >>> cgen.value_at(1)
             [-1.0, 1.2246467991473532e-16]
         """
-        theta = self.vdc.pop() * TWO_PI  # map to [0, 2π]
+        theta = self.vdc.value_at(n) * TWO_PI  # map to [0, 2π]
         return [cos(theta), sin(theta)]
 
-    # [allow(dead_code)]
-    def reseed(self, seed: int) -> None:
 
-
-        self.vdc.reseed(seed)
-
-    def __iter__(self) -> "Circle":
-        """Return iterator for the Circle sequence generator.
-
-        :return: Self as the iterator.
-        """
-        return self
-
-    def __next__(self) -> List[float]:
-        """Return the next point on the unit circle.
-
-        :return: Next point as [cos(theta), sin(theta)].
-        """
-        return self.pop()
-
-    def pop_batch(self, n: int) -> List[List[float]]:
-        """Generate a batch of n points on the unit circle.
-
-        :param n: Number of points to generate.
-        :type n: int
-        :return: List of n points on the circle.
-        :raises ValueError: If n is not positive.
-        """
-        if n <= 0:
-            raise ValueError(f"n must be positive, got {n}")
-        return [self.pop() for _ in range(n)]
-
-    def iter_batch(self, n: int):
-        if n <= 0:
-            raise ValueError(f"n must be positive, got {n}")
-        for _ in range(n):
-            yield self.pop()
-
-
-class Disk:
+class Disk(GeneratorBase[List[float]]):
     """Unit Disk sequence generator
 
     Examples:
@@ -386,13 +333,13 @@ class Disk:
     """
 
     def __init__(self, base: Sequence[int]) -> None:
-
-
+        self._count: int = 0
+        self._count_lock = threading.Lock()
         self.vdc0 = VdCorput(base[0])
         self.vdc1 = VdCorput(base[1])
 
-    def pop(self) -> List[float]:
-        r"""Next point uniformly distributed in the unit disk.
+    def value_at(self, n: int) -> List[float]:
+        r"""Evaluate the point in the unit disk at index :math:`n` (pure).
 
         Uses a van der Corput value :math:`v_\theta` for the angle and a second
         value :math:`v_r` for the radius, with :math:`r = \sqrt{v_r}` to
@@ -406,55 +353,20 @@ class Disk:
            \mathbf{x} &= (r\cos\theta,\; r\sin\theta)
            \end{aligned}
 
+        :param n: The sequence index.
+        :return: The point in the unit disk for index ``n``.
+
         Examples:
             >>> dgen = Disk([2, 3])
-            >>> dgen.pop()
+            >>> dgen.value_at(1)
             [-0.5773502691896257, 7.070501591499379e-17]
         """
-        theta = self.vdc0.pop() * TWO_PI  # map to [0, 2π]
-        radius = sqrt(self.vdc1.pop())  # map to [0, 1]
+        theta = self.vdc0.value_at(n) * TWO_PI  # map to [0, 2π]
+        radius = sqrt(self.vdc1.value_at(n))  # map to [0, 1]
         return [radius * cos(theta), radius * sin(theta)]
 
-    def reseed(self, seed: int) -> None:
 
-
-        self.vdc0.reseed(seed)
-        self.vdc1.reseed(seed)
-
-    def __iter__(self) -> "Disk":
-        """Return iterator for the Disk sequence generator.
-
-        :return: Self as the iterator.
-        """
-        return self
-
-    def __next__(self) -> List[float]:
-        """Return the next point in the unit disk.
-
-        :return: Next point as [radius * cos(theta), radius * sin(theta)].
-        """
-        return self.pop()
-
-    def pop_batch(self, n: int) -> List[List[float]]:
-        """Generate a batch of n points in the unit disk.
-
-        :param n: Number of points to generate.
-        :type n: int
-        :return: List of n points in the disk.
-        :raises ValueError: If n is not positive.
-        """
-        if n <= 0:
-            raise ValueError(f"n must be positive, got {n}")
-        return [self.pop() for _ in range(n)]
-
-    def iter_batch(self, n: int):
-        if n <= 0:
-            raise ValueError(f"n must be positive, got {n}")
-        for _ in range(n):
-            yield self.pop()
-
-
-class Sphere:
+class Sphere(GeneratorBase[List[float]]):
     """Unit Sphere sequence generator
 
     Examples:
@@ -466,13 +378,13 @@ class Sphere:
     """
 
     def __init__(self, base: Sequence[int]) -> None:
-
-
+        self._count: int = 0
+        self._count_lock = threading.Lock()
         self.vdcgen = VdCorput(base[0])
         self.cirgen = Circle(base[1])
 
-    def pop(self) -> List[float]:
-        r"""Next point uniformly distributed on the unit sphere :math:`S^2`.
+    def value_at(self, n: int) -> List[float]:
+        r"""Evaluate the point on the unit sphere :math:`S^2` at index :math:`n` (pure).
 
         Uses the cylindrical equal-area projection:
 
@@ -486,52 +398,17 @@ class Sphere:
 
         where :math:`\theta = 2\pi v_\theta` comes from a :class:`Circle`
         generator and :math:`\phi` is mapped uniformly to :math:`[-1,1]`.
+
+        :param n: The sequence index.
+        :return: The point on the unit sphere for index ``n``.
         """
-        cosphi = 2.0 * self.vdcgen.pop() - 1.0  # map to [-1, 1]
+        cosphi = 2.0 * self.vdcgen.value_at(n) - 1.0  # map to [-1, 1]
         sinphi = sqrt(1.0 - cosphi * cosphi)  # cylindrical mapping
-        [cos, sin] = self.cirgen.pop()
+        [cos, sin] = self.cirgen.value_at(n)
         return [sinphi * cos, sinphi * sin, cosphi]
 
-    def reseed(self, seed: int) -> None:
 
-
-        self.cirgen.reseed(seed)
-        self.vdcgen.reseed(seed)
-
-    def __iter__(self) -> "Sphere":
-        """Return iterator for the Sphere sequence generator.
-
-        :return: Self as the iterator.
-        """
-        return self
-
-    def __next__(self) -> List[float]:
-        """Return the next point on the unit sphere.
-
-        :return: Next 3D point on the sphere surface.
-        """
-        return self.pop()
-
-    def pop_batch(self, n: int) -> List[List[float]]:
-        """Generate a batch of n points on the unit sphere.
-
-        :param n: Number of points to generate.
-        :type n: int
-        :return: List of n 3D points on the sphere.
-        :raises ValueError: If n is not positive.
-        """
-        if n <= 0:
-            raise ValueError(f"n must be positive, got {n}")
-        return [self.pop() for _ in range(n)]
-
-    def iter_batch(self, n: int):
-        if n <= 0:
-            raise ValueError(f"n must be positive, got {n}")
-        for _ in range(n):
-            yield self.pop()
-
-
-class Sphere3Hopf:
+class Sphere3Hopf(GeneratorBase[List[float]]):
     """Sphere-3 sequence generator using Hopf coordinates
 
     .. code-block:: bibtex
@@ -556,14 +433,14 @@ class Sphere3Hopf:
     """
 
     def __init__(self, base: Sequence[int]) -> None:
-
-
+        self._count: int = 0
+        self._count_lock = threading.Lock()
         self.vdc0 = VdCorput(base[0])
         self.vdc1 = VdCorput(base[1])
         self.vdc2 = VdCorput(base[2])
 
-    def pop(self) -> List[float]:
-        r"""Next point on :math:`S^3` using Hopf fibration coordinates.
+    def value_at(self, n: int) -> List[float]:
+        r"""Evaluate the point on :math:`S^3` at index :math:`n` (pure).
 
         The 3-sphere :math:`S^3` is parameterised by the Hopf fibration:
 
@@ -582,10 +459,18 @@ class Sphere3Hopf:
 
         Reference:
             Yershova et al., *Int. J. Robotics Research*, 29(7), 2010.
+
+        :param n: The sequence index.
+        :return: The point on the 3-sphere for index ``n``.
+
+        Examples:
+            >>> sp3hgen = Sphere3Hopf([2, 3, 5])
+            >>> sp3hgen.value_at(1)
+            [-0.22360679774997885, 0.3872983346207417, 0.4472135954999573, -0.7745966692414837]
         """
-        phi = self.vdc0.pop() * TWO_PI  # map to [0, 2π]
-        psy = self.vdc1.pop() * TWO_PI  # map to [0, 2π]
-        vdc = self.vdc2.pop()
+        phi = self.vdc0.value_at(n) * TWO_PI  # map to [0, 2π]
+        psy = self.vdc1.value_at(n) * TWO_PI  # map to [0, 2π]
+        vdc = self.vdc2.value_at(n)
         cos_eta = sqrt(vdc)
         sin_eta = sqrt(1.0 - vdc)
         return [
@@ -595,47 +480,8 @@ class Sphere3Hopf:
             sin_eta * sin(phi + psy),
         ]
 
-    def reseed(self, seed: int) -> None:
 
-
-        self.vdc0.reseed(seed)
-        self.vdc1.reseed(seed)
-        self.vdc2.reseed(seed)
-
-    def __iter__(self) -> "Sphere3Hopf":
-        """Return iterator for the Sphere3Hopf sequence generator.
-
-        :return: Self as the iterator.
-        """
-        return self
-
-    def __next__(self) -> List[float]:
-        """Return the next point on the 3-sphere using Hopf fibration.
-
-        :return: Next 4D point on the 3-sphere.
-        """
-        return self.pop()
-
-    def pop_batch(self, n: int) -> List[List[float]]:
-        """Generate a batch of n points on the 3-sphere.
-
-        :param n: Number of points to generate.
-        :type n: int
-        :return: List of n 4D points on the 3-sphere.
-        :raises ValueError: If n is not positive.
-        """
-        if n <= 0:
-            raise ValueError(f"n must be positive, got {n}")
-        return [self.pop() for _ in range(n)]
-
-    def iter_batch(self, n: int):
-        if n <= 0:
-            raise ValueError(f"n must be positive, got {n}")
-        for _ in range(n):
-            yield self.pop()
-
-
-class HaltonN:
+class HaltonN(GeneratorBase[List[float]]):
     """HaltonN sequence generator
 
     Examples:
@@ -651,67 +497,26 @@ class HaltonN:
     vdcs: List[VdCorput]
 
     def __init__(self, base: Sequence[int]) -> None:
-
-
+        self._count: int = 0
+        self._count_lock = threading.Lock()
         self.vdcs = [VdCorput(b) for b in base]
 
-    def pop(self) -> List[float]:
-        """
-        The `pop()` function is used to generate the next value in the sequence.
-        For example, in the `VdCorput` class, `pop()` increments the count and
-        calculates the van der Corput sequence value for that count and base. In
-        the `Halton` class, `pop()` returns the next point in the Halton sequence
-        as a `List[float; 2]`. Similarly, in the `Circle` class, `pop()`
-        returns the next point on the unit circle as a `List[float; 2]`. In
-        the `Sphere` class, `pop()` returns the next point on the unit sphere as a
-        `List[float; 3]`. And in the `Sphere3Hopf` class, `pop()` returns
-        the next point on the 3-sphere using the Hopf fibration as a
-        `List[float; 4]`.
+    def value_at(self, n: int) -> List[float]:
+        r"""Evaluate the N-dimensional Halton point at index :math:`n` (pure).
+
+        .. math::
+
+           H(n) = (\phi_{b_1}(n), \phi_{b_2}(n), \dots, \phi_{b_N}(n))
+
+        :param n: The sequence index.
+        :return: The N-dimensional Halton point for index ``n``.
 
         Examples:
             >>> hgen = HaltonN([2, 3, 5])
-            >>> hgen.pop()
+            >>> hgen.value_at(1)
             [0.5, 0.3333333333333333, 0.2]
         """
-        return [vdc.pop() for vdc in self.vdcs]
-
-    def reseed(self, seed: int) -> None:
-
-
-        for vdc in self.vdcs:
-            vdc.reseed(seed)
-
-    def __iter__(self) -> "HaltonN":
-        """Return iterator for the HaltonN sequence generator.
-
-        :return: Self as the iterator.
-        """
-        return self
-
-    def __next__(self) -> List[float]:
-        """Return the next point in the N-dimensional Halton sequence.
-
-        :return: Next N-dimensional point as a list of floats.
-        """
-        return self.pop()
-
-    def pop_batch(self, n: int) -> List[List[float]]:
-        """Generate a batch of n points from the N-dimensional Halton sequence.
-
-        :param n: Number of points to generate.
-        :type n: int
-        :return: List of n N-dimensional points.
-        :raises ValueError: If n is not positive.
-        """
-        if n <= 0:
-            raise ValueError(f"n must be positive, got {n}")
-        return [self.pop() for _ in range(n)]
-
-    def iter_batch(self, n: int):
-        if n <= 0:
-            raise ValueError(f"n must be positive, got {n}")
-        for _ in range(n):
-            yield self.pop()
+        return [vdc.value_at(n) for vdc in self.vdcs]
 
 
 @cache

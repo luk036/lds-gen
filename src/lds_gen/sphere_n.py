@@ -6,7 +6,11 @@ import threading
 from functools import cache
 from typing import Final, List, Protocol, Union
 
-from lds_gen.lds import Sphere, VdCorput  # low-discrepancy sequence generators
+from lds_gen.lds import (  # low-discrepancy sequence generators
+    GeneratorBase,
+    Sphere,
+    VdCorput,
+)
 
 PI: Final[float] = math.pi
 HALF_PI: float = PI / 2.0
@@ -136,7 +140,7 @@ class SphereGen(Protocol):
         """
 
 
-class Sphere3(SphereGen):
+class Sphere3(GeneratorBase[List[float]], SphereGen):
     """3-Sphere sequence generator
 
     Examples:
@@ -158,54 +162,13 @@ class Sphere3(SphereGen):
                      sequence and the 2-sphere generator.
         :type base: List[int]
         """
+        self._count = 0
+        self._count_lock = threading.Lock()
         self.vdc = VdCorput(base[0])
         self.sphere2 = Sphere(base[1:3])
-        self._lock = threading.Lock()
 
-    def reseed(self, seed: int) -> None:
-        """Reset the sequence to a specific starting position.
-
-        :param seed: The starting position for the sequence.
-        :type seed: int
-        """
-        with self._lock:
-            self.vdc.reseed(seed)
-            self.sphere2.reseed(seed)
-
-    def __iter__(self) -> "Sphere3":
-        """Return iterator for the 3-sphere sequence generator.
-
-        :return: Self as the iterator.
-        """
-        return self
-
-    def __next__(self) -> List[float]:
-        """Return the next point on the 3-sphere.
-
-        :return: Next 4D point on the 3-sphere.
-        """
-        return self.pop()
-
-    def pop_batch(self, n: int) -> List[List[float]]:
-        """Generate a batch of n points on the 3-sphere.
-
-        :param n: Number of points to generate.
-        :type n: int
-        :return: List of n 4D points on the 3-sphere.
-        :raises ValueError: If n is not positive.
-        """
-        if n <= 0:
-            raise ValueError(f"n must be positive, got {n}")
-        return [self.pop() for _ in range(n)]
-
-    def iter_batch(self, n: int):
-        if n <= 0:
-            raise ValueError(f"n must be positive, got {n}")
-        for _ in range(n):
-            yield self.pop()
-
-    def pop(self) -> List[float]:
-        r"""Next point on :math:`S^3` using the covariance-mapping technique.
+    def value_at(self, n: int) -> List[float]:
+        r"""Evaluate the point on :math:`S^3` at index :math:`n` (pure).
 
         The polar angle :math:`\chi` is obtained by interpolating the inverse
         cumulative distribution function (precomputed in :data:`F2`):
@@ -221,17 +184,17 @@ class Sphere3(SphereGen):
         where :math:`\mathbf{s} \in S^2` is a uniform point on the 2-sphere
         and :math:`F_2(\chi)` is the marginal CDF for dimension 2.
 
-        :return: Next 4D point on the 3-sphere surface.
+        :param n: The sequence index.
+        :return: The point on the 3-sphere for index ``n``.
         """
-        with self._lock:
-            theta = HALF_PI * self.vdc.pop()  # map to [t0, tm-1]
-            x_val = simple_interp(theta, _get_f2(), _get_x())
-            cosxi = math.cos(x_val)
-            sinxi = math.sin(x_val)
-            return [sinxi * s for s in self.sphere2.pop()] + [cosxi]
+        theta = HALF_PI * self.vdc.value_at(n)  # map to [t0, tm-1]
+        x_val = simple_interp(theta, _get_f2(), _get_x())
+        cosxi = math.cos(x_val)
+        sinxi = math.sin(x_val)
+        return [sinxi * s for s in self.sphere2.value_at(n)] + [cosxi]
 
 
-class SphereN(SphereGen):
+class SphereN(GeneratorBase[List[float]], SphereGen):
     """Sphere-N sequence generator.
 
     Examples:
@@ -253,6 +216,8 @@ class SphereN(SphereGen):
         """
         ndim = len(base) - 1
         assert ndim >= 2
+        self._count = 0
+        self._count_lock = threading.Lock()
         self.vdc = VdCorput(base[0])
         if ndim == 2:
             self.s_gen = Sphere(base[1:3])
@@ -261,10 +226,9 @@ class SphereN(SphereGen):
         self.n = ndim
         tp_val = get_tp(ndim)
         self.range = tp_val[-1] - tp_val[0]
-        self._lock = threading.Lock()
 
-    def pop(self) -> List[float]:
-        r"""Next point uniformly distributed on :math:`S^{n-1}`.
+    def value_at(self, n: int) -> List[float]:
+        r"""Evaluate the point on :math:`S^{n-1}` at index :math:`n` (pure).
 
         Uses the recursive covariance-mapping technique. The polar angle
         :math:`\chi` is obtained by inverting the precomputed marginal CDF
@@ -287,65 +251,22 @@ class SphereN(SphereGen):
            T_n(\chi) = \frac{n-1}{n}\,T_{n-2}(\chi) +
                        \frac{\cos\chi\,\sin^{\,n-1}\chi}{n}
 
-        Returns:
-            List[float]: A new point on the :math:`n`-sphere.
+        :param n: The sequence index.
+        :return: A point on the :math:`n`-sphere for index ``n``.
         """
-        with self._lock:
-            if self.n == 2:
-                theta = HALF_PI * self.vdc.pop()  # map to [t0, tm-1]
-                x_val = simple_interp(theta, _get_f2(), _get_x())
-                cosxi = math.cos(x_val)
-                sinxi = math.sin(x_val)
-                return [sinxi * s for s in self.s_gen.pop()] + [cosxi]
+        if self.n == 2:
+            theta = HALF_PI * self.vdc.value_at(n)  # map to [t0, tm-1]
+            x_val = simple_interp(theta, _get_f2(), _get_x())
+            cosxi = math.cos(x_val)
+            sinxi = math.sin(x_val)
+            return [sinxi * s for s in self.s_gen.value_at(n)] + [cosxi]
 
-            vdc_val = self.vdc.pop()
-            tp_val = get_tp(self.n)
-            theta = tp_val[0] + self.range * vdc_val  # map to [t0, tm-1]
-            x_val = simple_interp(theta, tp_val, _get_x())
-            sinphi = math.sin(x_val)
-            return [x_val * sinphi for x_val in self.s_gen.pop()] + [math.cos(x_val)]
-
-    def reseed(self, seed: int) -> None:
-        """Reset the sequence to a specific starting position.
-
-        :param seed: The starting position for the sequence.
-        :type seed: int
-        """
-        with self._lock:
-            self.vdc.reseed(seed)
-            self.s_gen.reseed(seed)
-
-    def __iter__(self) -> "SphereN":
-        """Return iterator for the N-sphere sequence generator.
-
-        :return: Self as the iterator.
-        """
-        return self
-
-    def __next__(self) -> List[float]:
-        """Return the next point on the N-sphere.
-
-        :return: Next N-dimensional point on the N-sphere surface.
-        """
-        return self.pop()
-
-    def pop_batch(self, n: int) -> List[List[float]]:
-        """Generate a batch of n points on the N-sphere.
-
-        :param n: Number of points to generate.
-        :type n: int
-        :return: List of n N-dimensional points on the N-sphere.
-        :raises ValueError: If n is not positive.
-        """
-        if n <= 0:
-            raise ValueError(f"n must be positive, got {n}")
-        return [self.pop() for _ in range(n)]
-
-    def iter_batch(self, n: int):
-        if n <= 0:
-            raise ValueError(f"n must be positive, got {n}")
-        for _ in range(n):
-            yield self.pop()
+        vdc_val = self.vdc.value_at(n)
+        tp_val = get_tp(self.n)
+        theta = tp_val[0] + self.range * vdc_val  # map to [t0, tm-1]
+        x_val = simple_interp(theta, tp_val, _get_x())
+        sinphi = math.sin(x_val)
+        return [s * sinphi for s in self.s_gen.value_at(n)] + [math.cos(x_val)]
 
 
 if __name__ == "__main__":

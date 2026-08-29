@@ -43,96 +43,65 @@ block that can be used in more complex algorithms and simulations.
 import threading
 from typing import List, Sequence
 
+from lds_gen.lds import GeneratorBase
+
+
+def vdc_i(count: int, base: int = 2, scale: int = 10) -> int:
+    r"""Integer van der Corput sequence in base :math:`b`.
+
+    Reverses the base-:math:`b` expansion of :math:`n` and scales it by
+    :math:`b^{\text{scale}}` to produce an integer output:
+
+    .. math::
+
+       \phi_b^{\mathbb{Z}}(n) = \sum_{k=0}^{m} d_k \cdot \frac{b^{\text{scale}}}{b^{k+1}}
+
+    where :math:`d_k` are the base-:math:`b` digits of :math:`n`.
+
+    :param count: The integer :math:`n` to convert
+    :param base: The base :math:`b` (default 2)
+    :param scale: The number of digits (default 10)
+    :return: The integer radical inverse :math:`\phi_b^{\mathbb{Z}}(n)`
+
+    Examples:
+        >>> vdc_i(1, 2, 10)
+        512
+        >>> vdc_i(2, 2, 10)
+        256
+    """
+    factor = base**scale
+    reslt = 0
+    while count != 0:
+        remainder = count % base
+        factor //= base
+        count //= base
+        reslt += remainder * factor
+    return reslt
+
 
 # The `VdCorput` class initializes an object with a base and scale value, and sets the count to 0.
-class VdCorput:
+class VdCorput(GeneratorBase[int]):
     def __init__(self, base: int = 2, scale: int = 10) -> None:
-
-
-
-
         self._base: int = base
         self._scale: int = scale
         self._count: int = 0
         self._count_lock = threading.Lock()
-        self._factor: int = base**scale
 
-    def pop(self) -> int:
-        """
-        The `pop()` function is a member function of the `VdCorput` class that increments the count and
-        calculates the next value in the van der Corput sequence.
+    def value_at(self, n: int) -> int:
+        r"""Evaluate the integer sequence value at index :math:`n` (pure).
 
-        :return: The `pop()` function is returning an `int` value.
+        :param n: The sequence index.
+        :return: The integer van der Corput value for index ``n``.
 
         Examples:
             >>> vdc = VdCorput(2, 10)
-            >>> vdc.pop()
+            >>> vdc.value_at(1)
             512
         """
-        with self._count_lock:
-            self._count += 1
-            count = self._count
-        reslt: int = 0
-        factor: int = self._factor
-        while count != 0:
-            remainder: int = count % self._base
-            factor //= self._base
-            count //= self._base
-            reslt += remainder * factor
-        return reslt
-
-    def reseed(self, seed: int) -> None:
-        """
-        The `reseed` function resets the state of a sequence generator to a specific seed value.
-
-        :param seed: The `seed` parameter is an integer value that is used to reset the state of the
-                     sequence generator. It determines the starting point of the sequence generation
-
-        :type seed: int
-
-        Examples:
-            >>> vdc = VdCorput(2, 10)
-            >>> vdc.reseed(0)
-            >>> vdc.pop()
-            512
-        """
-        with self._count_lock:
-            self._count = seed
-
-    def __iter__(self) -> "VdCorput":
-        """Return iterator for the integer van der Corput sequence generator.
-
-        :return: Self as the iterator.
-        """
-        return self
-
-    def __next__(self) -> int:
-        """Return the next value in the integer van der Corput sequence.
-
-        :return: Next integer value in the sequence.
-        """
-        return self.pop()
-
-    def pop_batch(self, n: int) -> List[int]:
-        """Generate a batch of n values from the integer van der Corput sequence.
-
-        :param n: Number of values to generate.
-        :type n: int
-        :return: List of n integer values.
-        :raises ValueError: If n is not positive.
-        """
-        if n <= 0:
-            raise ValueError(f"n must be positive, got {n}")
-        return [self.pop() for _ in range(n)]
-
-    def iter_batch(self, n: int):
-        if n <= 0:
-            raise ValueError(f"n must be positive, got {n}")
-        for _ in range(n):
-            yield self.pop()
+        return vdc_i(n, self._base, self._scale)
 
 
-class Halton:
+class Halton(GeneratorBase[List[int]]):
     """Halton sequence generator
 
     The `Halton` class is a sequence generator that generates points in a
@@ -162,54 +131,22 @@ class Halton:
     """
 
     def __init__(self, base: Sequence[int], scale: Sequence[int]) -> None:
-
-
-
-
+        self._count: int = 0
+        self._count_lock = threading.Lock()
         self._vdc0 = VdCorput(base[0], scale[0])
         self._vdc1 = VdCorput(base[1], scale[1])
 
-    def pop(self) -> List[int]:
+    def value_at(self, n: int) -> List[int]:
+        r"""Evaluate the integer 2D Halton point at index :math:`n` (pure).
 
-        return [self._vdc0.pop(), self._vdc1.pop()]
+        .. math::
 
-    def reseed(self, seed: int) -> None:
+           H(n) = \bigl(\phi_{b_0}^{\mathbb{Z}}(n),\; \phi_{b_1}^{\mathbb{Z}}(n)\bigr)
 
-
-        self._vdc0.reseed(seed)
-        self._vdc1.reseed(seed)
-
-    def __iter__(self) -> "Halton":
-        """Return iterator for the integer Halton sequence generator.
-
-        :return: Self as the iterator.
+        :param n: The sequence index.
+        :return: The integer 2D Halton point for index ``n``.
         """
-        return self
-
-    def __next__(self) -> List[int]:
-        """Return the next point in the integer Halton sequence.
-
-        :return: Next 2D point as a list of two integers.
-        """
-        return self.pop()
-
-    def pop_batch(self, n: int) -> List[List[int]]:
-        """Generate a batch of n points from the integer Halton sequence.
-
-        :param n: Number of points to generate.
-        :type n: int
-        :return: List of n 2D integer points.
-        :raises ValueError: If n is not positive.
-        """
-        if n <= 0:
-            raise ValueError(f"n must be positive, got {n}")
-        return [self.pop() for _ in range(n)]
-
-    def iter_batch(self, n: int):
-        if n <= 0:
-            raise ValueError(f"n must be positive, got {n}")
-        for _ in range(n):
-            yield self.pop()
+        return [self._vdc0.value_at(n), self._vdc1.value_at(n)]
 
 
 if __name__ == "__main__":
