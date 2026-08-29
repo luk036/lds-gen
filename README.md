@@ -43,13 +43,13 @@ Each generator class has methods for producing the next value in the sequence (p
 
 ## Thread Safety
 
-The following generator classes are now **thread-safe**:
+All generator classes are **thread-safe**:
 
-- `VdCorput` classes in both `lds.py` and `ilds.py` modules
-- `Sphere3` class in `sphere_n.py` module
-- `SphereN` class in `sphere_n.py` module
+- `VdCorput`, `Halton`, `Circle`, `Disk`, `Sphere`, `Sphere3Hopf`, `HaltonN` in `lds.py`
+- `VdCorput`, `Halton` in `ilds.py`
+- `Sphere3`, `SphereN` in `sphere_n.py`
 
-The internal state in all these generators is protected by threading locks, ensuring atomic operations when multiple threads access the same generator instance. This makes the library safe to use in multi-threaded applications without additional synchronization. The `pop()` and `reseed()` methods in all thread-safe classes use proper locking to prevent race conditions.
+The internal state in all these generators is protected by a per-instance threading lock around the shared sequence counter, ensuring atomic operations when multiple threads access the same generator instance. A `pop()` call atomically claims the next index, so concurrent calls never produce duplicate values — including for composite generators, whose points are generated atomically as a whole. This makes the library safe to use in multi-threaded applications without additional synchronization. The `pop()` and `reseed()` methods use proper locking to prevent race conditions.
 
 The objective of this library is to provide a toolkit for the generation of sequences of numbers that are distributed in a well-balanced manner. These can be used in place of random numbers in many applications to achieve a more uniform coverage of a given space or surface. This can result in more efficient and accurate outcomes in tasks such as sampling, integration, and optimization.
 
