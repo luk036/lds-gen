@@ -110,6 +110,7 @@ def get_tp(ndim: int) -> List[float]:
         prev = _get_neg_cosine()  # Tp(1)
         start = 3
 
+    current = prev
     for i in range(start, ndim + 1, 2):
         current = [
             ((i - 1) * prev[j] + nc[j] * (sine[j] ** (i - 1))) / i for j in range(n_pts)
@@ -127,7 +128,7 @@ class SphereGen(Protocol):
     to reset the sequence to a specific starting position.
     """
 
-    def pop(self) -> List[float]:
+    def pop(self) -> List[float]: # type: ignore
         """Generate the next point on the sphere.
 
         :return: List of floats representing a point on the sphere.
