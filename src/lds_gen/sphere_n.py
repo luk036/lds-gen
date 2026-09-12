@@ -4,13 +4,20 @@ import bisect
 import math
 import threading
 from functools import cache
-from typing import Final, List, Protocol, Union
+from typing import Any, Final, List, Protocol, Union
 
 from lds_gen.lds import (  # low-discrepancy sequence generators
     GeneratorBase,
     Sphere,
     VdCorput,
 )
+
+try:
+    import numpy as _np
+
+    _HAS_NUMPY = True
+except ImportError:  # pragma: no cover
+    _HAS_NUMPY = False
 
 PI: Final[float] = math.pi
 HALF_PI: float = PI / 2.0
@@ -120,6 +127,59 @@ def get_tp(ndim: int) -> List[float]:
     return current
 
 
+@cache
+def _get_x_np() -> Any:
+    """Cached NumPy view of the interpolation grid :func:`_get_x`."""
+    return _np.asarray(_get_x(), dtype=_np.float64)
+
+
+@cache
+def _get_f2_np() -> Any:
+    """Cached NumPy view of the marginal CDF table :func:`_get_f2`."""
+    return _np.asarray(_get_f2(), dtype=_np.float64)
+
+
+@cache
+def _get_tp_np(ndim: int) -> Any:
+    """Cached NumPy view of the marginal CDF table :func:`get_tp`."""
+    return _np.asarray(get_tp(ndim), dtype=_np.float64)
+
+
+def _vdc_batch(indices: Any, base: int) -> Any:
+    """Radical-inverse (van der Corput) values for a batch of indices."""
+    idx = _np.asarray(indices, dtype=_np.float64)
+    result = _np.zeros(idx.shape[0], dtype=_np.float64)
+    denom = 1.0
+    while _np.any(idx > 0.0):
+        denom *= base
+        result += _np.mod(idx, base) / denom
+        idx = _np.floor_divide(idx, base)
+    return result
+
+
+def _sphere_batch_indices(base: List[int], indices: Any) -> Any:
+    """Vectorized :meth:`Sphere.value_at` over a batch of indices."""
+    cosphi = 2.0 * _vdc_batch(indices, base[0]) - 1.0
+    sinphi = _np.sqrt(_np.maximum(0.0, 1.0 - cosphi * cosphi))
+    theta = 2.0 * PI * _vdc_batch(indices, base[1])
+    return _np.column_stack([sinphi * _np.cos(theta), sinphi * _np.sin(theta), cosphi])
+
+
+def _spheren_batch_indices(base: List[int], indices: Any) -> Any:
+    """Vectorized :meth:`SphereN.value_at` over a batch of indices."""
+    ndim = len(base) - 1
+    vdc = _vdc_batch(indices, base[0])
+    if ndim == 2:
+        child = _sphere_batch_indices(base[1:3], indices)
+        x_val = _np.interp(HALF_PI * vdc, _get_f2_np(), _get_x_np())
+    else:
+        tp_val = _get_tp_np(ndim)
+        theta = tp_val[0] + (tp_val[-1] - tp_val[0]) * vdc
+        x_val = _np.interp(theta, tp_val, _get_x_np())
+        child = _spheren_batch_indices(base[1:], indices)
+    return _np.column_stack([_np.sin(x_val)[:, None] * child, _np.cos(x_val)])
+
+
 class SphereGen(Protocol):
     """Protocol defining the interface for sphere sequence generators.
 
@@ -128,7 +188,7 @@ class SphereGen(Protocol):
     to reset the sequence to a specific starting position.
     """
 
-    def pop(self) -> List[float]: # type: ignore
+    def pop(self) -> List[float]:  # type: ignore
         """Generate the next point on the sphere.
 
         :return: List of floats representing a point on the sphere.
@@ -167,6 +227,24 @@ class Sphere3(GeneratorBase[List[float]], SphereGen):
         self._count_lock = threading.Lock()
         self.vdc = VdCorput(base[0])
         self.sphere2 = Sphere(base[1:3])
+        self.base = list(base)
+
+    def pop_batch(self, n: int) -> List[List[float]]:
+        """Generate and return ``n`` points, vectorized when NumPy is available.
+
+        :param n: Number of points to generate.
+        :return: List of ``n`` points on the 3-sphere.
+        :raises ValueError: If ``n`` is not positive.
+        """
+        if n <= 0:
+            raise ValueError(f"n must be positive, got {n}")
+        if not _HAS_NUMPY:
+            return super().pop_batch(n)
+        with self._count_lock:
+            start = self._count + 1
+            self._count += n
+        indices = _np.arange(start, start + n)
+        return _spheren_batch_indices(self.base, indices).tolist()
 
     def value_at(self, n: int) -> List[float]:
         r"""Evaluate the point on :math:`S^3` at index :math:`n` (pure).
@@ -227,6 +305,24 @@ class SphereN(GeneratorBase[List[float]], SphereGen):
         self.n = ndim
         tp_val = get_tp(ndim)
         self.range = tp_val[-1] - tp_val[0]
+        self.base = list(base)
+
+    def pop_batch(self, n: int) -> List[List[float]]:
+        """Generate and return ``n`` points, vectorized when NumPy is available.
+
+        :param n: Number of points to generate.
+        :return: List of ``n`` points on the n-sphere.
+        :raises ValueError: If ``n`` is not positive.
+        """
+        if n <= 0:
+            raise ValueError(f"n must be positive, got {n}")
+        if not _HAS_NUMPY:
+            return super().pop_batch(n)
+        with self._count_lock:
+            start = self._count + 1
+            self._count += n
+        indices = _np.arange(start, start + n)
+        return _spheren_batch_indices(self.base, indices).tolist()
 
     def value_at(self, n: int) -> List[float]:
         r"""Evaluate the point on :math:`S^{n-1}` at index :math:`n` (pure).

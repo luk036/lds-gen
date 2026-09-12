@@ -581,3 +581,31 @@ def test_sphere_thread_pool_executor() -> None:
     assert len(set(result_tuples)) == len(
         result_tuples
     ), "Duplicate values found - possible race condition"
+
+
+def test_sphere3_pop_batch_matches_pop() -> None:
+    """Vectorized Sphere3.pop_batch matches repeated pop()."""
+    sgen = Sphere3([2, 3, 5])
+    sgen.reseed(0)
+    ref = [sgen.pop() for _ in range(20)]
+    sgen.reseed(0)
+    batch = sgen.pop_batch(20)
+    assert len(batch) == 20
+    for a, b in zip(ref, batch):
+        for ca, cb in zip(a, b):
+            assert abs(ca - cb) < 1e-12
+
+
+def test_spheren_pop_batch_matches_pop() -> None:
+    """Vectorized SphereN.pop_batch matches repeated pop() and validates n."""
+    sgen = SphereN([2, 3, 5, 7])
+    sgen.reseed(0)
+    ref = [sgen.pop() for _ in range(20)]
+    sgen.reseed(0)
+    batch = sgen.pop_batch(20)
+    assert len(batch) == 20
+    for a, b in zip(ref, batch):
+        for ca, cb in zip(a, b):
+            assert abs(ca - cb) < 1e-12
+    with pytest.raises(ValueError):
+        sgen.pop_batch(0)
