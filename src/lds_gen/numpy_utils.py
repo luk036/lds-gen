@@ -1,41 +1,11 @@
 """NumPy accelerated utilities for LDS generators.
 
-This module provides optional NumPy-accelerated operations for common
-LDS operations. All functions are optional and will gracefully fall back
-to pure Python if NumPy is not available.
+This module provides NumPy-based operations for common LDS operations.
 """
 
-import warnings
 from typing import List
 
-try:
-    import numpy as np
-
-    HAS_NUMPY = True
-except ImportError:
-    HAS_NUMPY = False
-
-    class np:  # type: ignore
-        pass
-
-
-def numpy_available() -> bool:
-    """Check if NumPy is available in the environment.
-
-    :return: True if NumPy is installed and importable, False otherwise.
-    """
-    return HAS_NUMPY
-
-
-def ensure_numpy() -> None:
-    """Ensure NumPy is available, raising ImportError if not.
-
-    :raises ImportError: If NumPy is not installed.
-    """
-    if not HAS_NUMPY:
-        raise ImportError(
-            "NumPy is required for this function. Install with: pip install numpy"
-        )
+import numpy as np
 
 
 def generate_vdcorput_vectorized(count: int, base: int) -> List[float]:
@@ -46,26 +16,18 @@ def generate_vdcorput_vectorized(count: int, base: int) -> List[float]:
     :param base: The base for the van der Corput sequence.
     :type base: int
     :return: List of count floating-point values in the sequence.
-    :raises ImportError: If NumPy is not available.
     """
-    if HAS_NUMPY:
-        indices = np.arange(1, count + 1, dtype=np.float64)
-        result = np.zeros(count, dtype=np.float64)
+    indices = np.arange(1, count + 1, dtype=np.float64)
+    result = np.zeros(count, dtype=np.float64)
 
-        denom = 1.0
-        while np.any(indices > 0):
-            denom *= base
-            remainder = indices % base
-            indices = np.floor(indices / base)
-            result += remainder / denom
+    denom = 1.0
+    while np.any(indices > 0):
+        denom *= base
+        remainder = indices % base
+        indices = np.floor(indices / base)
+        result += remainder / denom
 
-        return result.tolist()
-
-    warnings.warn("NumPy not available, falling back to pure Python")
-    from lds_gen.lds import VdCorput
-
-    gen = VdCorput(base=base)
-    return gen.pop_batch(count)
+    return result.tolist()
 
 
 def generate_halton_vectorized(count: int, bases: List[int]) -> List[List[float]]:
@@ -76,28 +38,20 @@ def generate_halton_vectorized(count: int, bases: List[int]) -> List[List[float]
     :param bases: List of bases, one for each dimension.
     :type bases: List[int]
     :return: List of count N-dimensional points in the Halton sequence.
-    :raises ImportError: If NumPy is not available.
     """
-    if HAS_NUMPY:
-        ndim = len(bases)
-        result = np.zeros((count, ndim), dtype=np.float64)
+    ndim = len(bases)
+    result = np.zeros((count, ndim), dtype=np.float64)
 
-        for dim, base in enumerate(bases):
-            indices = np.arange(1, count + 1, dtype=np.float64)
-            denom = 1.0
-            while np.any(indices > 0):
-                denom *= base
-                remainder = indices % base
-                indices = np.floor(indices / base)
-                result[:, dim] += remainder / denom
+    for dim, base in enumerate(bases):
+        indices = np.arange(1, count + 1, dtype=np.float64)
+        denom = 1.0
+        while np.any(indices > 0):
+            denom *= base
+            remainder = indices % base
+            indices = np.floor(indices / base)
+            result[:, dim] += remainder / denom
 
-        return result.tolist()
-
-    warnings.warn("NumPy not available, falling back to pure Python")
-    from lds_gen.lds import Halton
-
-    gen = Halton(base=bases)
-    return gen.pop_batch(count)
+    return result.tolist()
 
 
 def compute_discrepancy(points: List[List[float]]) -> float:
@@ -110,11 +64,7 @@ def compute_discrepancy(points: List[List[float]]) -> float:
     :param points: List of N-dimensional points to evaluate.
     :type points: List[List[float]]
     :return: The star-discrepancy value.
-    :raises ImportError: If NumPy is not available.
     """
-    if not HAS_NUMPY:
-        raise ImportError("NumPy is required for discrepancy computation")
-
     n = len(points)
     if n == 0:
         return 0.0
@@ -133,17 +83,13 @@ def compute_discrepancy(points: List[List[float]]) -> float:
     return max_discrepancy
 
 
-def batch_to_numpy(points: List[List[float]]) -> "np.ndarray":
+def batch_to_numpy(points: List[List[float]]) -> np.ndarray:
     """Convert a list of points to a NumPy array.
 
     :param points: List of N-dimensional points.
     :type points: List[List[float]]
     :return: NumPy array of shape (n_points, n_dimensions).
-    :raises ImportError: If NumPy is not available.
     """
-    if not HAS_NUMPY:
-        raise ImportError("NumPy is required for this function")
-
     return np.array(points)
 
 
@@ -152,10 +98,6 @@ if __name__ == "__main__":
 
     print("NumPy Utilities Test")
     print("=" * 60)
-
-    if not HAS_NUMPY:
-        print("NumPy not available. Install with: pip install numpy")
-        exit(1)
 
     n = 100000
 
