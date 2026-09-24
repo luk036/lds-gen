@@ -6,3 +6,4 @@ dependencies:
   - pytest-benchmark
   - pytest-cov
   - decorator
+  - numpy
