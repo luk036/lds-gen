@@ -41,16 +41,6 @@ Furthermore, the library incorporates a set of utility functions and classes tha
 
 Each generator class has methods for producing the next value in the sequence (pop()) and for resetting the sequence to a specific starting point (reseed()). This enables the generators to be employed in a variety of contexts in a flexible manner.
 
-## Thread Safety
-
-All generator classes are **thread-safe**:
-
-- `VdCorput`, `Halton`, `Circle`, `Disk`, `Sphere`, `Sphere3Hopf`, `HaltonN` in `lds.py`
-- `VdCorput`, `Halton` in `ilds.py`
-- `Sphere3`, `SphereN` in `sphere_n.py`
-
-The internal state in all these generators is protected by a per-instance threading lock around the shared sequence counter, ensuring atomic operations when multiple threads access the same generator instance. A `pop()` call atomically claims the next index, so concurrent calls never produce duplicate values — including for composite generators, whose points are generated atomically as a whole. This makes the library safe to use in multi-threaded applications without additional synchronization. The `pop()` and `reseed()` methods use proper locking to prevent race conditions.
-
 The objective of this library is to provide a toolkit for the generation of sequences of numbers that are distributed in a well-balanced manner. These can be used in place of random numbers in many applications to achieve a more uniform coverage of a given space or surface. This can result in more efficient and accurate outcomes in tasks such as sampling, integration, and optimization.
 
 ## Quick Start
@@ -106,7 +96,6 @@ generator.reseed(5)
 
 ### Key Features
 
-- **Thread-safe**: All generators are safe to use in multi-threaded applications
 - **Iterator protocol**: Use `for` loops directly with generator objects
 - **Batch generation**: Generate multiple points efficiently with `pop_batch(n)`
 - **Resettable**: Use `reseed(n)` to reset sequence to any position

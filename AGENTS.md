@@ -65,18 +65,10 @@ tox -e doctests       # Run doctests
 - **Classes**: PascalCase (e.g., `VdCorput`, `Halton`, `SphereGen`)
 - **Functions/Methods**: snake_case (e.g., `pop()`, `reseed()`, `linspace()`)
 - **Constants**: UPPER_SNAKE_CASE (e.g., `TWO_PI`, `PRIME_TABLE`)
-- **Private members**: Single underscore prefix (e.g., `_count`, `_lock`)
+- **Private members**: Single underscore prefix (e.g., `_count`, `_base`)
 
 ### Error Handling
-- **Thread safety**: Use `threading.Lock` for shared mutable state
-- **Critical generators**: `VdCorput`, `Sphere3`, `SphereN` are thread-safe
-- **Pattern**:
-  ```python
-  def pop(self) -> float:
-      with self._count_lock:
-          self._count += 1
-          return vdc(self._count, self.base)
-  ```
+- **Validation**: Raise `ValueError` for invalid arguments (e.g., non-positive batch sizes)
 
 ### Docstrings
 - **Primary style**: Sphinx/reStructuredText with `:param:`, `:type:`, `:return:`
@@ -89,11 +81,6 @@ tox -e doctests       # Run doctests
 - **Tests**: `tests/` mirroring source files (test_lds.py → lds.py)
 - **Classes**: Abstract base classes for shared interfaces (e.g., `SphereGen`)
 - **Decorators**: Use `@cache` for memoization, `@abstractmethod` for interfaces
-
-### Thread Safety
-- **Generators**: Protect internal state with `threading.Lock()`
-- **Methods**: Use `with self._lock:` for atomic operations
-- **Testing**: Include thread safety tests using `ThreadPoolExecutor`
 
 ## Key Configuration Files
 - `setup.cfg` - pytest, flake8 settings
@@ -116,7 +103,7 @@ pre-commit run --all-files
 pytest
 
 # Test single file/function
-pytest tests/test_lds.py::test_vdcorput_thread_safety
+pytest tests/test_lds.py::test_vdcorput_pop
 
 # Build and verify package
 tox -e clean && tox -e build && tox -e docs

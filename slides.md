@@ -612,9 +612,8 @@ class VdCorput:
             self.rev_lst.append(reverse)
 
     def pop(self) -> float:
-        with self._count_lock:
-            self._count += 1
-            count = self._count
+        self._count += 1
+        count = self._count
         res = 0.0
         i = 0
         while count != 0:
@@ -625,8 +624,7 @@ class VdCorput:
         return res
 
     def reseed(self, seed: int) -> None:
-        with self._count_lock:
-            self._count = seed
+        self._count = seed
 ```
 
 #### Rust Implementation
