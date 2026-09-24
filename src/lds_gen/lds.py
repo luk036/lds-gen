@@ -42,7 +42,6 @@ coverage of a given space or surface. This can lead to more efficient and accura
 tasks like sampling, integration, and optimization.
 """
 
-import threading
 from functools import cache
 from math import cos, pi, sin, sqrt
 from typing import Final, Generic, List, Sequence, TypeVar
@@ -91,25 +90,21 @@ class GeneratorBase(Generic[T]):
 
     Provides the stateful protocol (``pop``/``reseed``), iterator support and
     batch helpers in terms of two hooks supplied by each concrete generator:
-    the pure index-to-value computation :meth:`value_at` and the atomic counter
-    ``_count`` (guarded by ``_count_lock``).
+    the pure index-to-value computation :meth:`value_at` and the counter
+    ``_count``.
     """
 
     _count: int
-    _count_lock: threading.Lock
 
     def pop(self) -> T:
         """Generate the next value in the sequence (advances state).
 
-        Atomically claims the next index under ``_count_lock`` and evaluates
-        the pure ``value_at`` computation, so concurrent calls never produce
-        duplicate values.
+        Claims the next index and evaluates the pure ``value_at`` computation.
 
         :return: The next value in the sequence.
         """
-        with self._count_lock:
-            self._count += 1  # ignore 0
-            return self.value_at(self._count)
+        self._count += 1  # ignore 0
+        return self.value_at(self._count)
 
     def reseed(self, seed: int) -> None:
         """Reset the sequence to a specific starting position.
@@ -117,8 +112,7 @@ class GeneratorBase(Generic[T]):
         :param seed: The starting position for the sequence.
         :type seed: int
         """
-        with self._count_lock:
-            self._count = seed
+        self._count = seed
 
     def value_at(self, n: int) -> T:
         """Evaluate the sequence value at index ``n`` (pure, no state change).
@@ -193,7 +187,6 @@ class VdCorput(GeneratorBase[float]):
 
     def __init__(self, base: int = 2) -> None:
         self._count: int = 0
-        self._count_lock = threading.Lock()
         self.base: int = base
 
     def value_at(self, n: int) -> float:
@@ -247,7 +240,6 @@ class Halton(GeneratorBase[List[float]]):
 
     def __init__(self, base: Sequence[int]) -> None:
         self._count: int = 0
-        self._count_lock = threading.Lock()
         self.vdc0 = VdCorput(base[0])
         self.vdc1 = VdCorput(base[1])
 
@@ -284,7 +276,6 @@ class Circle(GeneratorBase[List[float]]):
 
     def __init__(self, base: int) -> None:
         self._count: int = 0
-        self._count_lock = threading.Lock()
         self.vdc = VdCorput(base)
 
     def value_at(self, n: int) -> List[float]:
@@ -334,7 +325,6 @@ class Disk(GeneratorBase[List[float]]):
 
     def __init__(self, base: Sequence[int]) -> None:
         self._count: int = 0
-        self._count_lock = threading.Lock()
         self.vdc0 = VdCorput(base[0])
         self.vdc1 = VdCorput(base[1])
 
@@ -379,7 +369,6 @@ class Sphere(GeneratorBase[List[float]]):
 
     def __init__(self, base: Sequence[int]) -> None:
         self._count: int = 0
-        self._count_lock = threading.Lock()
         self.vdcgen = VdCorput(base[0])
         self.cirgen = Circle(base[1])
 
@@ -434,7 +423,6 @@ class Sphere3Hopf(GeneratorBase[List[float]]):
 
     def __init__(self, base: Sequence[int]) -> None:
         self._count: int = 0
-        self._count_lock = threading.Lock()
         self.vdc0 = VdCorput(base[0])
         self.vdc1 = VdCorput(base[1])
         self.vdc2 = VdCorput(base[2])
@@ -498,7 +486,6 @@ class HaltonN(GeneratorBase[List[float]]):
 
     def __init__(self, base: Sequence[int]) -> None:
         self._count: int = 0
-        self._count_lock = threading.Lock()
         self.vdcs = [VdCorput(b) for b in base]
 
     def value_at(self, n: int) -> List[float]:

@@ -40,7 +40,6 @@ but with more uniformity than typical pseudo-random number generators provide. I
 block that can be used in more complex algorithms and simulations.
 """
 
-import threading
 from typing import List, Sequence
 
 from lds_gen.lds import GeneratorBase
@@ -85,7 +84,6 @@ class VdCorput(GeneratorBase[int]):
         self._base: int = base
         self._scale: int = scale
         self._count: int = 0
-        self._count_lock = threading.Lock()
 
     def value_at(self, n: int) -> int:
         r"""Evaluate the integer sequence value at index :math:`n` (pure).
@@ -132,7 +130,6 @@ class Halton(GeneratorBase[List[int]]):
 
     def __init__(self, base: Sequence[int], scale: Sequence[int]) -> None:
         self._count: int = 0
-        self._count_lock = threading.Lock()
         self._vdc0 = VdCorput(base[0], scale[0])
         self._vdc1 = VdCorput(base[1], scale[1])
 

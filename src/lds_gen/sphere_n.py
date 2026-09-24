@@ -2,7 +2,6 @@
 
 import bisect
 import math
-import threading
 from functools import cache
 from typing import Final, List, Protocol, Union
 
@@ -216,7 +215,6 @@ class Sphere3(GeneratorBase[List[float]], SphereGen):
         :type base: List[int]
         """
         self._count = 0
-        self._count_lock = threading.Lock()
         self.vdc = VdCorput(base[0])
         self.sphere2 = Sphere(base[1:3])
         self.base = list(base)
@@ -230,9 +228,8 @@ class Sphere3(GeneratorBase[List[float]], SphereGen):
         """
         if n <= 0:
             raise ValueError(f"n must be positive, got {n}")
-        with self._count_lock:
-            start = self._count + 1
-            self._count += n
+        start = self._count + 1
+        self._count += n
         indices = np.arange(start, start + n)
         return _spheren_batch_indices(self.base, indices).tolist()
 
@@ -286,7 +283,6 @@ class SphereN(GeneratorBase[List[float]], SphereGen):
         ndim = len(base) - 1
         assert ndim >= 2
         self._count = 0
-        self._count_lock = threading.Lock()
         self.vdc = VdCorput(base[0])
         if ndim == 2:
             self.s_gen = Sphere(base[1:3])
@@ -306,9 +302,8 @@ class SphereN(GeneratorBase[List[float]], SphereGen):
         """
         if n <= 0:
             raise ValueError(f"n must be positive, got {n}")
-        with self._count_lock:
-            start = self._count + 1
-            self._count += n
+        start = self._count + 1
+        self._count += n
         indices = np.arange(start, start + n)
         return _spheren_batch_indices(self.base, indices).tolist()
 
