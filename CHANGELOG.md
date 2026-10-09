@@ -1,5 +1,32 @@
 # Changelog
 
+## Version 0.6 (2026-10-09)
+
+### Features
+- **Vectorized `pop_batch` for `Sphere3`/`SphereN`**: A NumPy-optional batch path evaluates all points at once via vectorized radical-inverse, `np.interp`, and trig, giving ~8× speedup with a per-point loop fallback when NumPy is unavailable. (#caa3896)
+
+### Bug Fixes
+- **`get_tp` uninitialized variable**: Initialized `current` and suppressed the `Protocol.pop` type warning. (#044e452)
+- **RTD documentation build**: Added `matplotlib` and `numpy` to `docs/requirements.txt` so the ReadTheDocs build resolves. (#442a7ca)
+
+### Testing & Code Quality
+- **Coverage raised 77% → 100%**: Added coverage extras for the batch and iterator APIs. (#7e42fbc)
+- **New unit tests**: Added `test_numpy_utils.py` and expanded `test_coverage_extras.py`. (#d0aa4bc)
+
+### Code Cleanup
+- **Removed threading support**: Dropped the lock/threading machinery so generators are simpler and documented as single-threaded. (#2e0316d)
+- **Dropped optional NumPy fallbacks**: Removed fallback shims now that NumPy is a hard dependency. (#6eb0f81)
+- **Extracted generator protocol**: Pulled the shared generator protocol into a `Generic` base class. (#5f3bcf1)
+- **Removed AI slop**: Stripped boilerplate from docstrings and comments. (#064b50c)
+- **Config & style cleanup**: Stripped the empty `entry_points` section from `setup.cfg`; fixed import order, operator spacing, and list-comprehension format. (#f76b2cf, #0c19111)
+
+### Documentation
+- **Docs reorganized**: Moved documentation files into `docs/`, moved visualization outputs into `figs/`, and removed stale thread-safety notes. (#8163e0f, #3deaa2c, #d6f0498)
+
+### Build & CI
+- **Added NumPy hard dependency**: Listed `numpy>=1.21` in `setup.cfg` and requirements. (#2d1f981)
+- **CI cleanup**: Removed the legacy `pythonapp.yml` workflow and updated Actions to `checkout@v4` / `setup-python@v5` / `codecov@v4`. (#a78dd03, #ddd57f8)
+
 ## Version 0.5 (2026-07-16)
 
 ### Features
